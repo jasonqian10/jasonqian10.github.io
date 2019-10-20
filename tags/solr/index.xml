@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>solr on Welcome</title>
+    <link>http://localhost:1313/tags/solr/</link>
+    <description>Recent content in solr on Welcome</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-CN</language>
+    <lastBuildDate>Fri, 18 Oct 2019 15:56:37 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/tags/solr/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>搜索原理解析</title>
+      <link>http://localhost:1313/post/solr-lucene-principle/</link>
+      <pubDate>Fri, 18 Oct 2019 15:56:37 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/solr-lucene-principle/</guid>
+      <description>&lt;p&gt;[TOC]&lt;/p&gt;
+
+&lt;h2 id=&#34;搜索流程&#34;&gt;搜索流程&lt;/h2&gt;
+
+&lt;h4 id=&#34;solr与lucene的关系&#34;&gt;solr与Lucene的关系&lt;/h4&gt;
+
+&lt;p&gt;讲搜索流程之前先介绍一下solr与Lucene的关系。&lt;/p&gt;
+
+&lt;p&gt;Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。&lt;/p&gt;
+
+&lt;p&gt;Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。&lt;/p&gt;
+
+&lt;p&gt;solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。
+solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/post/solr_lucene-1542234.png&#34; alt=&#34;solr_lucene&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
