@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>lucene on Welcome</title>
-    <link>http://localhost:1313/tags/lucene/</link>
-    <description>Recent content in lucene on Welcome</description>
+    <title>lucene on Welcome to Jason&#39;s blog</title>
+    <link>https://jasonqian10.github.io/tags/lucene/</link>
+    <description>Recent content in lucene on Welcome to Jason&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-CN</language>
     <lastBuildDate>Fri, 18 Oct 2019 15:56:37 +0800</lastBuildDate>
     
-	<atom:link href="http://localhost:1313/tags/lucene/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://jasonqian10.github.io/tags/lucene/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>搜索原理解析</title>
-      <link>http://localhost:1313/post/solr-lucene-principle/</link>
+      <link>https://jasonqian10.github.io/post/solr-lucene-principle/</link>
       <pubDate>Fri, 18 Oct 2019 15:56:37 +0800</pubDate>
       
-      <guid>http://localhost:1313/post/solr-lucene-principle/</guid>
+      <guid>https://jasonqian10.github.io/post/solr-lucene-principle/</guid>
       <description>&lt;p&gt;[TOC]&lt;/p&gt;
 
 &lt;h2 id=&#34;搜索流程&#34;&gt;搜索流程&lt;/h2&gt;
@@ -32,7 +32,7 @@
 &lt;p&gt;solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。
 solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/post/solr_lucene-1542234.png&#34; alt=&#34;solr_lucene&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/solr_lucene-1542234.png&#34; alt=&#34;solr_lucene&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

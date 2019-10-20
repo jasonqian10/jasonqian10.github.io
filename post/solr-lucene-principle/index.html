@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="generator" content="Hugo 0.58.3" />
 
-  <title>搜索原理解析 &middot; Welcome</title>
+  <title>搜索原理解析 &middot; Welcome to Jason&#39;s blog</title>
 
     
 
@@ -23,13 +23,13 @@
   <!--<![endif]-->
 
   <!--[if lte IE 8]>
-  <link rel="stylesheet" href="http://localhost:1313/css/side-menu-old-ie.css">
+  <link rel="stylesheet" href="https://jasonqian10.github.io/css/side-menu-old-ie.css">
   <![endif]-->
   <!--[if gt IE 8]><!-->
-  <link rel="stylesheet" href="http://localhost:1313/css/side-menu.css">
+  <link rel="stylesheet" href="https://jasonqian10.github.io/css/side-menu.css">
   <!--<![endif]-->
 
-  <link rel="stylesheet" href="http://localhost:1313/css/blackburn.css">
+  <link rel="stylesheet" href="https://jasonqian10.github.io/css/blackburn.css">
 
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
@@ -50,7 +50,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
   
 
-  <link rel="shortcut icon" href="http://localhost:1313/img/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" type="image/x-icon" />
 
   
   
@@ -69,7 +69,7 @@
 <div id="menu">
 
   
-  <a class="pure-menu-heading brand" href="http://localhost:1313/">Jason</a>
+  <a class="pure-menu-heading brand" href="https://jasonqian10.github.io/">Jason</a>
 
 
   <div class="pure-menu">
@@ -77,37 +77,37 @@
       
       
         <li class="pure-menu-item">
-          <a class="pure-menu-link" href="http://localhost:1313/">首页</a>
+          <a class="pure-menu-link" href="https://jasonqian10.github.io/">首页</a>
       
         </li>
       
       
         <li class="pure-menu-item">
-          <a class="pure-menu-link" href="http://localhost:1313/post/">归档</a>
+          <a class="pure-menu-link" href="https://jasonqian10.github.io/post/">归档</a>
       
         </li>
       
       
         <li class="pure-menu-item">
-          <a class="pure-menu-link" href="http://localhost:1313/topics/">分类</a>
+          <a class="pure-menu-link" href="https://jasonqian10.github.io/topics/">分类</a>
       
         </li>
       
       
         <li class="pure-menu-item">
-          <a class="pure-menu-link" href="http://localhost:1313/tags/">标签</a>
+          <a class="pure-menu-link" href="https://jasonqian10.github.io/tags/">标签</a>
       
         </li>
       
       
         <li class="pure-menu-item">
-          <a class="pure-menu-link" href="http://localhost:1313/about/">关于我</a>
+          <a class="pure-menu-link" href="https://jasonqian10.github.io/about/">关于我</a>
       
         </li>
       
       
         <li class="pure-menu-item">
-          <a class="pure-menu-link" href="http://localhost:1313/about/">About</a>
+          <a class="pure-menu-link" href="https://jasonqian10.github.io/about/">About</a>
       
         </li>
       
@@ -236,7 +236,7 @@
   <div>
     <i class="fa fa-folder fa-fw"></i>
     
-      <a class="post-taxonomy-topic" href="http://localhost:1313/topics/search">Search</a>
+      <a class="post-taxonomy-topic" href="https://jasonqian10.github.io/topics/search">Search</a>
     
   </div>
   
@@ -248,9 +248,9 @@
   <div>
     <i class="fa fa-tags fa-fw"></i>
     
-      <a class="post-taxonomy-tag" href="http://localhost:1313/tags/solr">solr</a>&nbsp;&#47;
+      <a class="post-taxonomy-tag" href="https://jasonqian10.github.io/tags/solr">solr</a>&nbsp;&#47;
     
-      <a class="post-taxonomy-tag" href="http://localhost:1313/tags/lucene">lucene</a>
+      <a class="post-taxonomy-tag" href="https://jasonqian10.github.io/tags/lucene">lucene</a>
     
   </div>
   
@@ -273,7 +273,7 @@
 <p>solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。
 solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。</p>
 
-<p><img src="http://localhost:1313/img/post/solr_lucene-1542234.png" alt="solr_lucene" style="zoom:40%;" /></p>
+<p><img src="https://jasonqian10.github.io/img/post/solr_lucene-1542234.png" alt="solr_lucene" style="zoom:40%;" /></p>
 
 <blockquote>
 <p><strong>说明</strong></p>
@@ -288,7 +288,7 @@ solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过sol
 
 <p>Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是<strong>solr server启动过程</strong>）如下</p>
 
-<p><img src="http://localhost:1313/img/post/image-20191020120045651.png" alt="image-20191020120045651" style="zoom:45%;" /></p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20191020120045651.png" alt="image-20191020120045651" style="zoom:45%;" /></p>
 
 <p>这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。</p>
 
@@ -296,7 +296,7 @@ solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过sol
 
 <p>solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。</p>
 
-<p><img src="http://localhost:1313/img/post/image-20191020120449619.png" alt="image-20191020120449619" style="zoom:50%;" /></p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20191020120449619.png" alt="image-20191020120449619" style="zoom:50%;" /></p>
 
 <p>这里重点讲一下solr几个处理query的核心类：</p>
 
@@ -304,7 +304,7 @@ solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过sol
 
 <p>真正处理请求的入口函数在SearchHandler.handleRequestBody()，这里默认 <strong>select</strong> 请求会进入SearchHandler。</p>
 
-<p><img src="http://localhost:1313/img/post/image-20191012152013256.png" alt="image-20191012152013256" style="zoom:50%;" /></p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20191012152013256.png" alt="image-20191012152013256" style="zoom:50%;" /></p>
 
 <ul>
 <li>如何定制SearchHandler</li>
@@ -394,14 +394,8 @@ BooleanQuery(Title:(car or bike))
   </div>
   <div class="pure-u-10-24">
     
-    <nav class="next">
-      <a href="http://localhost:1313/post/my-first-blog/">My First Blog</a>
-    </nav>
-    
   </div>
   <div class="pure-u-1-24" style="text-align: right;">
-    
-    <a href="http://localhost:1313/post/my-first-blog/"><i class="fa fa-chevron-right"></i></a>
     
   </div>
 </div>
@@ -432,8 +426,8 @@ BooleanQuery(Title:(car or bike))
 
 </div>
 </div>
-<script src="http://localhost:1313/js/ui.js"></script>
-<script src="http://localhost:1313/js/menus.js"></script>
+<script src="https://jasonqian10.github.io/js/ui.js"></script>
+<script src="https://jasonqian10.github.io/js/menus.js"></script>
 
 
 <script>
