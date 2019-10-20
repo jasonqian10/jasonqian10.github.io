@@ -1,0 +1,40 @@
+<search>
+    
+     <entry>
+        <title>搜索原理解析</title>
+        <url>https://jasonqian10.github.io/post/solr-lucene-principle/</url>
+        <categories>
+          <category>Search</category>
+        </categories>
+        <tags>
+          <tag>solr</tag><tag>lucene</tag>
+        </tags>
+        <content type="html"> 搜索流程 solr与Lucene的关系 讲搜索流程之前先介绍一下solr与Lucene的关系。
+Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。
+Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。
+solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。 solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
+ 说明
+对应网上已有的素材或者文字符合作者想要的描述，就直接引用了，不重复造轮子
+参考
+https://www.cnblogs.com/forfuture1978/archive/2010/04/04/1704282.html
+https://www.cnblogs.com/davidwang456/p/10570935.html
+ Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是solr server启动过程）如下
+这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。
+1.solr query流程 solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。
+这里重点讲一下solr几个处理query的核心类：
+1.1 SearchHandler 真正处理请求的入口函数在SearchHandler.handleRequestBody()，这里默认 select 请求会进入SearchHandler。
+ 如何定制SearchHandler  当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下
+&amp;lt;requestHandler name=&amp;#34;/test&amp;#34; class=&amp;#34;com.test.TestSearchHandler&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;defaults&amp;#34;&amp;gt; &amp;lt;int name=&amp;#34;timeAllowed&amp;#34;&amp;gt;11000&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;echoParams&amp;#34;&amp;gt;none&amp;lt;/str&amp;gt; &amp;lt;int name=&amp;#34;rows&amp;#34;&amp;gt;20&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;defType&amp;#34;&amp;gt;espan&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;op&amp;#34;&amp;gt;AND&amp;lt;/str&amp;gt; &amp;lt;float name=&amp;#34;tie&amp;#34;&amp;gt;1&amp;lt;/float&amp;gt; &amp;lt;str name=&amp;#34;qf&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;fl&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sort&amp;#34;&amp;gt;score desc,_version_ desc&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/requestHandler&amp;gt; 1.2 SearchComponent 初始化的时候SearchHandler中注册了本SearchHandler对应的SearchComponent的列表。一般包含主要功能的QueryComponent、FacetComponent、HighlightComponent、DebugComponent等，这些Component类都是继承SearchComponent这个抽象类。
+SearchComponent抽象类定义了三个阶段prepare，process，finishStage，SearchHandler.handleRequestBody()中会遍历所有注册的SearchComponent，调用这三个阶段，完成各个SearchComponent中功能。
+ 如何定制SearchComponent  定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent。然后在solrconfig.xml中标签配置自己开发的类。样例配置如下
+&amp;lt;searchComponent name=&amp;#34;test_componet&amp;#34; class=&amp;#34;com.test.solr.TestComponent&amp;#34;&amp;gt; xxxxxx 里面可以配置自定义的参数 &amp;lt;/searchComponent&amp;gt; 1.3 QueryComponet 进入查询最核心的QueryComponent，solr查询请求功能都是在本类中完成。
+Query
+2. Lucene query流程  Query.rewrite()作用:
+将查询语句解析出的Query对象转换成Query对象树，举个例子
+Title:(car and bike) &amp;ndash;&amp;gt;
+BooleanQuery(Title:(car or bike)) &#43; BooleanQuery(Title:(car or bike)) &#43; TermQuery(Title:car) &#43; TermQuery(Title:or) --这个BooleanClause后面流程会继续处理掉 &#43; TermQuery(Title:bike) --&amp;gt; BooleanQuery(Title:(car or bike)) &#43; TermQuery(Title:car) &#43; TermQuery(Title:or) --这个BooleanClause后面流程会继续处理掉 &#43; TermQuery(Title:bike) 这棵树很重要，并且会生成其他的树，一直贯穿整个索引过程。
+ 未完待续&amp;hellip;&amp;hellip;
+</content>
+    </entry>
+    
+</search>

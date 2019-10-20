@@ -1,0 +1,489 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>搜索原理解析 - Welcome</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="搜索原理解析">
+    <meta property="og:site_name" content="Welcome">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="搜索原理解析 - Welcome" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Welcome</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr-lucene-principle/" itemprop="url">
+        搜索原理解析
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-10-18">
+    2019-10-18
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/search" itemprop="url" rel="index">
+        <span itemprop="name">Search</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">1560 字 ~4分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h2 id="搜索流程">搜索流程</h2>
+
+<h4 id="solr与lucene的关系">solr与Lucene的关系</h4>
+
+<p>讲搜索流程之前先介绍一下solr与Lucene的关系。</p>
+
+<p>Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。</p>
+
+<p>Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。</p>
+
+<p>solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。
+solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/solr_lucene-1542234.png" alt="solr_lucene" style="zoom:40%;" /></p>
+
+<blockquote>
+<p><strong>说明</strong></p>
+
+<p>对应网上已有的素材或者文字符合作者想要的描述，就直接引用了，不重复造轮子</p>
+
+<p><strong>参考</strong></p>
+
+<p><a href="https://www.cnblogs.com/forfuture1978/archive/2010/04/04/1704282.html">https://www.cnblogs.com/forfuture1978/archive/2010/04/04/1704282.html</a><br />
+<a href="https://www.cnblogs.com/davidwang456/p/10570935.html">https://www.cnblogs.com/davidwang456/p/10570935.html</a></p>
+</blockquote>
+
+<p>Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是<strong>solr server启动过程</strong>）如下</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191020120045651.png" alt="image-20191020120045651" style="zoom:45%;" /></p>
+
+<p>这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。</p>
+
+<h3 id="1-solr-query流程">1.solr query流程</h3>
+
+<p>solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191020120449619.png" alt="image-20191020120449619" style="zoom:50%;" /></p>
+
+<p>这里重点讲一下solr几个处理query的核心类：</p>
+
+<h4 id="1-1-searchhandler">1.1 SearchHandler</h4>
+
+<p>真正处理请求的入口函数在SearchHandler.handleRequestBody()，这里默认 <strong>select</strong> 请求会进入SearchHandler。</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191012152013256.png" alt="image-20191012152013256" style="zoom:50%;" /></p>
+
+<ul>
+<li>如何定制SearchHandler</li>
+</ul>
+
+<p>当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中<requestHandler>标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">  <span style="color:#f92672">&lt;requestHandler</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;/test&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.test.TestSearchHandler&#34;</span><span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;lst</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;defaults&#34;</span><span style="color:#f92672">&gt;</span>
+              <span style="color:#f92672">&lt;int</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;timeAllowed&#34;</span><span style="color:#f92672">&gt;</span>11000<span style="color:#f92672">&lt;/int&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;echoParams&#34;</span><span style="color:#f92672">&gt;</span>none<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;int</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;rows&#34;</span><span style="color:#f92672">&gt;</span>20<span style="color:#f92672">&lt;/int&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;defType&#34;</span><span style="color:#f92672">&gt;</span>espan<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;op&#34;</span><span style="color:#f92672">&gt;</span>AND<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;float</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;tie&#34;</span><span style="color:#f92672">&gt;</span>1<span style="color:#f92672">&lt;/float&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;qf&#34;</span><span style="color:#f92672">&gt;</span>xxxxx<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;fl&#34;</span><span style="color:#f92672">&gt;</span>xxxxx<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;sort&#34;</span><span style="color:#f92672">&gt;</span>score desc,_version_ desc<span style="color:#f92672">&lt;/str&gt;</span>
+          <span style="color:#f92672">&lt;/lst&gt;</span>
+  <span style="color:#f92672">&lt;/requestHandler&gt;</span></code></pre></div>
+<h4 id="1-2-searchcomponent">1.2 SearchComponent</h4>
+
+<p>初始化的时候SearchHandler中注册了本SearchHandler对应的SearchComponent的列表。一般包含主要功能的QueryComponent、FacetComponent、HighlightComponent、DebugComponent等，这些Component类都是继承SearchComponent这个抽象类。</p>
+
+<p>SearchComponent抽象类定义了三个阶段prepare，process，finishStage，SearchHandler.handleRequestBody()中会遍历所有注册的SearchComponent，调用这三个阶段，完成各个SearchComponent中功能。</p>
+
+<ul>
+<li>如何定制SearchComponent</li>
+</ul>
+
+<p>定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent。然后在solrconfig.xml中<searchComponent>标签配置自己开发的类。样例配置如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">  <span style="color:#f92672">&lt;searchComponent</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;test_componet&#34;</span>  <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.test.solr.TestComponent&#34;</span><span style="color:#f92672">&gt;</span>
+        xxxxxx  里面可以配置自定义的参数
+  <span style="color:#f92672">&lt;/searchComponent&gt;</span></code></pre></div>
+<h4 id="1-3-querycomponet">1.3 QueryComponet</h4>
+
+<p>进入查询最核心的QueryComponent，solr查询请求功能都是在本类中完成。</p>
+
+<p>Query</p>
+
+<h3 id="2-lucene-query流程">2. Lucene query流程</h3>
+
+<blockquote>
+<p>Query.rewrite()作用:<br />
+将查询语句解析出的Query对象转换成Query对象树，举个例子<br />
+<code>Title:(car and bike)</code> &ndash;&gt;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">BooleanQuery(Title:(car or bike))
+  + BooleanQuery(Title:(car or bike))
+      + TermQuery(Title:car)
+      + TermQuery(Title:or)  --这个BooleanClause后面流程会继续处理掉
+      + TermQuery(Title:bike)
+--&gt;
+BooleanQuery(Title:(car or bike))
+   + TermQuery(Title:car)
+   + TermQuery(Title:or)  --这个BooleanClause后面流程会继续处理掉
+   + TermQuery(Title:bike)</pre></div>
+<p>这棵树很重要，并且会生成其他的树，一直贯穿整个索引过程。</p>
+</blockquote>
+
+<p>未完待续&hellip;&hellip;</p>
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/solr" rel="tag" title="solr">#solr#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/lucene" rel="tag" title="lucene">#lucene#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/about/" rel="prev" title="关于我">
+        关于我 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">1</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">2</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#搜索流程">搜索流程</a>
+<ul>
+<li>
+<ul>
+<li><a href="#solr与lucene的关系">solr与Lucene的关系</a></li>
+</ul></li>
+<li><a href="#1-solr-query流程">1.solr query流程</a>
+<ul>
+<li><a href="#1-1-searchhandler">1.1 SearchHandler</a></li>
+<li><a href="#1-2-searchcomponent">1.2 SearchComponent</a></li>
+<li><a href="#1-3-querycomponet">1.3 QueryComponet</a></li>
+</ul></li>
+<li><a href="#2-lucene-query流程">2. Lucene query流程</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2019</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">Welcome</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>
