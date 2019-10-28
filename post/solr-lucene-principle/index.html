@@ -153,7 +153,7 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">5278 字 ~11分钟</span>
+<span class="leancloud-visitors-count">5276 字 ~11分钟</span>
 </span>
       </div>
     </header>
@@ -200,23 +200,24 @@
 <img src="https://jasonqian10.github.io/img/post/image-20191012152013256.png" alt="image-20191012152013256" style="zoom:50%;" /></p>
 
 <ul>
-<li><p>如何定制SearchHandler
-当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中<requestHandler>标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;requestHandler</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;/test&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.test.TestSearchHandler&#34;</span><span style="color:#f92672">&gt;</span>
-      <span style="color:#f92672">&lt;lst</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;defaults&#34;</span><span style="color:#f92672">&gt;</span>
-          <span style="color:#f92672">&lt;int</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;timeAllowed&#34;</span><span style="color:#f92672">&gt;</span>11000<span style="color:#f92672">&lt;/int&gt;</span>
-          <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;echoParams&#34;</span><span style="color:#f92672">&gt;</span>none<span style="color:#f92672">&lt;/str&gt;</span>
-          <span style="color:#f92672">&lt;int</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;rows&#34;</span><span style="color:#f92672">&gt;</span>20<span style="color:#f92672">&lt;/int&gt;</span>
-          <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;defType&#34;</span><span style="color:#f92672">&gt;</span>xxx<span style="color:#f92672">&lt;/str&gt;</span>
-          <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;op&#34;</span><span style="color:#f92672">&gt;</span>AND<span style="color:#f92672">&lt;/str&gt;</span>
-          <span style="color:#f92672">&lt;float</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;tie&#34;</span><span style="color:#f92672">&gt;</span>1<span style="color:#f92672">&lt;/float&gt;</span>
-          <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;qf&#34;</span><span style="color:#f92672">&gt;</span>xxxxx<span style="color:#f92672">&lt;/str&gt;</span>
-          <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;fl&#34;</span><span style="color:#f92672">&gt;</span>xxxxx<span style="color:#f92672">&lt;/str&gt;</span>
-          <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;sort&#34;</span><span style="color:#f92672">&gt;</span>score desc,_version_ desc<span style="color:#f92672">&lt;/str&gt;</span>
-      <span style="color:#f92672">&lt;/lst&gt;</span>
-<span style="color:#f92672">&lt;/requestHandler&gt;</span></code></pre></div></li>
+<li>如何定制SearchHandler
+<br /></li>
 </ul>
 
+<p>当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中<requestHandler>标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">  <span style="color:#f92672">&lt;requestHandler</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;/test&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.test.TestSearchHandler&#34;</span><span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;lst</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;defaults&#34;</span><span style="color:#f92672">&gt;</span>
+              <span style="color:#f92672">&lt;int</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;timeAllowed&#34;</span><span style="color:#f92672">&gt;</span>11000<span style="color:#f92672">&lt;/int&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;echoParams&#34;</span><span style="color:#f92672">&gt;</span>none<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;int</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;rows&#34;</span><span style="color:#f92672">&gt;</span>20<span style="color:#f92672">&lt;/int&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;defType&#34;</span><span style="color:#f92672">&gt;</span>xxx<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;op&#34;</span><span style="color:#f92672">&gt;</span>AND<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;float</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;tie&#34;</span><span style="color:#f92672">&gt;</span>1<span style="color:#f92672">&lt;/float&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;qf&#34;</span><span style="color:#f92672">&gt;</span>xxxxx<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;fl&#34;</span><span style="color:#f92672">&gt;</span>xxxxx<span style="color:#f92672">&lt;/str&gt;</span>
+              <span style="color:#f92672">&lt;str</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;sort&#34;</span><span style="color:#f92672">&gt;</span>score desc,_version_ desc<span style="color:#f92672">&lt;/str&gt;</span>
+          <span style="color:#f92672">&lt;/lst&gt;</span>
+  <span style="color:#f92672">&lt;/requestHandler&gt;</span></code></pre></div>
 <h4 id="searchcomponent">SearchComponent</h4>
 
 <p>初始化的时候SearchHandler中注册了本SearchHandler对应的SearchComponent的列表。一般包含主要功能的QueryComponent、FacetComponent、HighlightComponent、DebugComponent等，这些Component类都是继承SearchComponent这个抽象类。</p>
@@ -224,18 +225,20 @@
 <p>SearchComponent抽象类定义了三个阶段prepare，process，post，SearchHandler.handleRequestBody()中会遍历所有注册的SearchComponent，调用这三个阶段，完成各个SearchComponent中功能。</p>
 
 <ul>
-<li><p>如何定制SearchComponent
-定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent（如QueryComponent、FacetComponent、HighlightComponent、DebugComponent等）。然后在solrconfig.xml中<searchComponent>标签配置自己开发的类。样例配置如下</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;searchComponent</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;test_componet&#34;</span>  <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.test.solr.TestComponent&#34;</span><span style="color:#f92672">&gt;</span>
-    xxxxxx  里面可以配置自定义的参数
-<span style="color:#f92672">&lt;/searchComponent&gt;</span></code></pre></div></li>
+<li>如何定制SearchComponent
+<br /></li>
 </ul>
 
+<p>定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent（如QueryComponent、FacetComponent、HighlightComponent、DebugComponent等）。然后在solrconfig.xml中<searchComponent>标签配置自己开发的类。样例配置如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">  <span style="color:#f92672">&lt;searchComponent</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;test_componet&#34;</span>  <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.test.solr.TestComponent&#34;</span><span style="color:#f92672">&gt;</span>
+        xxxxxx  里面可以配置自定义的参数
+  <span style="color:#f92672">&lt;/searchComponent&gt;</span></code></pre></div>
 <h4 id="querycomponet">QueryComponet</h4>
 
 <p>进入查询最核心的QueryComponent，solr查询请求功能都是在本类中完成。
-+ QueryComponent.prepare()
-  根据参数defType(配置在solrconfig.xml中<requestHandler>标签中，不配置的话默认是”lucene“)，初始化QParser以及Query。以defType=”lucene“为例，其初始化过程如下</p>
++ QueryComponent.prepare()</p>
+
+<p>根据参数defType(配置在solrconfig.xml中<requestHandler>标签中，不配置的话默认是”lucene“)，初始化QParser以及Query。以defType=”lucene“为例，其初始化过程如下</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  1.<span style="color:#a6e22e">QParser</span> <span style="color:#a6e22e">parser</span> <span style="color:#f92672">=</span> QParser.<span style="color:#a6e22e">getParser</span>(rb.<span style="color:#a6e22e">getQueryString</span>(), defType, req)
   2.<span style="color:#a6e22e">LuceneQParserPlugin</span>.<span style="color:#a6e22e">createParser</span>(qstr, localParams, req.<span style="color:#a6e22e">getParams</span>(), req)
   3.<span style="color:#a6e22e">new</span> <span style="color:#a6e22e">LuceneQParser</span>(qstr, localParams, params, req);
@@ -247,9 +250,14 @@ QParser类的作用是QParser.parse() 可以构造出Query对象，查询时必�
 
 <ul>
 <li>QueryComponent.process()
-process()主要调用SolrIndexSearcher.search()，主要工作都在search()中完成。
-&gt; SolrIndexSearcher类继承IndexSearcher，对InderSearch做了封装。最终调用IndexSearcher.search()函数。 这是Lucene处理query的入口。</li>
+<br /></li>
 </ul>
+
+<p>process()主要调用SolrIndexSearcher.search()，主要工作都在search()中完成。</p>
+
+<blockquote>
+<p>SolrIndexSearcher类继承IndexSearcher，对InderSearch做了封装。最终调用IndexSearcher.search()函数。 这是Lucene处理query的入口。</p>
+</blockquote>
 
 <h3 id="lucene-query流程">Lucene query流程</h3>
 
@@ -297,9 +305,12 @@ process()主要调用SolrIndexSearcher.search()，主要工作都在search()中�
 
 <li><p>计算idf</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stats</span> <span style="color:#f92672">=</span> similarity.<span style="color:#a6e22e">computeWeight</span>(collectionStats, termStats);</code></pre></div>
-<p>这里 this.stats 对象已经计算好idf值。
-&gt; Lucene打分使用TF-IDF的打分公式，idf是其中一项。这里不详细介绍。</p></li>
+<p>这里 this.stats 对象已经计算好idf值。</p></li>
 </ul>
+
+<blockquote>
+<p>Lucene打分使用TF-IDF的打分公式，idf是其中一项。这里不详细介绍。</p>
+</blockquote>
 
 <h5 id="计算分数">计算分数</h5>
 
