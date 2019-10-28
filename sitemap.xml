@@ -9,31 +9,54 @@
         <tags>
           <tag>solr</tag><tag>lucene</tag>
         </tags>
-        <content type="html"> 搜索流程 solr与Lucene的关系 讲搜索流程之前先介绍一下solr与Lucene的关系。
+        <content type="html"> solr与Lucene的关系 讲搜索流程之前先介绍一下solr与Lucene的关系。
 Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。
 Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。
-solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。 solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
- 说明
-对应网上已有的素材或者文字符合作者想要的描述，就直接引用了，不重复造轮子
-参考
-https://www.cnblogs.com/forfuture1978/archive/2010/04/04/1704282.html
-https://www.cnblogs.com/davidwang456/p/10570935.html
- Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是solr server启动过程）如下
-这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。
-1.solr query流程 solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。
-这里重点讲一下solr几个处理query的核心类：
-1.1 SearchHandler 真正处理请求的入口函数在SearchHandler.handleRequestBody()，这里默认 select 请求会进入SearchHandler。
- 如何定制SearchHandler  当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下
-&amp;lt;requestHandler name=&amp;#34;/test&amp;#34; class=&amp;#34;com.test.TestSearchHandler&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;defaults&amp;#34;&amp;gt; &amp;lt;int name=&amp;#34;timeAllowed&amp;#34;&amp;gt;11000&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;echoParams&amp;#34;&amp;gt;none&amp;lt;/str&amp;gt; &amp;lt;int name=&amp;#34;rows&amp;#34;&amp;gt;20&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;defType&amp;#34;&amp;gt;espan&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;op&amp;#34;&amp;gt;AND&amp;lt;/str&amp;gt; &amp;lt;float name=&amp;#34;tie&amp;#34;&amp;gt;1&amp;lt;/float&amp;gt; &amp;lt;str name=&amp;#34;qf&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;fl&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sort&amp;#34;&amp;gt;score desc,_version_ desc&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/requestHandler&amp;gt; 1.2 SearchComponent 初始化的时候SearchHandler中注册了本SearchHandler对应的SearchComponent的列表。一般包含主要功能的QueryComponent、FacetComponent、HighlightComponent、DebugComponent等，这些Component类都是继承SearchComponent这个抽象类。
-SearchComponent抽象类定义了三个阶段prepare，process，finishStage，SearchHandler.handleRequestBody()中会遍历所有注册的SearchComponent，调用这三个阶段，完成各个SearchComponent中功能。
- 如何定制SearchComponent  定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent。然后在solrconfig.xml中标签配置自己开发的类。样例配置如下
-&amp;lt;searchComponent name=&amp;#34;test_componet&amp;#34; class=&amp;#34;com.test.solr.TestComponent&amp;#34;&amp;gt; xxxxxx 里面可以配置自定义的参数 &amp;lt;/searchComponent&amp;gt; 1.3 QueryComponet 进入查询最核心的QueryComponent，solr查询请求功能都是在本类中完成。
-Query
-2. Lucene query流程  Query.rewrite()作用:
-将查询语句解析出的Query对象转换成Query对象树，举个例子
-Title:(car and bike) &amp;ndash;&amp;gt;
-BooleanQuery(Title:(car or bike)) &#43; BooleanQuery(Title:(car or bike)) &#43; TermQuery(Title:car) &#43; TermQuery(Title:or) --这个BooleanClause后面流程会继续处理掉 &#43; TermQuery(Title:bike) --&amp;gt; BooleanQuery(Title:(car or bike)) &#43; TermQuery(Title:car) &#43; TermQuery(Title:or) --这个BooleanClause后面流程会继续处理掉 &#43; TermQuery(Title:bike) 这棵树很重要，并且会生成其他的树，一直贯穿整个索引过程。
- 未完待续&amp;hellip;&amp;hellip;
+solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。
+solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。  说明 对应网上已有的素材或者文字符合作者想要的描述，就直接引用了，不重复造轮子
+参考 https://www.cnblogs.com/forfuture1978/archive/2010/04/04/1704282.html
+https://www.cnblogs.com/davidwang456/p/10570935.html https://blog.csdn.net/huangzhilin2015/article/details/89372127
+ solr的启动过程 Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是solr server启动过程）如下 这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。
+solr query流程 solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。 上图可以看出solr中的流程。下面按照处理顺序重点讲一下solr几个处理query的核心类：
+SearchHandler 真正处理请求的入口函数在SearchHandler.handleRequestBody()。对于不同的Request-Handler(qt)，请求会进入不同的SearchHandler，这由solrconfig.xml中的配置决定。我们这里以 select 请求为例，请求会进入SearchHandler。handleRequestBody()中主要做的事情就是依次调用SearchComponent列表的prepare，process，post方法。  如何定制SearchHandler 当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下
+&amp;lt;requestHandler name=&amp;#34;/test&amp;#34; class=&amp;#34;com.test.TestSearchHandler&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;defaults&amp;#34;&amp;gt; &amp;lt;int name=&amp;#34;timeAllowed&amp;#34;&amp;gt;11000&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;echoParams&amp;#34;&amp;gt;none&amp;lt;/str&amp;gt; &amp;lt;int name=&amp;#34;rows&amp;#34;&amp;gt;20&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;defType&amp;#34;&amp;gt;xxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;op&amp;#34;&amp;gt;AND&amp;lt;/str&amp;gt; &amp;lt;float name=&amp;#34;tie&amp;#34;&amp;gt;1&amp;lt;/float&amp;gt; &amp;lt;str name=&amp;#34;qf&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;fl&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sort&amp;#34;&amp;gt;score desc,_version_ desc&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/requestHandler&amp;gt;  SearchComponent 初始化的时候SearchHandler中注册了本SearchHandler对应的SearchComponent的列表。一般包含主要功能的QueryComponent、FacetComponent、HighlightComponent、DebugComponent等，这些Component类都是继承SearchComponent这个抽象类。
+SearchComponent抽象类定义了三个阶段prepare，process，post，SearchHandler.handleRequestBody()中会遍历所有注册的SearchComponent，调用这三个阶段，完成各个SearchComponent中功能。
+ 如何定制SearchComponent 定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent（如QueryComponent、FacetComponent、HighlightComponent、DebugComponent等）。然后在solrconfig.xml中标签配置自己开发的类。样例配置如下
+&amp;lt;searchComponent name=&amp;#34;test_componet&amp;#34; class=&amp;#34;com.test.solr.TestComponent&amp;#34;&amp;gt; xxxxxx 里面可以配置自定义的参数 &amp;lt;/searchComponent&amp;gt;  QueryComponet 进入查询最核心的QueryComponent，solr查询请求功能都是在本类中完成。 &#43; QueryComponent.prepare() 根据参数defType(配置在solrconfig.xml中标签中，不配置的话默认是”lucene“)，初始化QParser以及Query。以defType=”lucene“为例，其初始化过程如下
+1.QParser parser = QParser.getParser(rb.getQueryString(), defType, req) 2.LuceneQParserPlugin.createParser(qstr, localParams, req.getParams(), req) 3.new LuceneQParser(qstr, localParams, params, req); 4.Query query = LuceneQParser.parse()  补充：QParser类与QParserPlugin类 QParser类的作用是QParser.parse() 可以构造出Query对象，查询时必须使用的对象。QParser一般由QParserPlugin.createParser()创建。QParser类与QParserPlugin类都是抽象类，不同的defType参数，对应不同的实现类。以defType=”lucene“为例，其初始化过程如下
+  QueryComponent.process() process()主要调用SolrIndexSearcher.search()，主要工作都在search()中完成。 &amp;gt; SolrIndexSearcher类继承IndexSearcher，对InderSearch做了封装。最终调用IndexSearcher.search()函数。 这是Lucene处理query的入口。  Lucene query流程 Lucene处理query的入口是IndexSearcher.search()。其调用流程如下 createNormalizedWeight 创建归一化weight的流程，包括
+重写Query对象 代码为：query = rewrite(query)
+这个rewrite()作用是将 2.3 节中QParse.parse()解析出的Query对象转换成Query对象树，这棵树很重要，从Query对象树——》Weight对象树——》Scorer对象树，一直贯穿整个索引过程。为什么需要rewrite？ 因为solr很多不同的查询类型，比如前缀查询和通配符查询，从本质上，任何的查询都可以视为对多个关键词的查询。整个重写过程是把从Lucene角度认为原始的、开销大的查询对象转变成一系列开销小的查询对象的一个过程。
+举个例子，查询语句 Title:(car* or bike) ，其QParse.parse()解析出的Query对象结构为
+BooleanQuery(Title:(car* or bike)) &#43; BooleanQuery(Title:(car* or bike)) &#43; PrefixQuery(Title:car*) &#43; TermQuery(Title:or) --这个BooleanClause后面流程会继续处理掉 &#43; TermQuery(Title:bike) rewrite Query之后为
+BooleanQuery(Title:(car* or bike)) &#43; MultiTermQueryConstantScoreWrapper(Title:car*) &#43; PrefixQuery(Title:car*) &#43; TermQuery(Title:or) --这个BooleanClause后面流程会继续处理掉 &#43; TermQuery(Title:bike) 对于PrefixQuery和FuzzyQuery，这些查询语句由于特殊的语法，可能对应的不是一个词，而是多个词，因而他们都有rewriteMethod对象指向MultiTermQuery的Inner Class，表示对应多个词，在查询过程中会得到特殊处理。
+创建weight 调用 Query.createWeight(Searcher) 创建weight，以3.1.1中BooleanQuery为例，代码为
+BooleanQuery.createWeight(Searcher) ... return new BooleanWeight(searcher) BooleanWeight构造函数主要实现是递归遍历Query树，生成Weight树。遍历过程中叶子节点是TermQuery，其TermQuery.createWeight(Searcher) 返回return new TermWeight(searcher)对象。在TermWeight构造函数中，需要做几件事：
+ 获取Similarity类
+this.similarity = searcher.getSimilarity(needsScores); Similarity类是Lucene的相似度类（用于计算文档分数），嵌套在Weight对象中，Weight对象嵌套在Query对象中。这样Query树中每个query节点都会构造自己的打分类。 &amp;gt; 补充： &amp;gt; searcher.getSimilarity() 获取的Similarity对象是在初始化solr时创建的，根据schema.xml中是否定义了Similarity类，如果定义了，则用用户自定义的Similarity类进行打分，如果没有自定义，则使用solr默认的打分类BM25Similarity。后面的文章会详细介绍如何自定义打分。
+ 计算idf
+this.stats = similarity.computeWeight(collectionStats, termStats); 这里 this.stats 对象已经计算好idf值。 &amp;gt; Lucene打分使用TF-IDF的打分公式，idf是其中一项。这里不详细介绍。
+  计算分数 代码为
+float v = weight.getValueForNormalization(); float norm = getSimilarity(needsScores).queryNorm(v); weight.normalize(norm, 1.0f); 这步计算的TF-IDF打分公式中仅与搜索语句相关与文档无关的部分(即不依赖于查询结果)，每个query子对象分数都是一样。分数存在weight对象中，在最终打分时可以直接使用。因为与文档无关，无需收集文档时遍历每篇文档重复计算，这里计算好，后面重复使用。
+收集(collect)文档和打分(score) 收集文档 文档收集是收集匹配query的文档集，这里重点介绍涉及的几个类。  文档收集器（Collector及其实现类） 如上图Collector类是文档收集器接口类，其getLeafCollector()方法来获取LeafCollector对象（段文档收集器）。 TopDocsCollector类是个抽象类，实现了Collector接口，是一个文档收集器基类。其有个TopScoreDocCollector#create方法用于创建文档收集器对象，这个创建出来的对象一般是TopScoreDocCollector的子类。 SimpleTopScoreDocCollector类，是TopScoreDocCollector的子类，也是其内部类，是简单查询文档收集器。 PagingTopScoreDocCollector类，是TopScoreDocCollector的子类，也是其内部类，是用于分页查询文档收集器。
+ 段文档收集器（LeafCollector类及其实现类） LeafCollector是段文档收集器接口，LeafCollector#collect 方法最终完成收集文档的工作。段文档收集器会被Collector#getLeafCollector 初始化，包装在文档收集器中。这里会用到其子类ScorerLeafCollector。
+  介绍好了这几个类之后，开始讲收集文档的过程。首先还在2.3步的时候，SolrIndexSearcher.search()方法里会调用SolrIndexSearcher#getDocListNC方法，在该方法中调用
+final TopDocsCollector topCollector = buildTopDocsCollector(len, cmd); SolrIndexSearcher#buildTopDocsCollector方法中调用
+TopScoreDocCollector.create(weightedSort, len, searchAfter, fillFields, needScores, needScores); 注意：当query参数中存在sort字段是会用。这里以上面的为例。 TopFieldCollector.create(weightedSort, len, searchAfter, fillFields, needScores, needScores); 这个方法在上面介绍TopScoreDocCollector类的时候提过到。TopScoreDocCollector#create中会创建TopScoreDocCollector的子类。当简单查询时创建SimpleTopScoreDocCollector，分页查询时创建PagingTopScoreDocCollector。
+1. new SimpleTopScoreDocCollector(numHits); 2. new PagingTopScoreDocCollector(numHits, after); 然后会接下去会调用IndexSearcher#search(List leaves, Weight weight, Collector collector)方法，该方法的处理逻辑是for循环每个段，执行
+leafCollector = collector.getLeafCollector(ctx); 获取段文档收集器对象leafCollector，这里的collector就是上面创建的SimpleTopScoreDocCollector类对象。
+创建Scorer树 Scorer类是Lucene实现打分的类，是个抽象类，每个Query子类都会集成Scorer类，作为每个Query打分的入口。如TermQuery的Scorer类是TermScorer，TermQuery打分的入口则是TermScorer#score()。
+创建Scorer树入口代码：
+BulkScorer scorer = weight.bulkScorer(ctx) 创建Scorer对象树的过程其实与创建Weight对象树的过程类似。遍历Weight树依次创建Scorer对象。以TermQuery对象为例，初始化关键代码：
+1.Scorer scorer = TermWeight.scorer() 2.return new TermScorer(this, docs, similarity.simScorer(stats, context)); 创建TermScorer时传入了SimScorer对象，由Similarity#simScorer获取而来，Similarity类的对象，在创建TermQuery时维护在对象内部。
+similarity.simScorer(stats, context) SimScorer类是Similarity类的内部类，具体打分逻辑就是SimScorer#score()方法中实现。TermScorer对象初始化时会在对象内部维护SimScorer对象。打分时调用顺序会是： TermScorer.score() ——》 SimScorer.score()
+打分score 打分入口是BulkScorer#score()方法
+scorer.score(leafCollector, ctx.reader().getLiveDocs()); 进入Weight#score()方法，这里会执行
+collector.setScorer(scorer); 为收集器对象传入scorer打分对象（这个scorer对象会最终被LeafCollector#collect中使用来进行打分）。 调用Weight#scoreAll()方法，这里会调用DocIdSetIterator#nextDoc()方法，DocIdSetIterator是个迭代器，依次拿出匹配到的文档id。
+int doc = iterator.nextDoc()  至于如何拿出这些匹配到文档id，过程比较复杂，涉及Lucene索引文件相关的原理，后面文章会细聊。
+ 这里需要注意，每个段拿出的文档id是基于本段的排序。而最终的文档id是需要全局唯一的，这里需要加上docBase。
+final int docBase = context.docBase; pqTop.doc = doc &#43; docBase; 然后传入拿出的文档id，调用段文档收集器LeafCollector#collect 方法
+collector.collect(doc); 然后进入 TermScorer.score() ——》 SimScorer.score()完成打分。
 </content>
     </entry>
     
