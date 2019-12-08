@@ -6,15 +6,24 @@
     <description>Recent content in Categories on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 18 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Hadoop</title>
+      <link>https://jasonqian10.github.io/categories/hadoop/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/categories/hadoop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Search</title>
       <link>https://jasonqian10.github.io/categories/search/</link>
-      <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/categories/search/</guid>
       <description></description>

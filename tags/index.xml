@@ -6,26 +6,44 @@
     <description>Recent content in Tags on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 18 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>lucene</title>
-      <link>https://jasonqian10.github.io/tags/lucene/</link>
-      <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
+      <title>hadoop</title>
+      <link>https://jasonqian10.github.io/tags/hadoop/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://jasonqian10.github.io/tags/lucene/</guid>
+      <guid>https://jasonqian10.github.io/tags/hadoop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mapreduce</title>
+      <link>https://jasonqian10.github.io/tags/mapreduce/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/mapreduce/</guid>
       <description></description>
     </item>
     
     <item>
       <title>solr</title>
       <link>https://jasonqian10.github.io/tags/solr/</link>
-      <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/tags/solr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>lucene</title>
+      <link>https://jasonqian10.github.io/tags/lucene/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/lucene/</guid>
       <description></description>
     </item>
     

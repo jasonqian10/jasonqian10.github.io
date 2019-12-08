@@ -1,7 +1,155 @@
 <search>
     
      <entry>
-        <title>搜索原理解析</title>
+        <title>【Hadoop索引】Mapreduce进行solr索引实战</title>
+        <url>https://jasonqian10.github.io/post/mapreduce-index-2/</url>
+        <categories>
+          <category>Hadoop</category>
+        </categories>
+        <tags>
+          <tag>hadoop</tag><tag>mapreduce</tag><tag>solr</tag>
+        </tags>
+        <content type="html">  MapReduce如何做solr索引 如何用MapReduce做solr索引？ 网上现在使用MapReduce做solr索引的方式实战比较少，比较多的尝试有如下两种
+ Cloudera MapReduceIndexerTool  cloudera提供了基于morphline的索引工具SDK，solr也做了集成，在solr/contrib/map-reduce包。入口类为 MapReduceIndexerTool，详细使用可以参考
+https://docs.cloudera.com/documentation/enterprise/latest/topics/search_mapreduceindexertool.html
+ running solr on HDFS  这个是solr支持的索引到HDFS上，其实与MapReduce没有啥关系。细节见
+https://lucene.apache.org/solr/guide/6_6/running-solr-on-hdfs.html
+Cloudera MapReduceIndexerTool的方式我们也尝试过，发现有些定制化的功能无法满足，而且solr在6.6版本之后移除了map-reduce模块（https://issues.apache.org/jira/browse/SOLR-9221 ），原因是与Hadoop版本兼容问题。所以最后放弃使用了。但是solr/contrib/map-reduce中很多源码是值得参考的，我们在开发过程了也借鉴了很多。
+架构  备注: 我们使用aws emr做Hadoop集群，所以会使用一些 aws的服务
+ 流程其实很清晰，主要有以下几部分
+ Input  做索引的输入文件，存在在aws s3或者hdfs。
+job client提交job任务，其中准备MapReduce过程中需要使用的各种参数。
+ Map  map阶段完成solrDoucment的转换，其map的输出为，其中shardNum表示solrDocument所在solr集群中哪个shard。因为我们使用embedSolr作为solrServer进行index，并未使用https的方式进行index，所以分shard的逻辑需要在map中进行计算。算出shardNum，作为map输出的key。这样在后续shuffle，sort过程中MapReduce框架会把key相同的所有solrDoucment拷贝到同一reduce task的节点上。
+ Reduce  包含前置流程shuffle和sort，目的是把Hadoop集群各个节点上map输出的solrDoucment按key的不同拷贝并排序到对应的reduce task节点上。
+Reduce task就纯粹完成solr index，reduce container的jvm中启动EmbeddedSolr作为solr server。
+ output  solr索引文件支持输出到hdfs或者disk（只需在solrconfig.xml中配置即可），两种方式我们都尝试过，index速度方面，存储到disk更快一些。一般建议使用hdfs，因为使用了Hadoop，最好使用它的分布式存储系统。
+遇到一些问题  MapReduce的container数量如何分配？  这里有几个概念： MapReduce集群同时可以运行的
+</content>
+    </entry>
+    
+     <entry>
+        <title>【Hadoop索引】我理解的hadoop</title>
+        <url>https://jasonqian10.github.io/post/mapreduce-index-1/</url>
+        <categories>
+          <category>Hadoop</category>
+        </categories>
+        <tags>
+          <tag>hadoop</tag><tag>mapreduce</tag><tag>solr</tag>
+        </tags>
+        <content type="html"> 【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本文档介绍我学习使用Hadoop后对其的理解。
+为什么使用Hadoop来做solr索引？ 这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。map阶段转换solr document，reduce阶段进行solr add操作。MapReduce流程契合solr索引的流程。
+Hadoop概念 官方概念 The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models.
+总结：处理大数据、分布式集群、可编程计算框架
+Hadoop 的核心组件 Hadoop由1.0和2.0两个架构版本，2.0最大的变化就是引入YARN这个资源调度框架，更加精细化的分配和调度资源。这里主要以当前最新的2.0展开。感兴趣的同学可以自行了解一下两者差异。
+ HDFS：分布式文件系统
+ Mapreduce：分布式运算编程框架
+ YARN：运算资源调度系统
+  简单描述一下三者关系：自定义的MapReduce程序（Java进程），通过YARN框架分配资源来运行这个MapReduce程序，MapReduce程序中输出存储到HDFS。
+YARN框架 Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统，可为上层应用提供统一的资源管理和调度。它将资源管理和处理组件分开，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大好处。
+YARN框架几个重要组件/概念  ResourceManager(RM)  ResourceManager包含两个主要的组件：定时调用器(Scheduler)以及应用管理器(ApplicationsManager (AsM))。
+ 定时调度器(Scheduler)：这个组件完全是插拔式的，用户可以根据自己的需求实现不同的调度器，目前YARN提供了FIFO、容量以及公平调度器。这个组件的唯一功能就是给提交到集群的应用程序分配资源，并且对可用的资源和运行的队列进行限制。Scheduler并不对作业进行监控，并且它不保证会重启由于应用程序本身或硬件出错而执行失败的应用程序。
+ 为所有AM分配资源
+ 应用管理器(ApplicationsManager (AsM))：这个组件用于管理整个集群应用程序的application masters，负责接收应用程序的提交；为application master启动提供资源；监控应用程序的运行进度以及在应用程序出现故障时重启它。
+ 用于管理所有AM
+   NodeManager(NM)  是YARN中每个节点上的代理，它管理Hadoop集群中单个计算节点，根据相关的设置来启动容器的。NodeManager会定期向ResourceManager发送心跳信息来更新其健康状态。同时其也会监督Container的生命周期管理，监控每个Container的资源使用（内存、CPU等）情况，追踪节点健康状况，管理日志和不同应用程序用到的附属服务（auxiliary service）。
+ ApplicationMaster(AM)  ApplicationMaster是应用程序级别的，每个ApplicationMaster管理运行在YARN上的应用程序。YARN 将 ApplicationMaster看做是第三方组件，ApplicationMaster负责和ResourceManager scheduler协商资源，并且和NodeManager通信来运行相应的task。ResourceManager 为 ApplicationMaster 分配容器，这些容器将会用来运行task。ApplicationMaster 也会追踪应用程序的状态，监控容器的运行进度。当容器运行完成， ApplicationMaster 将会向 ResourceManager 注销这个容器；如果是整个作业运行完成，其也会向 ResourceManager 注销自己，这样这些资源就可以分配给其他的应用程序使用了。
+ Container容器  Container是一个逻辑上的概念。与特定节点绑定的，其包含了内存、CPU磁盘等逻辑资源。不过在现在的容器实现中，这些资源只包括了内存和CPU。容器是由 ResourceManager scheduler 服务动态分配的资源构成。容器授予 ApplicationMaster 使用特定主机的特定数量资源的权限。ApplicationMaster 也是在容器中运行的，其在应用程序分配的第一个容器中运行。
+YARN框架执行流程 1.Client执行main()函数中runjob()，向yarn提交job，开启作业。
+ 这里client jvm是个独立运行的Java进程，跑在Hadoop集群的master节点上。
+ 2.Client向RM发送作业请求同时RM将作业id以及jar包存放路径返回给Client。
+3.Client会把Jar路径为前缀作业id为后缀作为唯一存放路径，将jar包以及输入分片写入到HDFS集群中。
+ 2,3两步都是Hadoop框架来做的，用户只需执行1即可。注意，这里框架只会默认上传MapReduce程序jar包和输入分片文件。如果用户运行MapReduce程序过程中还需其他的jar包、配置文件等，需要在1中自行上传，以及在task运行起来后自行获取。
+ 4.Client再次将Jar存放地址(更为详细的描述)提交给RM。
+5.RM将其放入调度器，向NM发送命令，NM开启MRAPPMaster进程。
+6.MR初始化job。
+7.获取3中写入到HDFS中的输入分片。
+ 每个输入分片会创建一个map任务对象
+ 8.拿到输入分片后向RM的资源调度器请求分配资源来运行map、reduce task。
+9.一旦RM的资源调度器为任务分配了container，AM就通过与NM通信来启动container。
+10.该任务由主类为YarnChild的Java进程执行。但是它在运行之前会将需要的资源文件本地化。这里就会去HDFS获取程序运行所需的相关文件。
+ 在3中补充提到与框架无关的文件需要用户自己去上传和下载。文件是存放在HDFS上，依赖Hadoop的分布式缓存机制进行上传和下载。达到的效果是把用户需要使用的文件分发到各个NM节点。
+ 11.运行map任务或者reduce任务。
+MapReduce模型  图片来自 https://blog.csdn.net/aijiudu/article/details/72353510
+ Map阶段 1.输入文件进行split成小文件，被每个map任务使用。
+2.由程序内的InputFormat(默认实现类TextInputFormat)来读取外部数据，它会调用RecordReader(它的成员变量)的read()方法来读取，返回k,v键值对。k,v键值对传送给map()方法，作为其入参来执行用户定义的map逻辑。
+ MapReduce框架默认实现
+ 3.map()方法输出结果也是k,v键值对。对于map输出的每一个键值对，系统都会给定一个partition，partition值默认是通过计算key的hash值后对Reduce task的数量取模获得。如果一个键值对的partition值为1，意味着这个键值对会交给第一个Reducer处理。用户可以自定义partition逻辑。
+4.Map的输出结果是由collector处理的，每个Map任务不断地将键值对输出到在内存中构造的一个环形数据结构中。使用环形数据结构是为了更有效地使用内存空间，在内存中放置尽可能多的数据。环形缓冲区其实就是一个数组，后端不断接受数据的同时，前端数据不断被溢出，长度用完后读取的新数据再从前端开始覆盖。这个缓冲区默认大小100M，可以通过MR.SORT.MB(应该是它)配置。
+5.Map按照定义的partitioner分区，每个分区的输出value进行sort排序。
+ 若有combiner会先执行combiner。combiner作用是预合并，减少输出文件数量和大小。sort也是为了后面merge时效率更高。
+ 6.按照定义的partitioner分区spill(溢出)到文件，这些文件仍在map task所处机器上。
+7.小文件执行merge(合并)，形成partitioner分区内有序的大文件。这些大文件仍在map task所处机器上。
+ 这里输出的文件可以选择使用压缩。
+ Reduce阶段 1.copy数据。Reduce从AM那边获取本Reduce的数据存放在哪些Map里，到对应的Map机器去拉取文件。数据被reduce提走之后，map机器不会立刻删除数据，这是为了预防reduce任务失败需要重做。因此map输出数据是在整个作业完成之后才被删除掉的。
+2.Merge、Sort、spill。这个过程与Map阶段类似，reduce将copy过来的数据文件加载到内存，进行merge和sort，当内存缓冲区的使用达到阈值后开始往磁盘spill。这个过程会循环多次，最终得到一份有序的reduce输入看k,v键值对文件。
+3.通过GroupingComparator()分辨同一组的数据，把他们发送给reduce(k,iterator)方法。
+4.调用context.write()方法，会让OutPurFormat调用RecodeWriter的write()方法将处理结果写入到数据仓库中。
+ 如何输出，输出到哪，都可以在RecodeWriter里自定义。
+ Shuffle 这里将一下shuffle。这个阶段是MapReduce框架中间过程数据混洗阶段，交叉在map和reduce的过程中，包括数据分区，排序，局部聚合，缓存，拉取，再合并排序等阶段。从Map阶段的3~7以及Reduce阶段的1~2都是shuffle阶段。
+HDFS Hadoop Distributed File System(hadoop分布式文件系统)，架构图如下。
+有四部分组成
+Client 职责：
+ 文件切分。文件上传 HDFS 的时候，Client 将文件切分成 一个一个的Block，然后进行存储。
+ 与 NameNode 交互，获取文件的位置信息。
+ 与 DataNode 交互，读取或者写入数据。
+ Client 提供一些命令来管理 HDFS，比如启动或者关闭HDFS。
+ Client 可以通过一些命令来访问 HDFS。
+  NameNode 名称节点，是负责管理分布式文件系统的命名空间（Namespace），保存了两个核心的数据结构，即FsImage和EditLog。 你可以把它理解成大管家，它不负责存储具体的数据。
+ FsImage用于维护文件系统树以及文件树中所有的文件和文件夹的元数据 操作日志文件EditLog中记录了所有针对文件的创建、删除、重命名等操作 注意，这个两个都是文件，也会加载解析到内存中。  职责：
+ 管理 HDFS 的名称空间
+ 管理数据块（Block）映射信息
+ 配置副本策略
+ 处理客户端读写请求。
+  SendaryNamenode NameNode节点的备份，它会定期的和namenode就行通信来完成整个的备份操作。并非 NameNode 的热备。当NameNode 挂掉的时候，它并不能马上替换 NameNode 并提供服务。
+职责：
+ 辅助 NameNode，分担其工作量。
+ 定期合并 fsimage和fsedits，并推送给NameNode。
+ 在紧急情况下，可辅助恢复 NameNode。
+  DataNode 数据节点，用来具体的存储文件，维护了blockId 与 datanode本地文件的映射。 需要不断的与namenode节点通信，来告知其自己的信息，方便nameode来管控整个系统。
+数据节点存储数据以块为单位，块大小默认是128m，默认会存储多份。
+职责：
+ 存储实际的数据块。 执行数据块的读/写操作。  Hadoop集群节点组成 Hadoop集群逻辑节点组成 包括HDFS集群和YARN框架集群：
+ HDFS集群  NameNode
+SecondNameNode
+DataNode
+ YARN框架集群  ResourceManageNode
+NodeManageNode
+Hadoop集群物理节点应该如何分配？ 例如一套5节点的Hadoop集群：
+节点1部署NameNode和ResourceManageNode。一般NameNode和ResourceManageNode部署在同一个节点上，这个节点为主节点。client node也在这个节点上；
+节点2，3，4，5部署DataNode和NodeManageNode；
+节点2部署SecondNameNode。
+EMR集群介绍 EMR是AWS提供的Hadoop集群服务。现在使用云服务是主流趋势，这里介绍一下EMR集群节点组成。
+ Master node  该节点管理集群，它通过运行软件组件来协调在其他节点之间分配数据和任务的过程以便进行处理。主节点跟踪任务的状态并监控集群的健康状况。每个集群具有一个主节点，并且可以创建仅包含主节点的单节点集群。
+ Core node  该节点具有运行任务并在集群上的 Hadoop 分布式文件系统 (HDFS) 中存储数据的软件组件。多节点集群至少具有一个核心节点。
+ Task node  该节点具有仅运行任务但不在 HDFS 中存储数据的软件组件。任务节点是可选的。
+ 参考文章
+https://blog.csdn.net/aijiudu/article/details/72353510
+https://blog.csdn.net/qianbing11/article/details/82357033
+https://blog.csdn.net/xiaoshunzi111/article/details/48810239
+https://blog.csdn.net/weixin_38750084/article/details/82963235
+</content>
+    </entry>
+    
+     <entry>
+        <title>solr suggest实战</title>
+        <url>https://jasonqian10.github.io/post/solr-suggest/</url>
+        <categories>
+          <category>Search</category>
+        </categories>
+        <tags>
+          <tag>solr</tag><tag>lucene</tag>
+        </tags>
+        <content type="html"> solr suggest模块介绍 介绍 自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。
+本文我们主要就来讲一下solr里面是如何去实现这样的自动提示功能。
+Solr 中是通过 SuggestComponent 模块 为用户提供查询 term 的自动提示。可以使用此功能在搜索应用程序中实现强大的自动提示功能。
+如何使用suggest模块 使用方式 先来介绍一下官方给出的使用方式，在solrconfig.xml中添加如下配置
+&amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;mySuggester&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;FuzzyLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;DocumentDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;cat&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;weightField&amp;#34;&amp;gt;price&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;string&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt; 解释一下上面配置中参数的含义
+ searchComponent   如何定制 上面讲的是官方给出的使用方式，当然使用上面的配置，能实现基本的suggest功能。下面讲讲我的项目中是如何定制suggest的。下面分别介绍我参与的两个项目的suggest模块：
+关键字自动提示 &amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34; enable=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;default&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;AnalyzingInfixLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;indexPath&amp;#34;&amp;gt;infix_keyword&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;highlight&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;DocumentDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;TERM&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;weightField&amp;#34;&amp;gt;DF&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sortField&amp;#34;&amp;gt;DF&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;text_suggest&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnCommit&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnOptimize&amp;#34;&amp;gt;true&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt; 公司名自动提示</content>
+    </entry>
+    
+     <entry>
+        <title>solr搜索原理解析</title>
         <url>https://jasonqian10.github.io/post/solr-lucene-principle/</url>
         <categories>
           <category>Search</category>

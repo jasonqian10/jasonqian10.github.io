@@ -6,13 +6,52 @@
     <description>Recent content on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 18 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>搜索原理解析</title>
+      <title>【Hadoop索引】Mapreduce进行solr索引实战</title>
+      <link>https://jasonqian10.github.io/post/mapreduce-index-2/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/mapreduce-index-2/</guid>
+      <description>MapReduce如何做solr索引 如何用MapReduce做solr索引？ 网上现在使用MapReduce做solr索引的方式实战比较少，比</description>
+    </item>
+    
+    <item>
+      <title>【Hadoop索引】我理解的hadoop</title>
+      <link>https://jasonqian10.github.io/post/mapreduce-index-1/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/mapreduce-index-1/</guid>
+      <description>&lt;p&gt;【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本文档介绍我学习使用Hadoop后对其的理解。&lt;/p&gt;
+
+&lt;h3 id=&#34;为什么使用hadoop来做solr索引&#34;&gt;为什么使用Hadoop来做solr索引？&lt;/h3&gt;
+
+&lt;p&gt;这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。map阶段转换solr document，reduce阶段进行solr add操作。MapReduce流程契合solr索引的流程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>solr suggest实战</title>
+      <link>https://jasonqian10.github.io/post/solr-suggest/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr-suggest/</guid>
+      <description>&lt;h3 id=&#34;solr-suggest模块介绍&#34;&gt;solr suggest模块介绍&lt;/h3&gt;
+
+&lt;h4 id=&#34;介绍&#34;&gt;介绍&lt;/h4&gt;
+
+&lt;p&gt;自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20191116164420559.png&#34; alt=&#34;image-20191116164420559&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;本文我们主要就来讲一下solr里面是如何去实现这样的自动提示功能。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>solr搜索原理解析</title>
       <link>https://jasonqian10.github.io/post/solr-lucene-principle/</link>
       <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
       

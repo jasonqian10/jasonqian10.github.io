@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hadoop on 知不道</title>
+    <link>https://jasonqian10.github.io/categories/hadoop/</link>
+    <description>Recent content in Hadoop on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 06 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/categories/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>【Hadoop索引】Mapreduce进行solr索引实战</title>
+      <link>https://jasonqian10.github.io/post/mapreduce-index-2/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/mapreduce-index-2/</guid>
+      <description>MapReduce如何做solr索引 如何用MapReduce做solr索引？ 网上现在使用MapReduce做solr索引的方式实战比较少，比</description>
+    </item>
+    
+    <item>
+      <title>【Hadoop索引】我理解的hadoop</title>
+      <link>https://jasonqian10.github.io/post/mapreduce-index-1/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/mapreduce-index-1/</guid>
+      <description>&lt;p&gt;【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本文档介绍我学习使用Hadoop后对其的理解。&lt;/p&gt;
+
+&lt;h3 id=&#34;为什么使用hadoop来做solr索引&#34;&gt;为什么使用Hadoop来做solr索引？&lt;/h3&gt;
+
+&lt;p&gt;这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。map阶段转换solr document，reduce阶段进行solr add操作。MapReduce流程契合solr索引的流程。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
