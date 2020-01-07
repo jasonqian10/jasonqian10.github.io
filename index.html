@@ -117,7 +117,78 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce-index-2/" itemprop="url">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" itemprop="url">
+        【Hadoop索引】hadoop调优经验
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-22">
+    2019-12-22
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/hadoop" itemprop="url" rel="index">
+        <span itemprop="name">Hadoop</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">2371 字 ~5分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <p>【Hadoop索引】本篇系列第三篇。主要介绍Hadoop调试过程中的一些问题以及解决方法的总结。</p>
+
+<p>主要有以下几类问题</p>
+
+<ul>
+<li><p>资源分配问题</p></li>
+
+<li><p>性能调优问题</p></li>
+
+<li><p>Yarn框架运行机制问题</p></li>
+
+<li><p>Solr索引问题</p></li>
+</ul>
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-2/" itemprop="url">
         【Hadoop索引】Mapreduce进行solr索引实战
         </a>
       </h1>
@@ -156,16 +227,20 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">1129 字 ~3分钟</span>
+<span class="leancloud-visitors-count">2033 字 ~5分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    MapReduce如何做solr索引 如何用MapReduce做solr索引？ 网上现在使用MapReduce做solr索引的方式实战比较少，比
+    <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第二篇，介绍如何应用Hadoop到solr index。</p>
+
+<h2 id="为什么使用hadoop来做solr索引">为什么使用Hadoop来做solr索引？</h2>
+
+<p>这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。Hadoop的MapReduce计算框架分map阶段和reduce阶段。map阶段转换solr document，reduce阶段进行solr index操作。MapReduce流程契合solr索引的流程。</p>
     </div>
     
     <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce-index-2/" rel="contents">
+    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-2/" rel="contents">
       阅读全文 &raquo;
     </a>
     </div>
@@ -176,7 +251,7 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce-index-1/" itemprop="url">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-1/" itemprop="url">
         【Hadoop索引】我理解的hadoop
         </a>
       </h1>
@@ -215,20 +290,40 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">4958 字 ~10分钟</span>
+<span class="leancloud-visitors-count">5534 字 ~12分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本文档介绍我学习使用Hadoop后对其的理解。</p>
+    <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第一篇，介绍我学习使用Hadoop后对其的理解。</p>
 
-<h3 id="为什么使用hadoop来做solr索引">为什么使用Hadoop来做solr索引？</h3>
+<h2 id="hadoop概念">Hadoop概念</h2>
 
-<p>这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。map阶段转换solr document，reduce阶段进行solr add操作。MapReduce流程契合solr索引的流程。</p>
+<h3 id="官方概念">官方概念</h3>
+
+<p>The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using <strong>simple programming</strong> <strong>models</strong>.</p>
+
+<p>总结：处理大数据、分布式集群、可编程计算框架</p>
+
+<h3 id="hadoop-的核心组件">Hadoop 的核心组件</h3>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191206112523725.png" alt="image-20191206112523725" /></p>
+
+<p>Hadoop由1.0和2.0两个架构版本，2.0最大的变化就是引入YARN这个资源调度框架，更加精细化的分配和调度资源。这里主要以当前最新的2.0展开。感兴趣的同学可以自行了解一下两者差异。</p>
+
+<ul>
+<li><p>HDFS：分布式文件系统</p></li>
+
+<li><p>Mapreduce：分布式运算编程框架</p></li>
+
+<li><p>YARN：运算资源调度系统</p></li>
+</ul>
+
+<p>简单描述一下三者关系：自定义的MapReduce程序（Java进程），通过YARN框架分配资源来运行这个MapReduce程序，MapReduce程序中输出存储到HDFS。</p>
     </div>
     
     <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce-index-1/" rel="contents">
+    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-1/" rel="contents">
       阅读全文 &raquo;
     </a>
     </div>
@@ -373,6 +468,59 @@
     <footer class="post-footer"><div class="post-eof"></div></footer>
   </article>
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" itemprop="url">
+        
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="0001-01-01">
+    0001-01-01
+</time>
+</span> 
+      
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">272 字 ~2分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    title: &ldquo;搜索引擎中相似度算法TF-IDF和BM25&rdquo; date: &ldquo;2019-12-26&rdquo; categories:
+ &ldquo;Lucene&rdquo; tags: &ldquo;TF-IDF&rdquo; &ldquo;BM25&rdquo; toc: true  前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里介绍2种重要的相似度算法：TF-IDF和BM25。
+TF-IDF是Lucene上一代（6.0以前）相似度算法，BM25是Lucene新一代（6.0以后）正使用的相似度算法。
+先举个例子。假如，我们想找和“Lucene”相关的文章。可以想一下，那些内容里只出现过一次“Lucene”的文章，有可能是在讲某种技术，顺便提到了Lucene这个工具。而那些出现了两三次“Lucene”的文章，很可能是专门讨论Lucene的。通过直觉，我们可以得出判断：关键字出现的次数越多，文档与关键字的匹配度越高。
+TF Term Frequency，缩写为TF。通常叫做“词频”，表示文档中关键字出现的次数。
+ 通常TF越大，相关性越高。
+ 但是，你可能会发现一个问题。例如一篇小短文里出现了一次“Lucene”，而一部好几百页的书里提到两次“Lucene”，此时我们就不能说后者相关度更高了。为了消除文档本身大小的影响，在计算TF时引入文档长度这个参数，做文档长度标准化
+TF socre ＝ 某个词在文档中出现的次数 ／ 文档的长度 举例：某文档D，长度为200，其中“Lucene”出现了2次，“的”出现了20次，“原理”出现了3次，那么
+TF(Lucene|D) = 2/200 = 0.01 TF(的|D) = 20/200 = 0.1 TF(原理|D) = 3/200 = 0.015 其中我们发现“的”这个词的比重非常高，搜索引擎中一般把这种“的、地、得”这些虚词去掉，不计算其分数。
+IDF Inverse Dcument Frequency, 缩写为IDF。通常叫做“逆文档频率”，其定义为
+IDF = log(语料库的文档总数 / 包含该词的文档数 + 1) 可见包含该词的文档数越小，分母就越小，IDF越大；该词越常见，分母就越大，IDF越小越接近0。分母之所以要加1，是为了避免分母为0（即所有文档都不包含该词）。
+举例：世界上文档总数位100亿，&rdquo;Lucene&rdquo;在1万个文档中出现过，“原理”在2亿个文档中出现过，那么它们的IDF值分别为：
+IDF(Lucene) = log(100亿/1万+1) = 19.93 IDF(原理) ＝ log(100亿/2亿+1) ＝ 5.
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
 </section>
 
 
@@ -435,7 +583,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -504,7 +652,7 @@
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2019</span>
+  2009 - 2020</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>

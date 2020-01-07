@@ -1,0 +1,540 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>【Hadoop索引】Mapreduce进行solr索引实战 - 知不道</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="【Hadoop索引】Mapreduce进行solr索引实战">
+    <meta property="og:site_name" content="知不道">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="【Hadoop索引】Mapreduce进行solr索引实战 - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">知不道</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-2/" itemprop="url">
+        【Hadoop索引】Mapreduce进行solr索引实战
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-06">
+    2019-12-06
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/hadoop" itemprop="url" rel="index">
+        <span itemprop="name">Hadoop</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">2033 字 ~5分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第二篇，介绍如何应用Hadoop到solr index。</p>
+
+<h2 id="为什么使用hadoop来做solr索引">为什么使用Hadoop来做solr索引？</h2>
+
+<p>这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。Hadoop的MapReduce计算框架分map阶段和reduce阶段。map阶段转换solr document，reduce阶段进行solr index操作。MapReduce流程契合solr索引的流程。</p>
+
+<h2 id="如何用mapreduce做solr索引">如何用MapReduce做solr索引？</h2>
+
+<p>网上现在使用MapReduce做solr索引的方式实战比较少，常见的尝试有如下两种</p>
+
+<ul>
+<li>Cloudera MapReduceIndexerTool</li>
+</ul>
+
+<p>cloudera提供了基于morphline的索引工具SDK，solr也做了集成，在solr/contrib/map-reduce包。入口类为 MapReduceIndexerTool，详细使用可以参考</p>
+
+<p><a href="https://docs.cloudera.com/documentation/enterprise/latest/topics/search_mapreduceindexertool.html">https://docs.cloudera.com/documentation/enterprise/latest/topics/search_mapreduceindexertool.html</a></p>
+
+<ul>
+<li>running solr on HDFS</li>
+</ul>
+
+<p>这个是solr支持的索引到HDFS上，其实与MapReduce没有啥关系，只是存储文件系统换成了HDFS，细节见</p>
+
+<p><a href="https://lucene.apache.org/solr/guide/6_6/running-solr-on-hdfs.html">https://lucene.apache.org/solr/guide/6_6/running-solr-on-hdfs.html</a></p>
+
+<p>作者起先尝试过Cloudera MapReduceIndexerTool的方式，发现有些定制化的功能无法满足，而且solr在6.6版本之后移除了map-reduce模块（<a href="https://issues.apache.org/jira/browse/SOLR-9221">https://issues.apache.org/jira/browse/SOLR-9221</a> ），原因是solr与Hadoop版本兼容问题，所以最后放弃使用了。但是solr/contrib/map-reduce中很多源码是值得参考的，我们在开发过程了也借鉴了很多。</p>
+
+<h2 id="运行流程">运行流程</h2>
+
+<p><img src="https://jasonqian10.github.io/Users/jason/Library/Application Support/typora-user-images/image-20191017165211706.png" alt="image-20191017165211706" /></p>
+
+<blockquote>
+<p>备注: 我们使用aws emr做Hadoop集群，所以会使用一些 aws的服务</p>
+</blockquote>
+
+<p>流程其实很清晰，主要有以下几部分</p>
+
+<ul>
+<li>Input</li>
+</ul>
+
+<p>做索引的输入文件，存在在aws s3或者hdfs。</p>
+
+<p>job client提交job任务，初始化MapReduce job object。</p>
+
+<ul>
+<li>Map</li>
+</ul>
+
+<p>map阶段完成solrDoucment的转换，其map的输出<k, v>为<shardNum, solrDoucment>，其中shardNum表示solrDocument所在solr集群中哪个shard。因为我们使用embedSolr作为solrServer进行index，并未使用https的方式进行index，所以分shard的逻辑需要在map中进行计算。算出shardNum，作为map输出的key。这样在后续shuffle，sort过程中MapReduce框架会把key相同的所有solrDoucment拷贝到同一reduce task的节点上。</p>
+
+<ul>
+<li>Reduce</li>
+</ul>
+
+<p>包含前置流程shuffle和sort，目的是把Hadoop集群各个节点上map输出的solrDoucment按key的不同拷贝并排序到对应的reduce task节点上。</p>
+
+<p>Reduce task就纯粹完成solr index，reduce container的jvm中启动EmbeddedSolr作为solr server。</p>
+
+<ul>
+<li>output</li>
+</ul>
+
+<p>solr索引文件支持输出到hdfs或者disk（只需在solrconfig.xml中配置即可），两种方式作者均尝试过，index速度方面，存储到disk更快一些。如果对index速度要求不是很高，建议使用hdfs，因为使用了Hadoop，最好使用它的分布式存储系统。</p>
+
+<h2 id="代码实现">代码实现</h2>
+
+<h3 id="job-client">job client</h3>
+
+<p><strong>Job client main()方法</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//初始化Job object
+</span><span style="color:#75715e"></span>Job.<span style="color:#a6e22e">getInstance</span>(conf, <span style="color:#e6db74">&#34;solr index&#34;</span>)
+Configuration <span style="color:#a6e22e">conf</span> <span style="color:#f92672">=</span> job.<span style="color:#a6e22e">getConfiguration</span>();
+<span style="color:#75715e">//设置MapReduce入口类（job client类）
+</span><span style="color:#75715e"></span>job.<span style="color:#a6e22e">setJarByClass</span>(Runner.<span style="color:#a6e22e">class</span>);
+<span style="color:#75715e">//设置MapReduce输入文件
+</span><span style="color:#75715e"></span>FileInputFormat.<span style="color:#a6e22e">addInputPath</span>(job, <span style="color:#66d9ef">new</span> Path(INPUT_PATH)));
+<span style="color:#75715e">//设置blocksize大小，INPUT_PATH会按照splitSize大小进行分割成多个
+</span><span style="color:#75715e"></span>FileInputFormat.<span style="color:#a6e22e">setMinInputSplitSize</span>(job, splitSize);
+FileInputFormat.<span style="color:#a6e22e">setMaxInputSplitSize</span>(job, splitSize);
+<span style="color:#75715e">//SolrOutputFormat.java继承FileOutputFormat.java。solr/contrib/map-reduce包中存在这个类
+</span><span style="color:#75715e"></span>job.<span style="color:#a6e22e">setOutputFormatClass</span>(SolrOutputFormat.<span style="color:#a6e22e">class</span>);
+<span style="color:#75715e">//map output的key类型        
+</span><span style="color:#75715e"></span>job.<span style="color:#a6e22e">setOutputKeyClass</span>(IntWritable.<span style="color:#a6e22e">class</span>);
+<span style="color:#75715e">//设置map多线程
+</span><span style="color:#75715e"></span>MultithreadedMapper.<span style="color:#a6e22e">setMapperClass</span>(job, SolrMapper.<span style="color:#a6e22e">class</span>);
+MultithreadedMapper.<span style="color:#a6e22e">setNumberOfThreads</span>(job, MAP_THREAD_NUM);
+job.<span style="color:#a6e22e">setMapperClass</span>(MultithreadedMapper.<span style="color:#a6e22e">class</span>);
+<span style="color:#75715e">//map output的value类型 
+</span><span style="color:#75715e"></span>job.<span style="color:#a6e22e">setOutputValueClass</span>(SolrInputDocumentWritable.<span style="color:#a6e22e">class</span>);
+<span style="color:#75715e">//优先使用jar包classpath的类，其次才会使用Hadoop环境中lib的classpath类。为了解决不同版本类冲突
+</span><span style="color:#75715e"></span>conf.<span style="color:#a6e22e">setBoolean</span>(<span style="color:#e6db74">&#34;mapreduce.job.user.classpath.first&#34;</span>, <span style="color:#66d9ef">true</span>);
+<span style="color:#75715e">//设置reduce task数量
+</span><span style="color:#75715e"></span>job.<span style="color:#a6e22e">setNumReduceTasks</span>(REDUCE_TASK_NUM));</code></pre></div>
+<p>如上源码是初始化job client核心代码。如果jar包运行过程中涉及一些配置文件，需要传至各个node节点，则可以参考 <code>SolrOutputFormat#setupResourceCache</code>这个方法。</p>
+
+<h3 id="map">map</h3>
+
+<p><strong>SolrMapper.java</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">class</span> SolrMapper <span style="color:#a6e22e">extends</span> Mapper<span style="color:#f92672">&lt;</span>LongWritable, Text, IntWritable, SolrInputDocumentWritable<span style="color:#f92672">&gt;</span> {
+   
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#a6e22e">void</span> setup(Context <span style="color:#a6e22e">context</span>) <span style="color:#66d9ef">throws</span> <span style="color:#a6e22e">IOException</span> {
+        <span style="color:#75715e">//初始化
+</span><span style="color:#75715e"></span>    }
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#a6e22e">void</span> cleanup(Context <span style="color:#a6e22e">context</span>) {
+    }
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> map(LongWritable <span style="color:#a6e22e">key</span>, Text <span style="color:#a6e22e">value</span>, Context <span style="color:#a6e22e">context</span>) <span style="color:#66d9ef">throws</span> <span style="color:#a6e22e">InterruptedException</span>, IOException {
+        SolrInputDocument <span style="color:#a6e22e">doc</span> <span style="color:#f92672">=</span> xxx; <span style="color:#75715e">//solr document转换逻辑
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">shardOrd</span> <span style="color:#f92672">=</span> xxx; <span style="color:#75715e">//solr分shard逻辑，确定doc的分片
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//统计
+</span><span style="color:#75715e"></span>        context.<span style="color:#a6e22e">getCounter</span>(Counters.<span style="color:#a6e22e">MAPPER</span>).<span style="color:#a6e22e">increment</span>(1);
+        <span style="color:#75715e">//map outout
+</span><span style="color:#75715e"></span>        context.<span style="color:#a6e22e">write</span>(<span style="color:#66d9ef">new</span> IntWritable(shardOrd), <span style="color:#66d9ef">new</span> SolrInputDocumentWritable(doc));
+    }
+}</code></pre></div>
+<p>其中<strong>SolrInputDocumentWritable.java</strong>来自solr/contrib/map-reduce包。</p>
+
+<h3 id="reduce">reduce</h3>
+
+<p><strong>SolrReducer.java</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">class</span> SolrReducer<span style="color:#f92672">&lt;</span>K, V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">extends</span> RecordWriter<span style="color:#f92672">&lt;</span>K, V<span style="color:#f92672">&gt;</span> {
+
+  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">SolrClient</span> solrClient;
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">SolrReducer</span>(TaskAttemptContext <span style="color:#a6e22e">context</span>) {
+     <span style="color:#75715e">//初始化
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">solrClient</span> <span style="color:#f92672">=</span> SolrUtil.<span style="color:#a6e22e">createEmbeddedSolr</span>();
+  }
+
+  <span style="color:#75715e">/**
+</span><span style="color:#75715e">   * Write a record. This method accumulates records in to a batch, and when
+</span><span style="color:#75715e">   *  items are present flushes it to the indexer. The writes
+</span><span style="color:#75715e">   * can take a substantial amount of time, depending on. If
+</span><span style="color:#75715e">   * there is heavy disk contention the writes may take more than the 600 second
+</span><span style="color:#75715e">   * default timeout.
+</span><span style="color:#75715e">   */</span>
+  <span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> write(K <span style="color:#a6e22e">key</span>, V <span style="color:#a6e22e">value</span>) {
+      SolrInputDocumentWritable <span style="color:#a6e22e">sidw</span> <span style="color:#f92672">=</span> (SolrInputDocumentWritable) value;
+      SolrInputDocument <span style="color:#a6e22e">sid</span> <span style="color:#f92672">=</span> sidw.<span style="color:#a6e22e">getSolrInputDocument</span>();
+      solrClient.<span style="color:#a6e22e">add</span>(sid);
+  }
+
+  <span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> close(TaskAttemptContext <span style="color:#a6e22e">context</span>) {
+      <span style="color:#66d9ef">if</span> (solrClient <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+        	solrClient.<span style="color:#a6e22e">close</span>();
+      }
+  }</code></pre></div>
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/hadoop" rel="tag" title="hadoop">#hadoop#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/mapreduce" rel="tag" title="mapreduce">#mapreduce#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/solr" rel="tag" title="solr">#solr#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" rel="next" title="【Hadoop索引】hadoop调优经验">
+        <i class="fa fa-chevron-left"></i> 【Hadoop索引】hadoop调优经验
+        </a>
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-1/" rel="prev" title="【Hadoop索引】我理解的hadoop">
+        【Hadoop索引】我理解的hadoop <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">2</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#为什么使用hadoop来做solr索引">为什么使用Hadoop来做solr索引？</a></li>
+<li><a href="#如何用mapreduce做solr索引">如何用MapReduce做solr索引？</a></li>
+<li><a href="#运行流程">运行流程</a></li>
+<li><a href="#代码实现">代码实现</a>
+<ul>
+<li><a href="#job-client">job client</a></li>
+<li><a href="#map">map</a></li>
+<li><a href="#reduce">reduce</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">知不道</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>

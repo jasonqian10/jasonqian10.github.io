@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
-    <title>关于我 - 知不道</title>
+    <title>【Hadoop索引】hadoop调优经验 - 知不道</title>
     <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
     
-    <meta property="og:title" content="关于我">
+    <meta property="og:title" content="【Hadoop索引】hadoop调优经验">
     <meta property="og:site_name" content="知不道">
     <meta property="og:image" content="/img/author.jpg"> 
-    <meta name="title" content="关于我 - 知不道" />
-    <meta name="description" content="不能再简单的介绍" />
-     
+    <meta name="title" content="【Hadoop索引】hadoop调优经验 - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
     <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
     <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
     <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
@@ -115,8 +114,8 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/about/" itemprop="url">
-        关于我
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" itemprop="url">
+        【Hadoop索引】hadoop调优经验
         </a>
       </h1>
       <div class="post-meta">
@@ -125,42 +124,187 @@
     <i class="fa fa-calendar-o"></i>
 </span>
 <span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2009-06-01">
-    2009-06-01
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-22">
+    2019-12-22
 </time>
 </span> 
       
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/hadoop" itemprop="url" rel="index">
+        <span itemprop="name">Hadoop</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
        <span>
 &nbsp; | &nbsp;
 <span class="post-meta-item-icon">
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">13 字 ~1分钟</span>
+<span class="leancloud-visitors-count">2371 字 ~5分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    <p>一名普通的程序员~
-邮箱: jasonqian10@163.com</p>
+    <p>【Hadoop索引】本篇系列第三篇。主要介绍Hadoop调试过程中的一些问题以及解决方法的总结。</p>
 
+<p>主要有以下几类问题</p>
+
+<ul>
+<li><p>资源分配问题</p></li>
+
+<li><p>性能调优问题</p></li>
+
+<li><p>Yarn框架运行机制问题</p></li>
+
+<li><p>Solr索引问题</p></li>
+</ul>
+
+<h2 id="资源分配问题">资源分配问题</h2>
+
+<h3 id="mapreduce集群任务分配机制">MapReduce集群任务分配机制</h3>
+
+<p>举例：一套机型为c4.4x的16个node节点的emr集群为例</p>
+
+<blockquote>
+<p>c4.4x机器配置16核，30G内存</p>
+</blockquote>
+
+<h4 id="mapreduce集群最多可运行多少个container资源">MapReduce集群最多可运行多少个container资源？</h4>
+
+<p><strong>默认</strong></p>
+
+<p>以机器的vcode数量作为container数量，总 16* 16=256 container，也就是集群做多可以同时跑256个task。每个container的含有资源为 1core，30*0.<sup>75</sup>&frasl;<sub>16</sub>=1.4G。</p>
+
+<blockquote>
+<p>emr默认会用机器75%的内存来分配</p>
+</blockquote>
+
+<p><strong>实际并发container数量</strong>
+阶段 | 实际设定的内存 |  单node并发的container数量 | 集群总并发container数量
+-|-|-|-
+Map | 3G | 30*0.<sup>75</sup>&frasl;<sub>3</sub>=7 |7*16=112
+Reduce | 16G | 30*0.<sup>75</sup>&frasl;<sub>16</sub>=1 |1*16=16</p>
+
+<h4 id="mapreduce-job会被拆分成多少个map-reduce-task">MapReduce job会被拆分成多少个map/reduce task？</h4>
+
+<p>阶段 | task数量
+-|-|-|-
+Map | input size/ hdfs block size(split size)
+Reduce | mapreduce.job.reduces设定
+&gt; 默认情况下hdfs block size(split size)为64M，可以根据业务需要调整大小来控制Map task数量。</p>
+
+<h3 id="内存溢出问题">内存溢出问题</h3>
+
+<p><strong>问题现象</strong>：提示“<strong>Container is running beyond physical memory</strong>”、“<strong>running beyond virtual memory limits</strong>”</p>
+
+<p><strong>原因</strong>：container设定的物理内存、虚拟内存不足导致失败。</p>
+
+<p><strong>解决</strong>：</p>
+
+<p>1）一般内存溢出大部分是用户自己代码问题，可以优化代码是内存使用降低</p>
+
+<p>2）如果必须需要使用大量内存，可以通过配置提高内存
+参数 |说明
+-|-
+mapreduce.map.memory.mb |Map container内存
+mapreduce.map.java.opts |Map jvm内存，一般为Map container内存的80%
+mapreduce.reduce.memory.mb |Reduce container内存
+mapreduce.reduce.java.opts |Reduce jvm内存，一般为Reduce container内存的80%
+yarn.nodemanager.vmem-pmem-ratio |虚拟内存和物理内存比值，默认5。如果虚拟内存需要太大，可以通过提高这个参数
+yarn.nodemanager.vmem-check-enabled |虚拟内存检查，默认true。false可以关闭虚拟内存阈值check，一般不建议修改。
+yarn.nodemanager.pmem-check-enabled |物理内存检查，默认true。false可以关闭物理内存阈值check，一般不建议修改。</p>
+
+<h2 id="性能调优问题">性能调优问题</h2>
+
+<h3 id="shuffle阶段性能调优配置">shuffle阶段性能调优配置</h3>
+
+<p>参数 |说明
+-|-
+mapreduce.job.reduce.slowstart.completedmaps | 这个参数表示map完成多少进度后开始启动reduce container。默认是0.5。建议设置0.95，因为reduce container过早启动会抢占map的资源，导致并发map的数量减少，reduce正式开始跑需要等待map 100%完成，启动早无太大实质效果，只是决定早点开始拷贝map output。
+mapreduce.reduce.shuffle.merge.percent | reduce 复制的数据先写到 reduce 任务的 JVM 内存缓存区，这个参数表示内存缓存区占reduce jvm比重阀值，超过该比例将进行合并和溢写磁盘。默认是0.66，建议设小以免shuffle时reduce jvm内存爆。
+mapreduce.reduce.shuffle.memory.limit.percent | 单个shuffle线程能使用的内存限额，默认是0.25，并发线程数多于4之后容易内存爆掉，建议设置小于0.15。
+mapreduce.reduce.shuffle.parallelcopies | reduce并行copy maptask输出文件的线程数量，默认是5，可以配置（根据集群节点间的带宽）
+mapreduce.reduce.shuffle.read.timeout | shuffle copy的超时时间，默认是180000。如果集群节点间带宽较低，可以增加超时时间，否则可能会copy timeout。
+ |<br />
+ |</p>
+
+<h2 id="yarn框架运行机制问题">Yarn框架运行机制问题</h2>
+
+<h3 id="task运行超时被kill掉">Task运行超时被kill掉</h3>
+
+<p><strong>问题</strong>：Task由于代码堵塞或者业务逻辑执行时间过长，长时间不结束，TaskTracker把这个Task kill掉。</p>
+
+<p><strong>原因</strong>：每个Task会定期向TaskTracker汇报进度，如果进度不变则不汇报，这样一旦达到超时限制，TaskTracker会杀掉该任务，并将任务状态KILLED汇报给YARN,从而重新调度该任务。</p>
+
+<p><strong>解决</strong>：</p>
+
+<p>1）Task主动上报状态，使得TaskTracker知道Task正在运行。可以调用MapReduce的统计相关的sdk，如TaskAttemptContext.progress()、TaskAttemptContext.getCounter()等sdk。</p>
+
+<p>2）mapreduce.task.timeout，mr程序的task执行情况汇报过期时间，默认600000(10分钟)，可以设大。</p>
+
+<h3 id="shuffle-copy-time-out">shuffle copy time out</h3>
+
+<p><strong>问题</strong>：shuffle阶段reducer copy各个节点上map的输出文件，报“Failed to connect to xxx with 1 map outputs java.net.SocketTimeoutException: Read timed out”</p>
+
+<p><strong>原因</strong>：由于机器ebs带宽瓶颈，copy超时。</p>
+
+<p><strong>解决</strong>：这个原因其实是机器性能问题，无法直接进行提升。可以通过以下方式进行规避。</p>
+
+<p>1）mapreduce.reduce.shuffle.parallelcopies</p>
+
+<p>参数是copy并发线程数量，建议设小</p>
+
+<p>2）mapreduce.reduce.shuffle.read.timeout</p>
+
+<p>参数表示shuffle copy的超时时间，默认是180000，建议设大</p>
+
+<p>3）mapreduce.reduce.maxattempts，mapreduce.map.maxattempts</p>
+
+<p>参数表示reduce、map task失败重试次数，这种网络拷贝问题是并发时偶现问题，增加重试次数</p>
+
+<h2 id="solr索引问题">Solr索引问题</h2>
+
+<h3 id="reduce阶段做solr-index和optimize爆内存">reduce阶段做solr index和optimize爆内存</h3>
+
+<p><strong>问题</strong>：solr index和optimize时reduce container内存爆掉</p>
+
+<p><strong>原因</strong>：solr index默认使用MMapDirectoryFactory，这个目录实现类适用虚拟内存和内核中一个叫 mmap 的特性来访问存在磁盘上的文件。它允许 Lucene 直接访问 I/O 缓存，当不需要准实时搜索时，这个目录实现是一个非常不错的选择。MMap由于使用了memory mapping，会使用到跟索引总大小近似的virtual memory。</p>
+
+<p><strong>解决</strong>：替换成NIOFSDirectoryFactory，在solr index和optimize过程中进行内存使用基本平稳。</p>
     </div>
     <footer class="post-footer">
      
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/hadoop" rel="tag" title="hadoop">#hadoop#</a>
+    
+</div>
+
+
 
      <div class="post-nav">
     <div class="post-nav-next post-nav-item">
-    
-        <a href="https://jasonqian10.github.io/post/solr-lucene-principle/" rel="next" title="solr搜索原理解析">
-        <i class="fa fa-chevron-left"></i> solr搜索原理解析
-        </a>
     
     </div>
 
     <div class="post-nav-prev post-nav-item">
     
-        <a href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" rel="prev" title="">
-         <i class="fa fa-chevron-right"></i>
+        <a href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-2/" rel="prev" title="【Hadoop索引】Mapreduce进行solr索引实战">
+        【Hadoop索引】Mapreduce进行solr索引实战 <i class="fa fa-chevron-right"></i>
         </a>
     
     </div>
@@ -189,7 +333,16 @@
 <aside id="sidebar" class="sidebar">
   <div class="sidebar-inner">
 
-    <section class="site-overview sidebar-panel  sidebar-panel-active ">
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
       <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image"
         src="https://jasonqian10.github.io/img/author.jpg"
@@ -253,6 +406,40 @@
 
     </section>
     
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#资源分配问题">资源分配问题</a>
+<ul>
+<li><a href="#mapreduce集群任务分配机制">MapReduce集群任务分配机制</a>
+<ul>
+<li><a href="#mapreduce集群最多可运行多少个container资源">MapReduce集群最多可运行多少个container资源？</a></li>
+<li><a href="#mapreduce-job会被拆分成多少个map-reduce-task">MapReduce job会被拆分成多少个map/reduce task？</a></li>
+</ul></li>
+<li><a href="#内存溢出问题">内存溢出问题</a></li>
+</ul></li>
+<li><a href="#性能调优问题">性能调优问题</a>
+<ul>
+<li><a href="#shuffle阶段性能调优配置">shuffle阶段性能调优配置</a></li>
+</ul></li>
+<li><a href="#yarn框架运行机制问题">Yarn框架运行机制问题</a>
+<ul>
+<li><a href="#task运行超时被kill掉">Task运行超时被kill掉</a></li>
+<li><a href="#shuffle-copy-time-out">shuffle copy time out</a></li>
+</ul></li>
+<li><a href="#solr索引问题">Solr索引问题</a>
+<ul>
+<li><a href="#reduce阶段做solr-index和optimize爆内存">reduce阶段做solr index和optimize爆内存</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
   </div>
 </aside>
 

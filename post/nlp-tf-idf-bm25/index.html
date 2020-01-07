@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
-    <title>关于我 - 知不道</title>
+    <title> - 知不道</title>
     <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
     
-    <meta property="og:title" content="关于我">
+    <meta property="og:title" content="">
     <meta property="og:site_name" content="知不道">
     <meta property="og:image" content="/img/author.jpg"> 
-    <meta name="title" content="关于我 - 知不道" />
-    <meta name="description" content="不能再简单的介绍" />
-     
+    <meta name="title" content=" - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
     <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
     <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
     <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
@@ -115,8 +114,8 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/about/" itemprop="url">
-        关于我
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" itemprop="url">
+        
         </a>
       </h1>
       <div class="post-meta">
@@ -125,8 +124,8 @@
     <i class="fa fa-calendar-o"></i>
 </span>
 <span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2009-06-01">
-    2009-06-01
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="0001-01-01">
+    0001-01-01
 </time>
 </span> 
       
@@ -136,13 +135,145 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">13 字 ~1分钟</span>
+<span class="leancloud-visitors-count">272 字 ~2分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    <p>一名普通的程序员~
-邮箱: jasonqian10@163.com</p>
+    
+
+<p>title: &ldquo;搜索引擎中相似度算法TF-IDF和BM25&rdquo;
+date: &ldquo;2019-12-26&rdquo;
+categories:</p>
+
+<ul>
+<li>&ldquo;Lucene&rdquo;
+tags:</li>
+<li>&ldquo;TF-IDF&rdquo;</li>
+<li>&ldquo;BM25&rdquo;
+toc: true</li>
+</ul>
+
+<h2 id="前言">前言</h2>
+
+<p>当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里介绍2种重要的相似度算法：<strong>TF-IDF和BM25</strong>。</p>
+
+<p>TF-IDF是Lucene上一代（6.0以前）相似度算法，BM25是Lucene新一代（6.0以后）正使用的相似度算法。</p>
+
+<p>先举个例子。假如，我们想找和“Lucene”相关的文章。可以想一下，那些内容里只出现过一次“Lucene”的文章，有可能是在讲某种技术，顺便提到了Lucene这个工具。而那些出现了两三次“Lucene”的文章，很可能是专门讨论Lucene的。通过直觉，我们可以得出判断：<strong>关键字出现的次数越多，文档与关键字的匹配度越高</strong>。</p>
+
+<h2 id="tf">TF</h2>
+
+<p>Term Frequency，缩写为TF。通常叫做“词频”，表示文档中关键字出现的次数。</p>
+
+<blockquote>
+<p>通常TF越大，相关性越高。</p>
+</blockquote>
+
+<p>但是，你可能会发现一个问题。例如一篇小短文里出现了一次“Lucene”，而一部好几百页的书里提到两次“Lucene”，此时我们就不能说后者相关度更高了。为了消除文档本身大小的影响，在计算TF时引入文档长度这个参数，做文档长度标准化</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">TF socre ＝ 某个词在文档中出现的次数 ／ 文档的长度</pre></div>
+<p>举例：某文档D，长度为200，其中“Lucene”出现了2次，“的”出现了20次，“原理”出现了3次，那么</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">TF(Lucene|D) = 2/200 = 0.01
+TF(的|D) = 20/200 = 0.1
+TF(原理|D) = 3/200 = 0.015</pre></div>
+<p>其中我们发现“的”这个词的比重非常高，搜索引擎中一般把这种“的、地、得”这些虚词去掉，不计算其分数。</p>
+
+<h2 id="idf">IDF</h2>
+
+<p>Inverse Dcument Frequency, 缩写为IDF。通常叫做“逆文档频率”，其定义为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF = log(语料库的文档总数 / 包含该词的文档数 + 1)</pre></div>
+<p>可见包含该词的文档数越小，分母就越小，IDF越大；该词越常见，分母就越大，IDF越小越接近0。分母之所以要加1，是为了避免分母为0（即所有文档都不包含该词）。</p>
+
+<p>举例：世界上文档总数位100亿，&rdquo;Lucene&rdquo;在1万个文档中出现过，“原理”在2亿个文档中出现过，那么它们的IDF值分别为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF(Lucene) = log(100亿/1万+1) = 19.93
+IDF(原理) ＝ log(100亿/2亿+1) ＝ 5.64</pre></div>
+<p>“Lucene”重要性相当于“原理”的3.5倍，可见“Lucene”更能表征这篇文档。</p>
+
+<h2 id="tf-idf">TF-IDF</h2>
+
+<p>TF-IDF算法的相似度公式就是TF和IDF的加权求和</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = TF1*IDF1 + TF2*IDF2 + ... + TFn*IDFn</pre></div>
+<p>上面的例子最终相似度得分为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity(Lucene的原理|D) = 0.01*19.93 + 0 + 5.64*0.015 ＝ 0.2839</pre></div>
+<p>其中，“Lucene”占了总分70%的权重，“原理”仅占总分30%的权重。</p>
+
+<h2 id="lucene中的tf-idf">Lucene中的TF-IDF</h2>
+
+<p>Lucene对TF-IDF算法做了适当调整，它的相似度公式为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = log(numDocs / (docFreq + 1)) * sqrt(tf) * (1/sqrt(length))</pre></div>
+<p>各参数含义</p>
+
+<ul>
+<li>numDocs： 索引的文档总数量</li>
+<li>docFreq： 包含关键字的文档数量</li>
+<li>tf：关键字在一篇文档中出现的次数。</li>
+<li>length：文档的长度</li>
+</ul>
+
+<p>上面的公式在Lucene打分计算时会被拆分成三个部分：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF Score = log(numDocs / (docFreq + 1))
+TF Score = sqrt(tf)
+fieldNorms = 1/sqrt(length)</pre></div>
+<blockquote>
+<p>log()，sqrt()主要是为了降低分值大小，缩写文档之间分数差距</p>
+
+<p>fieldNorms是对文本长度的归一化(Normalization)，为了消除文档长度对分数的影响</p>
+</blockquote>
+
+<p>所以，上面公式也可以表示成</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = IDF score * TF score * fieldNorms</pre></div>
+<p>Lucene在score打分时会遍历匹配到的每篇文档计算每篇文档的score，每篇文档分别计算这三部分分值。最后默认根据score sort。</p>
+
+<h2 id="bm25-下一代的tf-idf">BM25,下一代的TF-IDF</h2>
+
+<p>新版的Lucene不再把TF-IDF作为默认的相关性算法，而是采用了BM25(BM是Best Matching的意思)。BM25是基于TF-IDF并做了改进的算法。先来看下改进之后的BM25算法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5)) * ((k1 + 1) * tf) / (K + tf)</pre></div>
+<p>上面的公式在Lucene打分计算时会被拆分成两部分：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))
+TF Score = ((k1 + 1) * tf) / (K + tf)</pre></div>
+<blockquote>
+<p>这里k1和K下面展开讨论</p>
+</blockquote>
+
+<ul>
+<li>#### TF项比较</li>
+</ul>
+
+<p>两者公式如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">传统 TF Score = sqrt(tf)
+BM25的 TF Score = ((k1 + 1) * tf) / (K + tf)</pre></div>
+<p>传统的TF值理论上是可以无限大的。而BM25与之不同，它在TF计算方法中增加了一个常量k1和K，用来限制TF值的增长极限，BM25的 TF Score的范围会控制在<strong>[0, k1+1]</strong>。其中K</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">K = k1(1 - b + b*dl/avgdl)</pre></div>
+<p>取值k1，b是调节因子，Lucene中默认是k1=2，b=0.75，用户可以自定义。dl为文档的长度，avgdl为所有文档的平均长度。</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191226134547226.png" alt="image-20191226134547226" /></p>
+
+<p>两者的分布曲线来看，随着tf增大，BM25的TF会接近k1+1，传统的TF会无限变大。</p>
+
+<p>TF中还引入了文档的长度dl，所有文档的平均长度avgdl，这里假设L = dl/avgdl，下面是不同L的条件下，词频对TFScore影响的走势图</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191226145110069.png" alt="image-20191226145110069" /></p>
+
+<p>从图上可以看到，文档越短，它逼近上限的速度越快，反之则越慢。这是可以理解的，对于只有几个词的内容，比如文章“标题”，只需要匹配很少的几个词，就可以确定相关性。而对于大篇幅的内容，比如一本书的内容，需要匹配很多词才能知道它的重点是讲什么。所以在专利检索中相关性通常的顺序 TTL &gt; ABST &gt; CLMS &gt; DESC。</p>
+
+<p>关于参数b的作用：公式中L前面有个常系数b，如果把b设置为0，则L完全失去对评分的影响力。b的值越大，L对总评分的影响力越大。</p>
+
+<ul>
+<li>IDF项比较</li>
+</ul>
+
+<p>两者公式如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">传统的 IDF Score = log(numDocs / (docFreq + 1))
+BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></div>
+<p><img src="https://jasonqian10.github.io/img/post/image-20191226144423194.png" alt="image-20191226144423194" /></p>
+
+<p>从分布曲线来看两者走势基本一致。</p>
+
+<h2 id="tf-idf-vs-bm25">TF-IDF vs BM25</h2>
+
+<p>传统的TF-IDF是自然语言搜索的一个基础理论，它符合信息论中的熵的计算原理，你观察IDF公式会发现，它与熵的公式是类似的。实际上IDF就是一个特定条件下关键词概率分布的交叉熵。</p>
+
+<p>BM25在传统TF-IDF的基础上增加了几个可调节的参数，使得它在应用上更佳灵活和强大，具有较高的实用性。</p>
 
     </div>
     <footer class="post-footer">
@@ -151,17 +282,13 @@
      <div class="post-nav">
     <div class="post-nav-next post-nav-item">
     
-        <a href="https://jasonqian10.github.io/post/solr-lucene-principle/" rel="next" title="solr搜索原理解析">
-        <i class="fa fa-chevron-left"></i> solr搜索原理解析
+        <a href="https://jasonqian10.github.io/about/" rel="next" title="关于我">
+        <i class="fa fa-chevron-left"></i> 关于我
         </a>
     
     </div>
 
     <div class="post-nav-prev post-nav-item">
-    
-        <a href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" rel="prev" title="">
-         <i class="fa fa-chevron-right"></i>
-        </a>
     
     </div>
 </div>
