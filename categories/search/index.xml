@@ -6,10 +6,19 @@
     <description>Recent content in Search on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 15 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/categories/search/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Intellij idea搭建solr源码debug调试环境</title>
+      <link>https://jasonqian10.github.io/post/solr-debug-idea-build/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr-debug-idea-build/</guid>
+      <description>&lt;p&gt;solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>solr suggest实战</title>
@@ -19,13 +28,11 @@
       <guid>https://jasonqian10.github.io/post/solr-suggest/</guid>
       <description>&lt;h3 id=&#34;solr-suggest模块介绍&#34;&gt;solr suggest模块介绍&lt;/h3&gt;
 
-&lt;h4 id=&#34;介绍&#34;&gt;介绍&lt;/h4&gt;
-
 &lt;p&gt;自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20191116164420559.png&#34; alt=&#34;image-20191116164420559&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;本文我们主要就来讲一下solr里面是如何去实现这样的自动提示功能。&lt;/p&gt;</description>
+&lt;p&gt;本文我们主要就来讲一下solr是如何去实现这样的自动提示功能。&lt;/p&gt;</description>
     </item>
     
     <item>

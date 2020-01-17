@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>debug on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/debug/</link>
+    <description>Recent content in debug on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/tags/debug/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Intellij idea搭建solr源码debug调试环境</title>
+      <link>https://jasonqian10.github.io/post/solr-debug-idea-build/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr-debug-idea-build/</guid>
+      <description>&lt;p&gt;solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

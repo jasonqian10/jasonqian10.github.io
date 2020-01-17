@@ -1,6 +1,83 @@
 <search>
     
      <entry>
+        <title>Intellij idea搭建solr源码debug调试环境</title>
+        <url>https://jasonqian10.github.io/post/solr-debug-idea-build/</url>
+        <categories>
+          <category>Search</category>
+        </categories>
+        <tags>
+          <tag>solr</tag><tag>debug</tag><tag>Intellij idea</tag>
+        </tags>
+        <content type="html"> solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。
+clone代码 git clone https://github.com/apache/lucene-solr.git
+下载后阅读根目录下README.md。
+下载ant依赖 如果本地没有安装过ant的请自行安装。
+在项目根目录下执行命令
+ant ivy-bootstrap
+自动下载ant依赖包。第一次执行需要较长时间，显示BUILD SUCCESSFUL则成功。
+ 这一步只需要执行一次，后面不需重复执行。
+ ant项目转换成maven项目 项目根目录下执行命令
+ant idea
+ 注意：执行完此步骤才可以用intellj idea打开项目。未转换先打开了会有问题。
+ 编译项目 进入项目根目录 solr/ 目录，执行命令
+ant server
+idea运行solr server 在idea上运行solr server是实际启动的是embedSolrServer。
+ 先准备一个solr_home，放在solr/server/ 目录下
+ 在项目 solr/solrj/src/test/org/apache/solr/client/solrj/StartSolrJetty.java 中增加上面准备的solr_hom的路径；设置webapp war路径
+   run StartSolrJetty.java，然后访问 localhost:8983/solr   对源码打断点，debug StartSolrJetty.java 即可进行源码调试  导入自定义jar 如果有基于源码自定义的插件jar，也可以把插件代码导入到源码项目中进行debug。
+</content>
+    </entry>
+    
+     <entry>
+        <title>搜索引擎中相似度算法TF-IDF和BM25</title>
+        <url>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</url>
+        <categories>
+          <category>Lucene</category>
+        </categories>
+        <tags>
+          <tag>TF-IDF</tag><tag>BM25</tag>
+        </tags>
+        <content type="html">  前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里介绍2种重要的相似度算法：TF-IDF和BM25。
+TF-IDF是Lucene上一代（6.0以前）相似度算法，BM25是Lucene新一代（6.0以后）正使用的相似度算法。
+先举个例子。假如，我们想找和“Lucene”相关的文章。可以想一下，那些内容里只出现过一次“Lucene”的文章，有可能是在讲某种技术，顺便提到了Lucene这个工具。而那些出现了两三次“Lucene”的文章，很可能是专门讨论Lucene的。通过直觉，我们可以得出判断：关键字出现的次数越多，文档与关键字的匹配度越高。
+TF Term Frequency，缩写为TF。通常叫做“词频”，表示文档中关键字出现的次数。
+ 通常TF越大，相关性越高。
+ 但是，你可能会发现一个问题。例如一篇小短文里出现了一次“Lucene”，而一部好几百页的书里提到两次“Lucene”，此时我们就不能说后者相关度更高了。为了消除文档本身大小的影响，在计算TF时引入文档长度这个参数，做文档长度标准化
+TF socre ＝ 某个词在文档中出现的次数 ／ 文档的长度 举例：某文档D，长度为200，其中“Lucene”出现了2次，“的”出现了20次，“原理”出现了3次，那么
+TF(Lucene|D) = 2/200 = 0.01 TF(的|D) = 20/200 = 0.1 TF(原理|D) = 3/200 = 0.015 其中我们发现“的”这个词的比重非常高，搜索引擎中一般把这种“的、地、得”这些虚词去掉，不计算其分数。
+IDF Inverse Dcument Frequency, 缩写为IDF。通常叫做“逆文档频率”，其定义为
+IDF = log(语料库的文档总数 / 包含该词的文档数 &#43; 1) 可见包含该词的文档数越小，分母就越小，IDF越大；该词越常见，分母就越大，IDF越小越接近0。分母之所以要加1，是为了避免分母为0（即所有文档都不包含该词）。
+举例：世界上文档总数位100亿，&amp;rdquo;Lucene&amp;rdquo;在1万个文档中出现过，“原理”在2亿个文档中出现过，那么它们的IDF值分别为：
+IDF(Lucene) = log(100亿/1万&#43;1) = 19.93 IDF(原理) ＝ log(100亿/2亿&#43;1) ＝ 5.64 “Lucene”重要性相当于“原理”的3.5倍，可见“Lucene”更能表征这篇文档。
+TF-IDF TF-IDF算法的相似度公式就是TF和IDF的加权求和
+simlarity = TF1*IDF1 &#43; TF2*IDF2 &#43; ... &#43; TFn*IDFn 上面的例子最终相似度得分为
+simlarity(Lucene的原理|D) = 0.01*19.93 &#43; 0 &#43; 5.64*0.015 ＝ 0.2839 其中，“Lucene”占了总分70%的权重，“原理”仅占总分30%的权重。
+Lucene中的TF-IDF Lucene对TF-IDF算法做了适当调整，它的相似度公式为
+simlarity = log(numDocs / (docFreq &#43; 1)) * sqrt(tf) * (1/sqrt(length)) 各参数含义
+ numDocs： 索引的文档总数量 docFreq： 包含关键字的文档数量 tf：关键字在一篇文档中出现的次数。 length：文档的长度  上面的公式在Lucene打分计算时会被拆分成三个部分：
+IDF Score = log(numDocs / (docFreq &#43; 1)) TF Score = sqrt(tf) fieldNorms = 1/sqrt(length)  log()，sqrt()主要是为了降低分值大小，缩写文档之间分数差距
+fieldNorms是对文本长度的归一化(Normalization)，为了消除文档长度对分数的影响
+ 所以，上面公式也可以表示成
+simlarity = IDF score * TF score * fieldNorms Lucene在score打分时会遍历匹配到的每篇文档计算每篇文档的score，每篇文档分别计算这三部分分值。最后默认根据score sort。
+BM25,下一代的TF-IDF 新版的Lucene不再把TF-IDF作为默认的相关性算法，而是采用了BM25(BM是Best Matching的意思)。BM25是基于TF-IDF并做了改进的算法。先来看下改进之后的BM25算法
+simlarity = log(1 &#43; (numDocs - docFreq &#43; 0.5) / (docFreq &#43; 0.5)) * ((k1 &#43; 1) * tf) / (K &#43; tf) 上面的公式在Lucene打分计算时会被拆分成两部分：
+IDF Score = log(1 &#43; (numDocs - docFreq &#43; 0.5) / (docFreq &#43; 0.5)) TF Score = ((k1 &#43; 1) * tf) / (K &#43; tf)  这里k1和K下面展开讨论
+  #### TF项比较  两者公式如下
+传统 TF Score = sqrt(tf) BM25的 TF Score = ((k1 &#43; 1) * tf) / (K &#43; tf) 传统的TF值理论上是可以无限大的。而BM25与之不同，它在TF计算方法中增加了一个常量k1和K，用来限制TF值的增长极限，BM25的 TF Score的范围会控制在[0, k1&#43;1]。其中K
+K = k1(1 - b &#43; b*dl/avgdl) 取值k1，b是调节因子，Lucene中默认是k1=2，b=0.75，用户可以自定义。dl为文档的长度，avgdl为所有文档的平均长度。
+两者的分布曲线来看，随着tf增大，BM25的TF会接近k1&#43;1，传统的TF会无限变大。
+TF中还引入了文档的长度dl，所有文档的平均长度avgdl，这里假设L = dl/avgdl，下面是不同L的条件下，词频对TFScore影响的走势图
+从图上可以看到，文档越短，它逼近上限的速度越快，反之则越慢。这是可以理解的，对于只有几个词的内容，比如文章“标题”，只需要匹配很少的几个词，就可以确定相关性。而对于大篇幅的内容，比如一本书的内容，需要匹配很多词才能知道它的重点是讲什么。所以在专利检索中相关性通常的顺序 TTL &amp;gt; ABST &amp;gt; CLMS &amp;gt; DESC。
+关于参数b的作用：公式中L前面有个常系数b，如果把b设置为0，则L完全失去对评分的影响力。b的值越大，L对总评分的影响力越大。
+ IDF项比较  两者公式如下
+传统的 IDF Score = log(numDocs / (docFreq &#43; 1)) BM25的 IDF Score = log(1 &#43; (numDocs - docFreq &#43; 0.5) / (docFreq &#43; 0.5)) 从分布曲线来看两者走势基本一致。
+TF-IDF vs BM25 传统的TF-IDF是自然语言搜索的一个基础理论，它符合信息论中的熵的计算原理，你观察IDF公式会发现，它与熵的公式是类似的。实际上IDF就是一个特定条件下关键词概率分布的交叉熵。
+BM25在传统TF-IDF的基础上增加了几个可调节的参数，使得它在应用上更佳灵活和强大，具有较高的实用性。
+</content>
+    </entry>
+    
+     <entry>
         <title>【Hadoop索引】hadoop调优经验</title>
         <url>https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/</url>
         <categories>
@@ -198,15 +275,36 @@ https://blog.csdn.net/weixin_38750084/article/details/82963235
           <category>Search</category>
         </categories>
         <tags>
-          <tag>solr</tag><tag>lucene</tag>
+          <tag>solr</tag><tag>lucene</tag><tag>suggest</tag>
         </tags>
-        <content type="html"> solr suggest模块介绍 介绍 自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。
-本文我们主要就来讲一下solr里面是如何去实现这样的自动提示功能。
-Solr 中是通过 SuggestComponent 模块 为用户提供查询 term 的自动提示。可以使用此功能在搜索应用程序中实现强大的自动提示功能。
-如何使用suggest模块 使用方式 先来介绍一下官方给出的使用方式，在solrconfig.xml中添加如下配置
-&amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;mySuggester&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;FuzzyLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;DocumentDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;cat&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;weightField&amp;#34;&amp;gt;price&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;string&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt; 解释一下上面配置中参数的含义
- searchComponent   如何定制 上面讲的是官方给出的使用方式，当然使用上面的配置，能实现基本的suggest功能。下面讲讲我的项目中是如何定制suggest的。下面分别介绍我参与的两个项目的suggest模块：
-关键字自动提示 &amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34; enable=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;default&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;AnalyzingInfixLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;indexPath&amp;#34;&amp;gt;infix_keyword&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;highlight&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;DocumentDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;TERM&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;weightField&amp;#34;&amp;gt;DF&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sortField&amp;#34;&amp;gt;DF&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;text_suggest&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnCommit&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnOptimize&amp;#34;&amp;gt;true&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt; 公司名自动提示</content>
+        <content type="html"> solr suggest模块介绍 自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。
+本文我们主要就来讲一下solr是如何去实现这样的自动提示功能。
+Solr 中是通过 SuggestComponent 模块 为用户提供查询关键字的自动提示功能。可以使用此功能在搜索应用程序中实现强大的自动提示功能。
+如何使用suggest模块 官方使用方式 先来介绍一下官方给出的使用方式，在solrconfig.xml中添加如下配置
+&amp;lt;requestHandler name=&amp;#34;/suggest&amp;#34; class=&amp;#34;solr.SearchHandler&amp;#34; startup=&amp;#34;lazy&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;defaults&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;suggest&amp;#34;&amp;gt;true&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggest.count&amp;#34;&amp;gt;10&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;arr name=&amp;#34;components&amp;#34;&amp;gt; &amp;lt;str&amp;gt;suggest&amp;lt;/str&amp;gt; &amp;lt;!--这里配置的就是下面的searchComponent “suggest”--&amp;gt; &amp;lt;/arr&amp;gt; &amp;lt;/requestHandler&amp;gt;&amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;mySuggester&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;FuzzyLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;DocumentDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;cat&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;weightField&amp;#34;&amp;gt;price&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;string&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt; 配置是什么作用 与是组合使用的，requestHandler定义的name &amp;ldquo;suggest&amp;rdquo;表示请求handler，当请求URL中出现&amp;rdquo;suggest&amp;rdquo;时，例如http://localhost:8983/solr/techproducts/suggest ，就会使用如上配置，进入solr.SearchHandler类，然后进入searchComponent配置的solr.SuggestComponent类。
+searchComponent配置中几个重要的参数含义
+ name：suggester名。可以任意取。当searchComponent中配置多个suggester时，可以通过查询参数 suggest.dictionary=mySuggester 指定查询哪一个suggester。且在response中会根据suggester名显示结果。 lookupImpl：查找实现。query词典和build词典的逻辑由其完成。solr提供了多种实现类。 dictionaryImpl：字典实现。词典中各字段值是由其获取的。solr提供了多种实现类。 field：指定主索引中的字段，需要stored，这个字段值用于生成suggest词典。 weightField：排序字段，需要数字类型，suggest结果会根据这个字段数值进行排序展示。 suggestAnalyzerFieldType：分析字段。lookupImpl类query和build阶段进行分析。 buildOnStartup：是否solr启动时构建suggest词典。建议false，否则启动很耗性能，可以通过suggest.build=true手动触发。 buildOnCommit和buildOnOptimize：是否在soft-commit和optimize后重建词典。可以根据自己soft-commit和optimize的频率来决定是否启用。如果频率比较高，建议false。可以通过suggest.build=true手动触发。  如何定制 上面讲的是官方给出的使用方式，当然使用上面的配置，能实现基本的suggest功能。下面讲讲我的项目中是如何定制suggest的。下面分别介绍两个suggest例子：
+关键字自动提示 需求：用户输入关键字，前缀匹配出相关性结果，根据词频大小排序展示给用户。
+我们把用户的查询关键字清洗出来，索引关键字和词频，用这份主索引生成词典。查询suggest词典，根据词频大小排序展示给用户。demo效果如下
+searchComponent配置
+&amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34; enable=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;mySuggester&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;AnalyzingInfixLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;indexPath&amp;#34;&amp;gt;index_keyword&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;highlight&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;DocumentDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;keyword&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;weightField&amp;#34;&amp;gt;tf&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sortField&amp;#34;&amp;gt;tf&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;text_suggest&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnCommit&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnOptimize&amp;#34;&amp;gt;true&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt;  text_suggest参考官网配置
+&amp;lt;fieldType name=&amp;#34;text_suggest&amp;#34; class=&amp;#34;solr.TextField&amp;#34; sortMissingLast=&amp;#34;true&amp;#34; omitTermFreqAndPositions=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;analyzer&amp;gt; &amp;lt;tokenizer class=&amp;#34;solr.KeywordTokenizerFactory&amp;#34;/&amp;gt; &amp;lt;filter class=&amp;#34;solr.LowerCaseFilterFactory&amp;#34; /&amp;gt; &amp;lt;/analyzer&amp;gt; &amp;lt;/fieldType&amp;gt;  这里KeywordTokenizerFactory不会进行分词，会把输入文本作为完整的关键字进行索引。
+为何选择AnalyzingInfixLookupFactory和DocumentDictionaryFactory的组合？
+ AnalyzingInfixLookupFactory  主要在于AnalyzingLookupFactory与AnalyzingInfixLookupFactory区别。两者都是支持字段分析，后者优势在于支持前缀匹配（prefix matches），例如词典中存在关键字apple，当搜索app就能匹配到关键字apple。我的应用场景需要支持前缀匹配。
+AnalyzingInfixLookupFactory支持indexPath配置，其他lookup不支持。
+ DocumentDictionaryFactory  这个字典实现支持weightField配置，我们的应用场景需要根据关键字的词频进行推荐排序，正好可以通过weightField实现。
+公司名自动提示 需求：本例子与上面的关键字提示有点不同，上面的例子是前缀匹配，本例需要短语匹配，只要命中公司中任意部分都会匹配上。根据文档频率排序展示。demo类似于天眼查搜索
+searchComponent配置
+&amp;lt;searchComponent name=&amp;#34;suggest&amp;#34; class=&amp;#34;solr.SuggestComponent&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;suggester&amp;#34;&amp;gt; &amp;lt;str name=&amp;#34;name&amp;#34;&amp;gt;mySuggester&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;lookupImpl&amp;#34;&amp;gt;com.test.AnalyzingInfixPhraseQueryLookupFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;dictionaryImpl&amp;#34;&amp;gt;HighFrequencyDictionaryFactory&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;indexPath&amp;#34;&amp;gt;index_company&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;field&amp;#34;&amp;gt;COMPANY&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;suggestAnalyzerFieldType&amp;#34;&amp;gt;suggest_text&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;highlight&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;int name=&amp;#34;minPrefixChars&amp;#34;&amp;gt;100&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;buildOnStartup&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;buildOnCommit&amp;#34;&amp;gt;false&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/searchComponent&amp;gt;  AnalyzingInfixPhraseQueryLookupFactory：这是个定制类，目的是为了实现短语查询
+ suggest_text为
+&amp;lt;fieldType name=&amp;#34;suggest_text&amp;#34; class=&amp;#34;solr.TextField&amp;#34; positionIncrementGap=&amp;#34;100&amp;#34;&amp;gt; &amp;lt;analyzer&amp;gt; &amp;lt;tokenizer class=&amp;#34;solr.StandardTokenizerFactory&amp;#34; /&amp;gt; &amp;lt;filter class=&amp;#34;solr.ICUTransformFilterFactory&amp;#34; id=&amp;#34;Traditional-Simplified&amp;#34;/&amp;gt; &amp;lt;filter class=&amp;#34;solr.LowerCaseFilterFactory&amp;#34; /&amp;gt; &amp;lt;/analyzer&amp;gt; &amp;lt;/fieldType&amp;gt;  这里会进行分词处理。查询时通过PhraseQuery进行搜索。
+ HighFrequencyDictionaryFactory：这个词典类作用是能获取term的docFreq，把docFreq作为weight字段的值，我们的需求需要根据公司名的docFreq来排序展示。  suggest源码分析 suggest query源码执行时序图 suggest build源码执行时序图 suggest索引是在主索引基础上build出来的（通过HTTP请求参数suggest.build=true），build时序图即是suggest构建索引的过程。
+suggest模块几个重要的类  SolrSuggester  solr初始化的时候，SolrSuggester类会维护lookupImpl和dictionaryImpl对象，query和build请求都会先经过SolrSuggester类。主要两个函数
+a).getSuggestions()：query请求会走这个函数，调用lookupImpl对象的lookup()
+b).build()：build请求走这个函数，调用lookupImpl对象的build()
+ lookupImpl  lookupImpl类都是继承Lookup类，实现lookup()和build()。其中build()会调用dictionaryImpl对象的next()
+ dictionaryImpl  dictionaryImpl类实现Dictionary接口，对象内部维护迭代器，迭代器实现InputIterator接口的next()，遍历获取所需字段。
+</content>
     </entry>
     
      <entry>
@@ -270,55 +368,6 @@ int doc = iterator.nextDoc()  至于如何拿出这些匹配到文档id，过程
  这里需要注意，每个段拿出的文档id是基于本段的排序。而最终的文档id是需要全局唯一的，这里需要加上docBase。
 final int docBase = context.docBase; pqTop.doc = doc &#43; docBase; 然后传入拿出的文档id，调用段文档收集器LeafCollector#collect 方法
 collector.collect(doc); 然后进入 TermScorer.score() ——》 SimScorer.score()完成打分。
-</content>
-    </entry>
-    
-     <entry>
-        <title></title>
-        <url>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</url>
-        <categories>
-          
-        </categories>
-        <tags>
-          
-        </tags>
-        <content type="html">  title: &amp;ldquo;搜索引擎中相似度算法TF-IDF和BM25&amp;rdquo; date: &amp;ldquo;2019-12-26&amp;rdquo; categories:
- &amp;ldquo;Lucene&amp;rdquo; tags: &amp;ldquo;TF-IDF&amp;rdquo; &amp;ldquo;BM25&amp;rdquo; toc: true  前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里介绍2种重要的相似度算法：TF-IDF和BM25。
-TF-IDF是Lucene上一代（6.0以前）相似度算法，BM25是Lucene新一代（6.0以后）正使用的相似度算法。
-先举个例子。假如，我们想找和“Lucene”相关的文章。可以想一下，那些内容里只出现过一次“Lucene”的文章，有可能是在讲某种技术，顺便提到了Lucene这个工具。而那些出现了两三次“Lucene”的文章，很可能是专门讨论Lucene的。通过直觉，我们可以得出判断：关键字出现的次数越多，文档与关键字的匹配度越高。
-TF Term Frequency，缩写为TF。通常叫做“词频”，表示文档中关键字出现的次数。
- 通常TF越大，相关性越高。
- 但是，你可能会发现一个问题。例如一篇小短文里出现了一次“Lucene”，而一部好几百页的书里提到两次“Lucene”，此时我们就不能说后者相关度更高了。为了消除文档本身大小的影响，在计算TF时引入文档长度这个参数，做文档长度标准化
-TF socre ＝ 某个词在文档中出现的次数 ／ 文档的长度 举例：某文档D，长度为200，其中“Lucene”出现了2次，“的”出现了20次，“原理”出现了3次，那么
-TF(Lucene|D) = 2/200 = 0.01 TF(的|D) = 20/200 = 0.1 TF(原理|D) = 3/200 = 0.015 其中我们发现“的”这个词的比重非常高，搜索引擎中一般把这种“的、地、得”这些虚词去掉，不计算其分数。
-IDF Inverse Dcument Frequency, 缩写为IDF。通常叫做“逆文档频率”，其定义为
-IDF = log(语料库的文档总数 / 包含该词的文档数 &#43; 1) 可见包含该词的文档数越小，分母就越小，IDF越大；该词越常见，分母就越大，IDF越小越接近0。分母之所以要加1，是为了避免分母为0（即所有文档都不包含该词）。
-举例：世界上文档总数位100亿，&amp;rdquo;Lucene&amp;rdquo;在1万个文档中出现过，“原理”在2亿个文档中出现过，那么它们的IDF值分别为：
-IDF(Lucene) = log(100亿/1万&#43;1) = 19.93 IDF(原理) ＝ log(100亿/2亿&#43;1) ＝ 5.64 “Lucene”重要性相当于“原理”的3.5倍，可见“Lucene”更能表征这篇文档。
-TF-IDF TF-IDF算法的相似度公式就是TF和IDF的加权求和
-simlarity = TF1*IDF1 &#43; TF2*IDF2 &#43; ... &#43; TFn*IDFn 上面的例子最终相似度得分为
-simlarity(Lucene的原理|D) = 0.01*19.93 &#43; 0 &#43; 5.64*0.015 ＝ 0.2839 其中，“Lucene”占了总分70%的权重，“原理”仅占总分30%的权重。
-Lucene中的TF-IDF Lucene对TF-IDF算法做了适当调整，它的相似度公式为
-simlarity = log(numDocs / (docFreq &#43; 1)) * sqrt(tf) * (1/sqrt(length)) 各参数含义
- numDocs： 索引的文档总数量 docFreq： 包含关键字的文档数量 tf：关键字在一篇文档中出现的次数。 length：文档的长度  上面的公式在Lucene打分计算时会被拆分成三个部分：
-IDF Score = log(numDocs / (docFreq &#43; 1)) TF Score = sqrt(tf) fieldNorms = 1/sqrt(length)  log()，sqrt()主要是为了降低分值大小，缩写文档之间分数差距
-fieldNorms是对文本长度的归一化(Normalization)，为了消除文档长度对分数的影响
- 所以，上面公式也可以表示成
-simlarity = IDF score * TF score * fieldNorms Lucene在score打分时会遍历匹配到的每篇文档计算每篇文档的score，每篇文档分别计算这三部分分值。最后默认根据score sort。
-BM25,下一代的TF-IDF 新版的Lucene不再把TF-IDF作为默认的相关性算法，而是采用了BM25(BM是Best Matching的意思)。BM25是基于TF-IDF并做了改进的算法。先来看下改进之后的BM25算法
-simlarity = log(1 &#43; (numDocs - docFreq &#43; 0.5) / (docFreq &#43; 0.5)) * ((k1 &#43; 1) * tf) / (K &#43; tf) 上面的公式在Lucene打分计算时会被拆分成两部分：
-IDF Score = log(1 &#43; (numDocs - docFreq &#43; 0.5) / (docFreq &#43; 0.5)) TF Score = ((k1 &#43; 1) * tf) / (K &#43; tf)  这里k1和K下面展开讨论
-  #### TF项比较  两者公式如下
-传统 TF Score = sqrt(tf) BM25的 TF Score = ((k1 &#43; 1) * tf) / (K &#43; tf) 传统的TF值理论上是可以无限大的。而BM25与之不同，它在TF计算方法中增加了一个常量k1和K，用来限制TF值的增长极限，BM25的 TF Score的范围会控制在[0, k1&#43;1]。其中K
-K = k1(1 - b &#43; b*dl/avgdl) 取值k1，b是调节因子，Lucene中默认是k1=2，b=0.75，用户可以自定义。dl为文档的长度，avgdl为所有文档的平均长度。
-两者的分布曲线来看，随着tf增大，BM25的TF会接近k1&#43;1，传统的TF会无限变大。
-TF中还引入了文档的长度dl，所有文档的平均长度avgdl，这里假设L = dl/avgdl，下面是不同L的条件下，词频对TFScore影响的走势图
-从图上可以看到，文档越短，它逼近上限的速度越快，反之则越慢。这是可以理解的，对于只有几个词的内容，比如文章“标题”，只需要匹配很少的几个词，就可以确定相关性。而对于大篇幅的内容，比如一本书的内容，需要匹配很多词才能知道它的重点是讲什么。所以在专利检索中相关性通常的顺序 TTL &amp;gt; ABST &amp;gt; CLMS &amp;gt; DESC。
-关于参数b的作用：公式中L前面有个常系数b，如果把b设置为0，则L完全失去对评分的影响力。b的值越大，L对总评分的影响力越大。
- IDF项比较  两者公式如下
-传统的 IDF Score = log(numDocs / (docFreq &#43; 1)) BM25的 IDF Score = log(1 &#43; (numDocs - docFreq &#43; 0.5) / (docFreq &#43; 0.5)) 从分布曲线来看两者走势基本一致。
-TF-IDF vs BM25 传统的TF-IDF是自然语言搜索的一个基础理论，它符合信息论中的熵的计算原理，你观察IDF公式会发现，它与熵的公式是类似的。实际上IDF就是一个特定条件下关键词概率分布的交叉熵。
-BM25在传统TF-IDF的基础上增加了几个可调节的参数，使得它在应用上更佳灵活和强大，具有较高的实用性。
 </content>
     </entry>
     

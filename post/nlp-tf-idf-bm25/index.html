@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
-    <title> - 知不道</title>
+    <title>搜索引擎中相似度算法TF-IDF和BM25 - 知不道</title>
     <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
     
-    <meta property="og:title" content="">
+    <meta property="og:title" content="搜索引擎中相似度算法TF-IDF和BM25">
     <meta property="og:site_name" content="知不道">
     <meta property="og:image" content="/img/author.jpg"> 
-    <meta name="title" content=" - 知不道" />
+    <meta name="title" content="搜索引擎中相似度算法TF-IDF和BM25 - 知不道" />
     <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
     <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
     <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
@@ -115,7 +115,7 @@
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
         <a class="post-title-link" href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" itemprop="url">
-        
+        搜索引擎中相似度算法TF-IDF和BM25
         </a>
       </h1>
       <div class="post-meta">
@@ -124,35 +124,41 @@
     <i class="fa fa-calendar-o"></i>
 </span>
 <span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="0001-01-01">
-    0001-01-01
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-26">
+    2019-12-26
 </time>
 </span> 
       
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/lucene" itemprop="url" rel="index">
+        <span itemprop="name">Lucene</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
        <span>
 &nbsp; | &nbsp;
 <span class="post-meta-item-icon">
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">272 字 ~2分钟</span>
+<span class="leancloud-visitors-count">2309 字 ~5分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     
-
-<p>title: &ldquo;搜索引擎中相似度算法TF-IDF和BM25&rdquo;
-date: &ldquo;2019-12-26&rdquo;
-categories:</p>
-
-<ul>
-<li>&ldquo;Lucene&rdquo;
-tags:</li>
-<li>&ldquo;TF-IDF&rdquo;</li>
-<li>&ldquo;BM25&rdquo;
-toc: true</li>
-</ul>
 
 <h2 id="前言">前言</h2>
 
@@ -278,17 +284,31 @@ BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></
     </div>
     <footer class="post-footer">
      
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/tf-idf" rel="tag" title="TF-IDF">#TF-IDF#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/bm25" rel="tag" title="BM25">#BM25#</a>
+    
+</div>
+
+
 
      <div class="post-nav">
     <div class="post-nav-next post-nav-item">
     
-        <a href="https://jasonqian10.github.io/about/" rel="next" title="关于我">
-        <i class="fa fa-chevron-left"></i> 关于我
+        <a href="https://jasonqian10.github.io/post/solr-debug-idea-build/" rel="next" title="Intellij idea搭建solr源码debug调试环境">
+        <i class="fa fa-chevron-left"></i> Intellij idea搭建solr源码debug调试环境
         </a>
     
     </div>
 
     <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" rel="prev" title="【Hadoop索引】hadoop调优经验">
+        【Hadoop索引】hadoop调优经验 <i class="fa fa-chevron-right"></i>
+        </a>
     
     </div>
 </div>
@@ -316,7 +336,16 @@ BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></
 <aside id="sidebar" class="sidebar">
   <div class="sidebar-inner">
 
-    <section class="site-overview sidebar-panel  sidebar-panel-active ">
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
       <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image"
         src="https://jasonqian10.github.io/img/author.jpg"
@@ -328,14 +357,14 @@ BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
     <div class="site-state-item site-state-categories">    
         <a href="https://jasonqian10.github.io/categories/">      
          
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         
         <span class="site-state-item-name">分类</span>
         
@@ -345,7 +374,7 @@ BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">9</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -380,6 +409,25 @@ BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></
 
     </section>
     
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#tf">TF</a></li>
+<li><a href="#idf">IDF</a></li>
+<li><a href="#tf-idf">TF-IDF</a></li>
+<li><a href="#lucene中的tf-idf">Lucene中的TF-IDF</a></li>
+<li><a href="#bm25-下一代的tf-idf">BM25,下一代的TF-IDF</a></li>
+<li><a href="#tf-idf-vs-bm25">TF-IDF vs BM25</a></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
   </div>
 </aside>
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BM25 on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/bm25/</link>
+    <description>Recent content in BM25 on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 26 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/tags/bm25/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>搜索引擎中相似度算法TF-IDF和BM25</title>
+      <link>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</link>
+      <pubDate>Thu, 26 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</guid>
+      <description>前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里</description>
+    </item>
+    
+  </channel>
+</rss>

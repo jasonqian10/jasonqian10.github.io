@@ -6,10 +6,28 @@
     <description>Recent content in Posts on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 22 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Intellij idea搭建solr源码debug调试环境</title>
+      <link>https://jasonqian10.github.io/post/solr-debug-idea-build/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr-debug-idea-build/</guid>
+      <description>&lt;p&gt;solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>搜索引擎中相似度算法TF-IDF和BM25</title>
+      <link>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</link>
+      <pubDate>Thu, 26 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</guid>
+      <description>前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里</description>
+    </item>
     
     <item>
       <title>【Hadoop索引】hadoop调优经验</title>
@@ -86,13 +104,11 @@
       <guid>https://jasonqian10.github.io/post/solr-suggest/</guid>
       <description>&lt;h3 id=&#34;solr-suggest模块介绍&#34;&gt;solr suggest模块介绍&lt;/h3&gt;
 
-&lt;h4 id=&#34;介绍&#34;&gt;介绍&lt;/h4&gt;
-
 &lt;p&gt;自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20191116164420559.png&#34; alt=&#34;image-20191116164420559&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;本文我们主要就来讲一下solr里面是如何去实现这样的自动提示功能。&lt;/p&gt;</description>
+&lt;p&gt;本文我们主要就来讲一下solr是如何去实现这样的自动提示功能。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -113,27 +129,6 @@
 
 &lt;p&gt;solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
 &lt;img src=&#34;https://jasonqian10.github.io/img/post/solr_lucene-1542234.png&#34; alt=&#34;solr_lucene&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</guid>
-      <description>title: &amp;ldquo;搜索引擎中相似度算法TF-IDF和BM25&amp;rdquo; date: &amp;ldquo;2019-12-26&amp;rdquo; categories:
- &amp;ldquo;Lucene&amp;rdquo; tags: &amp;ldquo;TF-IDF&amp;rdquo; &amp;ldquo;BM25&amp;rdquo; toc: true  前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里介绍2种重要的相似度算法：TF-IDF和BM25。
-TF-IDF是Lucene上一代（6.0以前）相似度算法，BM25是Lucene新一代（6.0以后）正使用的相似度算法。
-先举个例子。假如，我们想找和“Lucene”相关的文章。可以想一下，那些内容里只出现过一次“Lucene”的文章，有可能是在讲某种技术，顺便提到了Lucene这个工具。而那些出现了两三次“Lucene”的文章，很可能是专门讨论Lucene的。通过直觉，我们可以得出判断：关键字出现的次数越多，文档与关键字的匹配度越高。
-TF Term Frequency，缩写为TF。通常叫做“词频”，表示文档中关键字出现的次数。
- 通常TF越大，相关性越高。
- 但是，你可能会发现一个问题。例如一篇小短文里出现了一次“Lucene”，而一部好几百页的书里提到两次“Lucene”，此时我们就不能说后者相关度更高了。为了消除文档本身大小的影响，在计算TF时引入文档长度这个参数，做文档长度标准化
-TF socre ＝ 某个词在文档中出现的次数 ／ 文档的长度 举例：某文档D，长度为200，其中“Lucene”出现了2次，“的”出现了20次，“原理”出现了3次，那么
-TF(Lucene|D) = 2/200 = 0.01 TF(的|D) = 20/200 = 0.1 TF(原理|D) = 3/200 = 0.015 其中我们发现“的”这个词的比重非常高，搜索引擎中一般把这种“的、地、得”这些虚词去掉，不计算其分数。
-IDF Inverse Dcument Frequency, 缩写为IDF。通常叫做“逆文档频率”，其定义为
-IDF = log(语料库的文档总数 / 包含该词的文档数 + 1) 可见包含该词的文档数越小，分母就越小，IDF越大；该词越常见，分母就越大，IDF越小越接近0。分母之所以要加1，是为了避免分母为0（即所有文档都不包含该词）。
-举例：世界上文档总数位100亿，&amp;rdquo;Lucene&amp;rdquo;在1万个文档中出现过，“原理”在2亿个文档中出现过，那么它们的IDF值分别为：
-IDF(Lucene) = log(100亿/1万+1) = 19.93 IDF(原理) ＝ log(100亿/2亿+1) ＝ 5.</description>
     </item>
     
   </channel>
