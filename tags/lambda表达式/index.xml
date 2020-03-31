@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>lambda表达式 on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</link>
+    <description>Recent content in lambda表达式 on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 29 Mar 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>【java8】lambda表达式你用对了吗？</title>
+      <link>https://jasonqian10.github.io/post/java/java8-lambda/</link>
+      <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java8-lambda/</guid>
+      <description>前言 Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说</description>
+    </item>
+    
+  </channel>
+</rss>

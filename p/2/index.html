@@ -1,16 +1,17 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
+	<meta name="generator" content="Hugo 0.58.3" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
-    <title>suggest - 知不道</title>
+    <title>知不道 - 知不道</title>
     <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
     
-    <meta property="og:title" content="suggest">
+    <meta property="og:title" content="知不道">
     <meta property="og:site_name" content="知不道">
     <meta property="og:image" content="/img/author.jpg"> 
-    <meta name="title" content="suggest - 知不道" />
+    <meta name="title" content="知不道 - 知不道" />
     <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
     <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
     <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
@@ -30,7 +31,7 @@
 </script>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-<div class="container one-collumn sidebar-position-left   ">
+<div class="container one-collumn sidebar-position-left page-home  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -58,7 +59,7 @@
     <ul id="menu" class="menu">
       
       
-        <li class="menu-item ">
+        <li class="menu-item menu-item-active">
           <a href="https://jasonqian10.github.io/" rel="section">
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
           </a>
@@ -110,37 +111,80 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-<section id="posts" class="posts-collapse">
-<div class="collection-title">
-    <h2 >suggest
-    <small>标签</small>
-    </h2>
-</div>
+    
+ <section id="posts" class="posts-expand">
 
-<div class="collection-title">
-  <h2 class="archive-year motion-element" id="archive-year-2019">2019</h2>
-</div>
-
-  <article class="post post-type-normal }}" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-      <h1 class="post-title">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr-suggest/" itemprop="url">
-            <span itemprop="name">solr suggest实战</span>
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr-lucene-principle/" itemprop="url">
+        solr搜索原理解析
         </a>
       </h1>
-
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-11-15"
-              content="11-15" >
-          11-15
-        </time>
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-10-18">
+    2019-10-18
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/search" itemprop="url" rel="index">
+        <span itemprop="name">Search</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">5540 字 ~12分钟</span>
+</span>
       </div>
     </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="solr与lucene的关系">solr与Lucene的关系</h3>
+
+<p>讲搜索流程之前先介绍一下solr与Lucene的关系。</p>
+
+<p>Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。</p>
+
+<p>Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。</p>
+
+<p>solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。</p>
+
+<p>solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
+<img src="https://jasonqian10.github.io/img/post/solr_lucene-1542234.png" alt="solr_lucene" style="zoom:40%;" /></p>
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/solr-lucene-principle/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
   </article>
 
-
- </section>
+</section>
 
 
 
@@ -164,16 +208,24 @@
 
 
 <nav class="pagination">
-    
+    <a class="extend prev" rel="prev" href="https://jasonqian10.github.io/"><i class="fa fa-angle-left"></i></a>
     
         
         
-          <span class="page-number current">1</span>
+          <a class="page-number" href="https://jasonqian10.github.io/">1</a>
+        
+        
+    
+        
+        
+          <span class="page-number current">2</span>
         
         
     
     
 </nav>
+
+
 
 
           </div>
@@ -225,7 +277,7 @@
 </nav>
       
 <div class="feed-link motion-element">
-<a href="https://jasonqian10.github.io/tags/suggest/index.xml" rel="alternate" type="application/rss+xml" target="_blank">
+<a href="https://jasonqian10.github.io/index.xml" rel="alternate" type="application/rss+xml" target="_blank">
     <i class="fa fa-rss"></i>
     RSS 订阅
 </a>

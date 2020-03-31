@@ -6,10 +6,28 @@
     <description>Recent content in Posts on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【java8】高大上的函数式接口怎么用</title>
+      <link>https://jasonqian10.github.io/post/java/java8-function-interface/</link>
+      <pubDate>Mon, 30 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java8-function-interface/</guid>
+      <description>函数式接口 函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成</description>
+    </item>
+    
+    <item>
+      <title>【java8】lambda表达式你用对了吗？</title>
+      <link>https://jasonqian10.github.io/post/java/java8-lambda/</link>
+      <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java8-lambda/</guid>
+      <description>前言 Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说</description>
+    </item>
     
     <item>
       <title>Intellij idea搭建solr源码debug调试环境</title>

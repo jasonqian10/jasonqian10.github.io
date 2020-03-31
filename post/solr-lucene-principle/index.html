@@ -153,7 +153,7 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">5276 字 ~11分钟</span>
+<span class="leancloud-visitors-count">5540 字 ~12分钟</span>
 </span>
       </div>
     </header>
@@ -192,7 +192,45 @@
 
 <p>solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。
 <img src="https://jasonqian10.github.io/img/post/image-20191020120449619.png" alt="image-20191020120449619" style="zoom:50%;" />
-上图可以看出solr中的流程。下面按照处理顺序重点讲一下solr几个处理query的核心类：</p>
+上图可以看出solr中的流程。</p>
+
+<p>下面按照处理顺序重点讲一下solr几个处理query的核心类：</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">核心类</th>
+<th align="center">如何生效</th>
+<th align="center">solrconfig.xml声明方式(例子)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">SearchHandler</td>
+<td align="center">通过查询参数<strong>”qt“</strong>指定requestHandler的name，如本例中/test</td>
+<td align="center"><requestHandler name="/test" class="com.test.TestSearchHandler"><br/>        <lst name="defaults"><br/>            <str name="defType">test_type</str><br/>        </lst><br/></requestHandler></td>
+</tr>
+
+<tr>
+<td align="center">SearchComponent</td>
+<td align="center">在SearchHandler类初始化时注册<searchComponent>的name。如本例中TestSearchHandler类中注册”test_query“</td>
+<td align="center"><searchComponent name="test_query"  class="com.test.TestQueryComponent"/></td>
+</tr>
+
+<tr>
+<td align="center">QueryComponet</td>
+<td align="center">处理查询的类，属于SearchComponent的其中一类。</td>
+<td align="center"><searchComponent name="test_query"  class="com.test.TestQueryComponent"/></td>
+</tr>
+
+<tr>
+<td align="center">QParser</td>
+<td align="center">在QueryComponet进行查询处理时会先创建query对象分析器QParser。生效方式：1）配置在requestHandler下元素<strong>defType</strong>；2）通过查询参数<strong>defType</strong>指定</td>
+<td align="center"><queryParser name="test_parser" class="com.test.TestQParserPlugin"/></td>
+</tr>
+</tbody>
+</table>
 
 <h4 id="searchhandler">SearchHandler</h4>
 
@@ -460,14 +498,14 @@ pqTop.<span style="color:#a6e22e">doc</span> <span style="color:#f92672">=</span
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
     <div class="site-state-item site-state-categories">    
         <a href="https://jasonqian10.github.io/categories/">      
          
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         
         <span class="site-state-item-name">分类</span>
         
@@ -477,7 +515,7 @@ pqTop.<span style="color:#a6e22e">doc</span> <span style="color:#f92672">=</span
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">12</span>
         
         <span class="site-state-item-name">标签</span>
         </a>

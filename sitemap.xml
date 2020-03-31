@@ -1,6 +1,77 @@
 <search>
     
      <entry>
+        <title>【java8】高大上的函数式接口怎么用</title>
+        <url>https://jasonqian10.github.io/post/java/java8-function-interface/</url>
+        <categories>
+          <category>java</category>
+        </categories>
+        <tags>
+          <tag>java8</tag><tag>函数式接口</tag>
+        </tags>
+        <content type="html">  函数式接口 函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。
+1)函数式接口中的抽象函数就是为了支持 lambda表达式；
+2)函数式接口可以被隐式转换为lambda表达式；
+3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；
+注意：加不加@FunctionalInterface对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。
+例外：
+函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；
+函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；
+函数式接口里是可以包含Object里的public方法，如equals()。
+下面介绍几种常用的函数式接口。
+Predicate 主要用于filter条件判断或者断言，接受一个泛型的对象T,调用boolean testT t)方法，返回boolean结果。
+常用场景：list.stream().filter(Predicate p)
+Stream&amp;lt;T&amp;gt; filter(Predicate&amp;lt;? super T&amp;gt; predicate); Stream的filter接口的入参就是Predicate函数式接口的lambda表达式。
+例子：
+//通过Color过滤，入参是 Predicate&amp;lt;T&amp;gt; predicate public static List&amp;lt;Apple&amp;gt; filterByColor(List&amp;lt;Apple&amp;gt; list, Predicate&amp;lt;Apple&amp;gt; predicate) { List&amp;lt;Apple&amp;gt; result = new ArrayList&amp;lt;&amp;gt;(); for (Apple apple : list) { if (predicate.test(apple)) { result.add(apple); } } return result; } //初始化list List&amp;lt;Apple&amp;gt; list = Arrays.asList(new Apple(&amp;#34;green&amp;#34;, 120), new Apple(&amp;#34;red&amp;#34;, 130)); /* Predicate&amp;lt;? super T&amp;gt; predicate = apple -&amp;gt; apple.getColor().equals(&amp;#34;green&amp;#34;)) 这里的Predicate lambda表达式的泛型T表示Apple类 */ System.out.println(filterByColor(list, apple -&amp;gt; apple.getColor().equals(&amp;#34;green&amp;#34;))); 我们可以通过stream的filter接口来实现同样的功能
+/* Predicate&amp;lt;? super T&amp;gt; predicate = l -&amp;gt; l.getColor().equals(&amp;#34;green&amp;#34;) 这里的Predicate lambda表达式的泛型T表示String类 */ System.out.println(list.stream().filter(l -&amp;gt; l.getColor().equals(&amp;#34;green&amp;#34;)).collect(Collectors.toList())); Predicate接口还有一些default方法：
+default Predicate&amp;lt;T&amp;gt; and(Predicate&amp;lt;? super T&amp;gt; other) default Predicate&amp;lt;T&amp;gt; or(Predicate&amp;lt;? super T&amp;gt; other) 通过predicate.or() predicate.and()实现filter条件组合。
+Consumer consumer主要是消费数据，接受一个泛型的对象T，调用void accept(T t)方法，无返回结果。 其实就是执行一段自定义的逻辑。
+常用场景：list.steam().forEach() 等执行业务逻辑、无返回结果的函数式接口。
+void forEach(Consumer&amp;lt;? super T&amp;gt; action); 例子：
+//定义consumer方法 public static void consumer(List&amp;lt;Apple&amp;gt; list, Consumer&amp;lt;Apple&amp;gt; consumer) { // return list.stream().filter(l -&amp;gt; predicate.test(l.getColor())).collect(Collectors.toList());  for (Apple apple : list) { consumer.accept(apple); } } /* Consumer&amp;lt;Apple&amp;gt; consumer = apple -&amp;gt; System.out.println(apple.getColor()); */ consumer(list, apple -&amp;gt; System.out.println(apple.getColor())); 可以通过forEach接口实现同样的功能
+list.stream().forEach(l -&amp;gt; System.out.println(l.getColor())); Consumer接口还有如下default方法
+default Consumer&amp;lt;T&amp;gt; andThen(Consumer&amp;lt;? super T&amp;gt; after) 消费数据的时候，首先做一个操作，然后再做一个操作，实现组合。
+Supplier 接口仅包含一个无参的方法： T get() 。用来获取一个泛型参数指定类型的对象数据。由于这是一个函数式接口，这也就意味着对应的Lambda表达式需要“对外提供”一个符合泛型类型的对象数据。
+例子：
+Supplier&amp;lt;Apple&amp;gt; supplier = () -&amp;gt; new Apple(&amp;#34;&amp;#34;, 0); Apple apple = supplier.get(); Function java.util.function.Function 接口用来根据一个类型的数据得到另一个类型的数据，前者称为前置条件，后者称为后置条件将T 转为 R，是一个类型转换接口
+常用场景：list.stream().map()
+&amp;lt;R&amp;gt; Stream&amp;lt;R&amp;gt; map(Function&amp;lt;? super T, ? extends R&amp;gt; mapper); Stream的map接口接收的就是Function函数式接口对象，将集合中的元素转换成另一个类型。
+例子：
+Function&amp;lt;Apple, String&amp;gt; function = apple -&amp;gt; apple.getColor(); function.apply(new Apple(&amp;#34;red&amp;#34;,100));</content>
+    </entry>
+    
+     <entry>
+        <title>【java8】lambda表达式你用对了吗？</title>
+        <url>https://jasonqian10.github.io/post/java/java8-lambda/</url>
+        <categories>
+          <category>java</category>
+        </categories>
+        <tags>
+          <tag>java8</tag><tag>lambda表达式</tag>
+        </tags>
+        <content type="html">  前言 Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？
+lambda表达式语法 概念 可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。
+ lambda表达式依附于函数式接口，可以理解为是函数式接口的匿名实现。
+函数式接口后面会详细介绍。
+ 语法格式 java8中，引入了一个新的操作符“-&amp;gt;”：
+左侧：lambda表达式参数列表。这个参数列表是接口的入参。
+右侧：lambda表达式所需执行的功能，即lambda函数体。这个是接口的具体实现函数。
+无参数，无返回值用法 //应用lambda表达式之前 Runnable r1 = new Runnable() { @Override public void run() { System.out.println(&amp;#34;无参数，无返回值&amp;#34;); } }; r1.run(); //应用lambda表达式之前 Runnable r2 = () -&amp;gt; System.out.println(&amp;#34;无参数，无返回值&amp;#34;); r2.run(); Runnable接口(Java8改造成一种函数式接口了) 就是场景的例子。 这里-&amp;gt;左侧参数列表即使接口函数public void run()的入参；右侧是run()接口的实现体。
+无参数，有返回值 //定义获取状态的接口 @FunctionalInterface public interface Status { public String getStatus(); } //应用lambda表达式之前 Status status1 = new Status() { @Override public String getStatus() { return &amp;#34;stop&amp;#34;; } }; System.out.println(status1.getStatus()); //应用lambda表达式之后 Status status2 = () -&amp;gt; &amp;#34;stop&amp;#34;; System.out.println(status2.getStatus()); 与上面一类场景相比，这里右侧的函数体是有返回值的。可以通过函数体最终结果是void还是Object来判断是否有返回值。
+注意有返回值时右侧函数体如果只有一行，可以省略return和{},即也可以这样写
+//lambda写法1 Status status2 = () -&amp;gt; &amp;#34;stop&amp;#34;; //lambda写法2 Status status = () -&amp;gt; { return &amp;#34;stop&amp;#34;; }; //建议第一种 有1个参数，无返回值 //定义打印信息的接口 @FunctionalInterface public interface Printer { public void print(String str); } //应用lambda表达式之前 Printer printer1 = new Printer() { @Override public void print(String str) { System.out.println(str); } }; printer1.print(&amp;#34;123&amp;#34;); //应用lambda表达式之后 Printer printer2 = (str -&amp;gt; System.out.println(str)); printer2.print(&amp;#34;123&amp;#34;); 这里注意有1个参数时，左侧的参数括号可以省略。下面是几种扩展写法
+Printer printer2 = (str -&amp;gt; System.out.println(str)); Printer printer2 = ((str) -&amp;gt; System.out.println(str)); Printer printer2 = ((String str)-&amp;gt; System.out.println(str)); 有1个参数，有返回值 //定义int到String转换接口 @FunctionalInterface public interface Exchanger { public String exchange(int n); } Exchanger exchanger1 = new Exchanger() { @Override public String exchange(int n) { return String.valueOf(n); } }; System.out.println(exchanger1.exchange(10)); Exchanger exchanger2 = (n -&amp;gt; String.valueOf(n)); System.out.println(exchanger2.exchange(20)); 有多个参数，无返回值 //定义加法接口 @FunctionalInterface public interface Operation { public int plus(int a, int b); } Printer2 printer21 = new Printer2() { @Override public void print(int a, int b) { System.out.println(a&#43;b); } }; printer21.print(5,3); Printer2 printer22 = (a,b) -&amp;gt; System.out.println(a&#43;b); printer22.print(20,30); 这里要注意左侧参数列表有多个参数时，括号一定要保留。下面Lambda多种扩展写法。
+Printer2 printer22 = (a,b) -&amp;gt; System.out.println(a&#43;b); Operation operation2 = (int a,int b) -&amp;gt; { System.out.println(a&#43;b) }; 有多个参数，有返回值 //这里我们直接使用现有的Comparator接口 //应用lambda表达式之前 Comparator comparator1 = new Comparator() { @Override public int compare(Object o1, Object o2) { return o1.hashCode() - o2.hashCode(); } }; System.out.println(comparator1.compare(new Integer(5), new Integer(10))); //应用lambda表达式之后 Comparator comparator2 = ((o1, o2) -&amp;gt; o1.hashCode() - o2.hashCode()); System.out.println(comparator2.compare(new Integer(3), new Integer(10))); 当右侧函数体有多行时，一定需要{}
+总结  左侧参数列表  无参数和有多个参数时一定需要括号()
+有一个参数时，可以省略括号()
+当使用括号()时，参数的类型可以省略不写
+ 右侧函数体  单行代码：可以省略花括号{}和return(无论是否有返回值)
+多行代码：一定要写花括号{}和return(如果有返回值)
+</content>
+    </entry>
+    
+     <entry>
         <title>Intellij idea搭建solr源码debug调试环境</title>
         <url>https://jasonqian10.github.io/post/solr-debug-idea-build/</url>
         <categories>
@@ -25,7 +96,9 @@ ant server
 idea运行solr server 在idea上运行solr server是实际启动的是embedSolrServer。
  先准备一个solr_home，放在solr/server/ 目录下
  在项目 solr/solrj/src/test/org/apache/solr/client/solrj/StartSolrJetty.java 中增加上面准备的solr_hom的路径；设置webapp war路径
-   run StartSolrJetty.java，然后访问 localhost:8983/solr   对源码打断点，debug StartSolrJetty.java 即可进行源码调试  导入自定义jar 如果有基于源码自定义的插件jar，也可以把插件代码导入到源码项目中进行debug。
+   solr/solrj/src/resources 目录下添加log4j2配置文件（solr/solrj/src/resources/log4j2.xml）
+ run StartSolrJetty.java，然后访问 localhost:8983/solr
+   对源码打断点，debug StartSolrJetty.java 即可进行源码调试  导入自定义jar 如果有基于源码自定义的插件jar，也可以把插件代码导入到源码项目中进行debug。
 </content>
     </entry>
     
@@ -324,8 +397,9 @@ solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过sol
 参考 https://www.cnblogs.com/forfuture1978/archive/2010/04/04/1704282.html
 https://www.cnblogs.com/davidwang456/p/10570935.html https://blog.csdn.net/huangzhilin2015/article/details/89372127
  solr的启动过程 Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是solr server启动过程）如下 这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。
-solr query流程 solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。 上图可以看出solr中的流程。下面按照处理顺序重点讲一下solr几个处理query的核心类：
-SearchHandler 真正处理请求的入口函数在SearchHandler.handleRequestBody()。对于不同的Request-Handler(qt)，请求会进入不同的SearchHandler，这由solrconfig.xml中的配置决定。我们这里以 select 请求为例，请求会进入SearchHandler。handleRequestBody()中主要做的事情就是依次调用SearchComponent列表的prepare，process，post方法。  如何定制SearchHandler   当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下
+solr query流程 solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。 上图可以看出solr中的流程。
+下面按照处理顺序重点讲一下solr几个处理query的核心类：
+   核心类 如何生效 solrconfig.xml声明方式(例子)     SearchHandler 通过查询参数”qt“指定requestHandler的name，如本例中/test   test_type    SearchComponent 在SearchHandler类初始化时注册的name。如本例中TestSearchHandler类中注册”test_query“    QueryComponet 处理查询的类，属于SearchComponent的其中一类。    QParser 在QueryComponet进行查询处理时会先创建query对象分析器QParser。生效方式：1）配置在requestHandler下元素defType；2）通过查询参数defType指定     SearchHandler 真正处理请求的入口函数在SearchHandler.handleRequestBody()。对于不同的Request-Handler(qt)，请求会进入不同的SearchHandler，这由solrconfig.xml中的配置决定。我们这里以 select 请求为例，请求会进入SearchHandler。handleRequestBody()中主要做的事情就是依次调用SearchComponent列表的prepare，process，post方法。  如何定制SearchHandler   当然可以定制自己的Request-Handler，继承SearchHandler或RequestHandlerBase都可以。然后在solrconfig.xml中标签中配置自己开发的类。例如自定义TestSearchHandler，url path为/test，则样例配置如下
 &amp;lt;requestHandler name=&amp;#34;/test&amp;#34; class=&amp;#34;com.test.TestSearchHandler&amp;#34;&amp;gt; &amp;lt;lst name=&amp;#34;defaults&amp;#34;&amp;gt; &amp;lt;int name=&amp;#34;timeAllowed&amp;#34;&amp;gt;11000&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;echoParams&amp;#34;&amp;gt;none&amp;lt;/str&amp;gt; &amp;lt;int name=&amp;#34;rows&amp;#34;&amp;gt;20&amp;lt;/int&amp;gt; &amp;lt;str name=&amp;#34;defType&amp;#34;&amp;gt;xxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;op&amp;#34;&amp;gt;AND&amp;lt;/str&amp;gt; &amp;lt;float name=&amp;#34;tie&amp;#34;&amp;gt;1&amp;lt;/float&amp;gt; &amp;lt;str name=&amp;#34;qf&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;fl&amp;#34;&amp;gt;xxxxx&amp;lt;/str&amp;gt; &amp;lt;str name=&amp;#34;sort&amp;#34;&amp;gt;score desc,_version_ desc&amp;lt;/str&amp;gt; &amp;lt;/lst&amp;gt; &amp;lt;/requestHandler&amp;gt; SearchComponent 初始化的时候SearchHandler中注册了本SearchHandler对应的SearchComponent的列表。一般包含主要功能的QueryComponent、FacetComponent、HighlightComponent、DebugComponent等，这些Component类都是继承SearchComponent这个抽象类。
 SearchComponent抽象类定义了三个阶段prepare，process，post，SearchHandler.handleRequestBody()中会遍历所有注册的SearchComponent，调用这三个阶段，完成各个SearchComponent中功能。
  如何定制SearchComponent   定制SearchComponent的方法与定制SearchHandler的方法类似。继承SearchComponent或者对应功能的SearchComponent（如QueryComponent、FacetComponent、HighlightComponent、DebugComponent等）。然后在solrconfig.xml中标签配置自己开发的类。样例配置如下

@@ -1,0 +1,553 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>【java8】lambda表达式你用对了吗？ - 知不道</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="【java8】lambda表达式你用对了吗？">
+    <meta property="og:site_name" content="知不道">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="【java8】lambda表达式你用对了吗？ - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">知不道</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java8-lambda/" itemprop="url">
+        【java8】lambda表达式你用对了吗？
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-03-29">
+    2020-03-29
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">1357 字 ~3分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    
+
+<h2 id="前言">前言</h2>
+
+<p>Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？</p>
+
+<h2 id="lambda表达式语法">lambda表达式语法</h2>
+
+<h3 id="概念">概念</h3>
+
+<p>可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。</p>
+
+<blockquote>
+<p>lambda表达式依附于<strong>函数式接口</strong>，可以理解为是函数式接口的匿名实现。</p>
+
+<p><strong>函数式接口</strong>后面会详细介绍。</p>
+</blockquote>
+
+<h3 id="语法格式">语法格式</h3>
+
+<p>java8中，引入了一个新的操作符“-&gt;”：</p>
+
+<p>左侧：lambda表达式参数列表。这个参数列表是接口的入参。</p>
+
+<p>右侧：lambda表达式所需执行的功能，即lambda函数体。这个是接口的具体实现函数。</p>
+
+<h4 id="无参数-无返回值用法">无参数，无返回值用法</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//应用lambda表达式之前
+</span><span style="color:#75715e"></span>Runnable <span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Runnable() {
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> run() {
+                System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;无参数，无返回值&#34;</span>);
+            }
+        };
+r1.<span style="color:#a6e22e">run</span>();
+<span style="color:#75715e">//应用lambda表达式之前
+</span><span style="color:#75715e"></span>Runnable <span style="color:#a6e22e">r2</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;无参数，无返回值&#34;</span>);
+r2.<span style="color:#a6e22e">run</span>();</code></pre></div>
+<p>Runnable接口(Java8改造成一种函数式接口了) 就是场景的例子。 这里<code>-&gt;</code>左侧参数列表即使接口函数<code>public void run()</code>的入参；右侧是<code>run()</code>接口的实现体。</p>
+
+<h4 id="无参数-有返回值">无参数，有返回值</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义获取状态的接口
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Status {
+   <span style="color:#66d9ef">public</span>  <span style="color:#a6e22e">String</span> getStatus();
+}
+
+<span style="color:#75715e">//应用lambda表达式之前
+</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Status() {
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">String</span> getStatus() {
+                <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
+            }
+};
+System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(status1.<span style="color:#a6e22e">getStatus</span>());
+<span style="color:#75715e">//应用lambda表达式之后
+</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status2</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
+System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(status2.<span style="color:#a6e22e">getStatus</span>());</code></pre></div>
+<p>与上面一类场景相比，这里右侧的函数体是有返回值的。可以通过函数体最终结果是void还是Object来判断是否有返回值。</p>
+
+<p>注意有返回值时右侧函数体如果只有一行，可以省略<code>return</code>和<code>{}</code>,即也可以这样写</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//lambda写法1
+</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status2</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
+<span style="color:#75715e">//lambda写法2
+</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
+};
+
+<span style="color:#f92672">//</span>建议第一种</code></pre></div>
+<h4 id="有1个参数-无返回值">有1个参数，无返回值</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义打印信息的接口
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Printer {
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> print(String <span style="color:#a6e22e">str</span>);
+}
+
+<span style="color:#75715e">//应用lambda表达式之前
+</span><span style="color:#75715e"></span>Printer <span style="color:#a6e22e">printer1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Printer() {
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> print(String <span style="color:#a6e22e">str</span>) {
+        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str);
+    }
+};
+printer1.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;123&#34;</span>);
+<span style="color:#75715e">//应用lambda表达式之后
+</span><span style="color:#75715e"></span>Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> (str <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));
+printer2.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;123&#34;</span>);</code></pre></div>
+<p>这里注意有1个参数时，左侧的参数括号可以省略。下面是几种扩展写法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> (str <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));
+Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> ((str) <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));
+Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> ((String <span style="color:#a6e22e">str</span>)<span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));</code></pre></div>
+<h4 id="有1个参数-有返回值">有1个参数，有返回值</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义int到String转换接口
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Exchanger {
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">String</span> exchange(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">n</span>);
+    }
+  
+Exchanger <span style="color:#a6e22e">exchanger1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Exchanger() {
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">String</span> exchange(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">n</span>) {
+        <span style="color:#66d9ef">return</span> String.<span style="color:#a6e22e">valueOf</span>(n);
+    }
+};
+System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(exchanger1.<span style="color:#a6e22e">exchange</span>(10));
+
+Exchanger <span style="color:#a6e22e">exchanger2</span> <span style="color:#f92672">=</span> (n <span style="color:#f92672">-&gt;</span> String.<span style="color:#a6e22e">valueOf</span>(n));
+System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(exchanger2.<span style="color:#a6e22e">exchange</span>(20));</code></pre></div>
+<h4 id="有多个参数-无返回值">有多个参数，无返回值</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义加法接口
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Operation {
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">int</span> plus(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">a</span>, <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">b</span>);
+    }
+    
+Printer2 <span style="color:#a6e22e">printer21</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Printer2() {
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> print(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">a</span>, <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">b</span>) {
+                System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b);
+            }
+        };
+printer21.<span style="color:#a6e22e">print</span>(5,3);
+
+Printer2 <span style="color:#a6e22e">printer22</span> <span style="color:#f92672">=</span> (a,b) <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b);
+printer22.<span style="color:#a6e22e">print</span>(20,30);</code></pre></div>
+<p>这里要注意左侧参数列表有多个参数时，括号一定要保留。下面Lambda多种扩展写法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Printer2 <span style="color:#a6e22e">printer22</span> <span style="color:#f92672">=</span> (a,b) <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b);
+Operation <span style="color:#a6e22e">operation2</span> <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">a</span>,<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">b</span>) <span style="color:#f92672">-&gt;</span> { System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b) };</code></pre></div>
+<h4 id="有多个参数-有返回值">有多个参数，有返回值</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//这里我们直接使用现有的Comparator接口
+</span><span style="color:#75715e">//应用lambda表达式之前
+</span><span style="color:#75715e"></span>Comparator <span style="color:#a6e22e">comparator1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Comparator() {
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">int</span> compare(Object <span style="color:#a6e22e">o1</span>, Object <span style="color:#a6e22e">o2</span>) {
+        <span style="color:#66d9ef">return</span> o1.<span style="color:#a6e22e">hashCode</span>() <span style="color:#f92672">-</span> o2.<span style="color:#a6e22e">hashCode</span>();
+    }
+};
+System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(comparator1.<span style="color:#a6e22e">compare</span>(<span style="color:#66d9ef">new</span> Integer(5), <span style="color:#66d9ef">new</span> Integer(10)));
+<span style="color:#75715e">//应用lambda表达式之后
+</span><span style="color:#75715e"></span>Comparator <span style="color:#a6e22e">comparator2</span> <span style="color:#f92672">=</span> ((o1, o2) <span style="color:#f92672">-&gt;</span> o1.<span style="color:#a6e22e">hashCode</span>() <span style="color:#f92672">-</span> o2.<span style="color:#a6e22e">hashCode</span>());
+System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(comparator2.<span style="color:#a6e22e">compare</span>(<span style="color:#66d9ef">new</span> Integer(3), <span style="color:#66d9ef">new</span> Integer(10)));</code></pre></div>
+<p>当右侧函数体有多行时，一定需要<code>{}</code></p>
+
+<h3 id="总结">总结</h3>
+
+<ul>
+<li>左侧参数列表</li>
+</ul>
+
+<p>无参数和有多个参数时一定需要括号()</p>
+
+<p>有一个参数时，可以省略括号()</p>
+
+<p>当使用括号()时，参数的类型可以省略不写</p>
+
+<ul>
+<li>右侧函数体</li>
+</ul>
+
+<p>单行代码：可以省略花括号{}和return(无论是否有返回值)</p>
+
+<p>多行代码：一定要写花括号{}和return(如果有返回值)</p>
+
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/java8" rel="tag" title="java8">#java8#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/lambda%e8%a1%a8%e8%be%be%e5%bc%8f" rel="tag" title="lambda表达式">#lambda表达式#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/java/java8-function-interface/" rel="next" title="【java8】高大上的函数式接口怎么用">
+        <i class="fa fa-chevron-left"></i> 【java8】高大上的函数式接口怎么用
+        </a>
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/solr-debug-idea-build/" rel="prev" title="Intellij idea搭建solr源码debug调试环境">
+        Intellij idea搭建solr源码debug调试环境 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">12</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#lambda表达式语法">lambda表达式语法</a>
+<ul>
+<li><a href="#概念">概念</a></li>
+<li><a href="#语法格式">语法格式</a>
+<ul>
+<li><a href="#无参数-无返回值用法">无参数，无返回值用法</a></li>
+<li><a href="#无参数-有返回值">无参数，有返回值</a></li>
+<li><a href="#有1个参数-无返回值">有1个参数，无返回值</a></li>
+<li><a href="#有1个参数-有返回值">有1个参数，有返回值</a></li>
+<li><a href="#有多个参数-无返回值">有多个参数，无返回值</a></li>
+<li><a href="#有多个参数-有返回值">有多个参数，有返回值</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">知不道</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>
