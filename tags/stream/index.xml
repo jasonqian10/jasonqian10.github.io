@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>stream on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/stream/</link>
+    <description>Recent content in stream on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 06 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/tags/stream/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>【java8】(三)stream 详细用法</title>
+      <link>https://jasonqian10.github.io/post/java/java8-stream/</link>
+      <pubDate>Mon, 06 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java8-stream/</guid>
+      <description>概述 Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。使用Stream API 对集合</description>
+    </item>
+    
+  </channel>
+</rss>
