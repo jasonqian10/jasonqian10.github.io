@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/java/</link>
+    <description>Recent content in java on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 16 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>【Java集合框架】看这一篇就够了</title>
+      <link>https://jasonqian10.github.io/post/java/java-collection/</link>
+      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-collection/</guid>
+      <description>&lt;h3 id=&#34;概述&#34;&gt;概述&lt;/h3&gt;
+
+&lt;p&gt;集合框架是Java编码中最常用的知识点，本篇主要梳理一下Java集合框架，总结出各个常用的集合知识点。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Collection接口下有List、Set、Queue，三者都是接口&lt;/li&gt;
+&lt;li&gt;Map是独立接口（与Collection是平级关系），下有Hashtable，LinkedHashMap，HashMap，TreeMap&lt;/li&gt;
+&lt;li&gt;List下有ArrayList，Vector，LinkedList&lt;/li&gt;
+&lt;li&gt;Set下有HashSet，LinkedHashSet，TreeSet&lt;/li&gt;
+&lt;li&gt;Queue下有阻塞队列和非阻塞队列；堵塞队列中又分单端堵塞队列和双端堵塞队列&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

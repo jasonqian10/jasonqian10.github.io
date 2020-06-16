@@ -12,9 +12,27 @@
     
     
     <item>
+      <title>java</title>
+      <link>https://jasonqian10.github.io/tags/java/</link>
+      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>集合框架</title>
+      <link>https://jasonqian10.github.io/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>java8</title>
       <link>https://jasonqian10.github.io/tags/java8/</link>
-      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 06 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/tags/java8/</guid>
       <description></description>
@@ -23,7 +41,7 @@
     <item>
       <title>stream</title>
       <link>https://jasonqian10.github.io/tags/stream/</link>
-      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 06 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/tags/stream/</guid>
       <description></description>
