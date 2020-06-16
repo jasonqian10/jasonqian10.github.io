@@ -153,14 +153,12 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">3839 字 ~8分钟</span>
+<span class="leancloud-visitors-count">4178 字 ~9分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    
-
-<h3 id="概述">概述</h3>
+    <h3 id="概述">概述</h3>
 
 <p>Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。使用Stream API 对集合数据进行操作，就类似于使用 SQL 执行的数据库查询。也可以使用 Stream API 来并行执行操作。简而言之，Stream API 提供了一种高效且易于使用的处理数据的方式。</p>
 
@@ -452,7 +450,8 @@ System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printl
 <h3 id="optional类">Optional类</h3>
 
 <p>很多的stream的终端操作，都返回了一个Optional<T>对象。Optional 类主要解决的问题是臭名昭著的空指针异常（NullPointerException）。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//1. 构造方法
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//1. Optional创建方法
+</span><span style="color:#75715e">//这三个创建方法建议使用Optional.ofNullable。比如从数据库/API获取到的结果，不知道其是否为null,此时直接使用此方法即可
 </span><span style="color:#75715e"></span>List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">list</span> <span style="color:#f92672">=</span> Arrays.<span style="color:#a6e22e">asList</span>(<span style="color:#e6db74">&#34;aaa&#34;</span>);
 Optional <span style="color:#a6e22e">optional1</span> <span style="color:#f92672">=</span> Optional.<span style="color:#a6e22e">of</span>(list); <span style="color:#75715e">//此方法如果list为null，会抛异常，不建议使用
 </span><span style="color:#75715e"></span>Optional <span style="color:#a6e22e">optional2</span> <span style="color:#f92672">=</span> Optional.<span style="color:#a6e22e">ofNullable</span>(list); <span style="color:#75715e">//此方法如果list为null，不会抛异常，建议使用
@@ -460,9 +459,86 @@ Optional <span style="color:#a6e22e">optional1</span> <span style="color:#f92672
 <span style="color:#75715e">//2. 获取元素方法
 </span><span style="color:#75715e"></span>optional1.<span style="color:#a6e22e">get</span>(); <span style="color:#75715e">//此方法如果optional1包装的对象为null，会抛异常，不建议使用
 </span><span style="color:#75715e"></span>optional1.<span style="color:#a6e22e">orElse</span>(Arrays.<span style="color:#a6e22e">asList</span>(<span style="color:#e6db74">&#34;bbb&#34;</span>)); <span style="color:#75715e">//当optional1包装的对象为null时，使用给定的默认值返回
-</span><span style="color:#75715e"></span>optional1.<span style="color:#a6e22e">orElseGet</span>(() <span style="color:#f92672">-&gt;</span> Arrays.<span style="color:#a6e22e">asList</span>(<span style="color:#e6db74">&#34;bbb&#34;</span>)); <span style="color:#f92672">//</span>当optional1包装的对象为null时<span style="color:#960050;background-color:#1e0010">，</span>使用默认的Supplier函数式接口返回值</code></pre></div>
-<p>Optional还有filter、map、flatMap等操作，使用方式与stream类似。这里不再详细阐述。</p>
+</span><span style="color:#75715e"></span>optional1.<span style="color:#a6e22e">orElseGet</span>(() <span style="color:#f92672">-&gt;</span> Arrays.<span style="color:#a6e22e">asList</span>(<span style="color:#e6db74">&#34;bbb&#34;</span>)); <span style="color:#75715e">//当optional1包装的对象为null时，使用默认的Supplier函数式接口返回值
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">//3. 判断是否存在的方法
+</span><span style="color:#75715e"></span>optional1.<span style="color:#a6e22e">isPresent</span>();  <span style="color:#75715e">//此方法判断optional1的包装对象是否为null，返回boolean结果
+</span><span style="color:#75715e"></span>optional1.<span style="color:#a6e22e">ifPresent</span>(System.<span style="color:#a6e22e">out</span><span style="color:#f92672">::</span>println); <span style="color:#75715e">//此方法是在optional1的包装对象存在的情况下，遍历打印出元素
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">//例子
+</span><span style="color:#75715e"></span>        Student <span style="color:#a6e22e">student1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Student();
+        Student <span style="color:#a6e22e">student2</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Student(<span style="color:#e6db74">&#34;apple&#34;</span>, 10);
+        Student <span style="color:#a6e22e">student3</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+        Optional<span style="color:#f92672">&lt;</span>Student<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">optional11</span> <span style="color:#f92672">=</span> Optional.<span style="color:#a6e22e">ofNullable</span>(student1);
+        optional11.<span style="color:#a6e22e">ifPresent</span>(System.<span style="color:#a6e22e">out</span><span style="color:#f92672">::</span>println);
+        
+        Optional<span style="color:#f92672">&lt;</span>Student<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">optional22</span> <span style="color:#f92672">=</span> Optional.<span style="color:#a6e22e">ofNullable</span>(student2);
+        String <span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> optional22.<span style="color:#a6e22e">map</span>(Student<span style="color:#f92672">::</span>getName).<span style="color:#a6e22e">filter</span>(name <span style="color:#f92672">-&gt;</span> name.<span style="color:#a6e22e">equals</span>(<span style="color:#e6db74">&#34;car&#34;</span>)).<span style="color:#a6e22e">orElse</span>(<span style="color:#e6db74">&#34;default name&#34;</span>);
+        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(result);
+        
+        Optional<span style="color:#f92672">&lt;</span>Student<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">optional33</span> <span style="color:#f92672">=</span> Optional.<span style="color:#a6e22e">ofNullable</span>(student3);
+        optional33.<span style="color:#a6e22e">orElseThrow</span>(() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">new</span> RuntimeException(<span style="color:#e6db74">&#34;exception&#34;</span>));</code></pre></div>
+<h3 id="numeric-stream">Numeric Stream</h3>
 
+<p>IntStream,LongStream,DoubleStream分别表示原始 <code>int</code> 流、 原始 <code>long</code> 流 和 原始 <code>double</code> 流，提供了大量的静态方法，对数字类型的集合操作，建议转成流进行处理。</p>
+
+<p>常用方法有</p>
+
+<table>
+<thead>
+<tr>
+<th><strong>方法</strong></th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>rangeClosed(a,b)</td>
+<td>返回子序列 [a,b]，左闭右闭（包括 b 元素，增长步值为 1）</td>
+</tr>
+
+<tr>
+<td>range(a,b)</td>
+<td>返回子序列 [a,b)，左闭右开（不包括 b）</td>
+</tr>
+
+<tr>
+<td>sum</td>
+<td>计算总和</td>
+</tr>
+
+<tr>
+<td>sorted</td>
+<td>排序</td>
+</tr>
+
+<tr>
+<td>toArray</td>
+<td>流转为数组</td>
+</tr>
+
+<tr>
+<td>max</td>
+<td>最大值</td>
+</tr>
+
+<tr>
+<td>min</td>
+<td>最小值</td>
+</tr>
+
+<tr>
+<td>average</td>
+<td>平均值</td>
+</tr>
+
+<tr>
+<td>of</td>
+<td>传入数组，转成流</td>
+</tr>
+</tbody>
+</table>
     </div>
     <footer class="post-footer">
      
@@ -479,6 +555,10 @@ Optional <span style="color:#a6e22e">optional1</span> <span style="color:#f92672
 
      <div class="post-nav">
     <div class="post-nav-next post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/java/java-collection/" rel="next" title="【Java集合框架】看这一篇就够了">
+        <i class="fa fa-chevron-left"></i> 【Java集合框架】看这一篇就够了
+        </a>
     
     </div>
 
@@ -535,7 +615,7 @@ Optional <span style="color:#a6e22e">optional1</span> <span style="color:#f92672
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -607,6 +687,7 @@ Optional <span style="color:#a6e22e">optional1</span> <span style="color:#f92672
 <li><a href="#流的结束操作">流的结束操作</a></li>
 </ul></li>
 <li><a href="#optional类">Optional类</a></li>
+<li><a href="#numeric-stream">Numeric Stream</a></li>
 </ul></li>
 </ul></li>
 </ul>

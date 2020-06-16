@@ -1,0 +1,931 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>【Java集合框架】看这一篇就够了 - 知不道</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="【Java集合框架】看这一篇就够了">
+    <meta property="og:site_name" content="知不道">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="【Java集合框架】看这一篇就够了 - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">知不道</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java-collection/" itemprop="url">
+        【Java集合框架】看这一篇就够了
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-04-16">
+    2020-04-16
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">8904 字 ~18分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="概述">概述</h3>
+
+<p>集合框架是Java编码中最常用的知识点，本篇主要梳理一下Java集合框架，总结出各个常用的集合知识点。</p>
+
+<ul>
+<li>Collection接口下有List、Set、Queue，三者都是接口</li>
+<li>Map是独立接口（与Collection是平级关系），下有Hashtable，LinkedHashMap，HashMap，TreeMap</li>
+<li>List下有ArrayList，Vector，LinkedList</li>
+<li>Set下有HashSet，LinkedHashSet，TreeSet</li>
+<li>Queue下有阻塞队列和非阻塞队列；堵塞队列中又分单端堵塞队列和双端堵塞队列</li>
+</ul>
+
+<h3 id="collection">Collection</h3>
+
+<p>Collection家族图谱：</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20200614160349364.png" alt="image-20200614160349364" /></p>
+
+<h4 id="list">List</h4>
+
+<h5 id="arraylist">ArrayList</h5>
+
+<p>ArrayList是最常用的数据结构之一，主要<strong>技术点</strong>有</p>
+
+<ul>
+<li>使用可变大小的<strong>数组</strong>实现:   <code>transient Object[] elementData</code>；默认容量10: <code>private static final int DEFAULT_CAPACITY = 10;</code></li>
+<li>每次扩容50%:  <code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code></li>
+<li>它允许所有元素，<strong>包括多个null，允许重复元素</strong></li>
+<li>默认从末尾添加，保持添加顺序；<strong>remove时只会remove掉数组中第一个出现的元素</strong></li>
+<li>各方法时间复杂度
+
+<ul>
+<li>get(i) 直接读取第i个下标，复杂度 O(1)</li>
+<li>add(E) 添加元素，直接在后面添加，复杂度O(1)</li>
+<li>add(index, E) 添加元素，在第index个元素后面插入，后面的元素需要向后移动，复杂度O(n)</li>
+<li>remove()删除元素，后面的元素需要逐个移动，复杂度O(n)</li>
+</ul></li>
+</ul>
+
+<p><strong>总结</strong></p>
+
+<ul>
+<li><strong>优点: 底层数据结构是数组，查询快，增删慢（需数组间拷贝数据）。</strong></li>
+<li><strong>缺点: 线程不安全，效率高</strong></li>
+</ul>
+
+<h5 id="linkedlist">LinkedList</h5>
+
+<p>LinkedList是最常用的数据结构之一，主要<strong>技术点</strong>有</p>
+
+<ul>
+<li>使用<strong>双链表</strong>，双向链表就是通过Node类来体现，Node对象会多消耗额外的内存（相对于ArrayList的缺点）</li>
+<li>申请内存容量和实际size一致，不会额外申请容量（ArrayList申请的容量如果未使用，也会有内存分配）</li>
+<li>它允许所有元素，<strong>包括多个null，允许重复元素</strong></li>
+<li>默认从末尾添加，保持添加顺序；<strong>remove时只会remove掉数组中第一个出现的元素</strong></li>
+<li>各方法时间复杂度
+
+<ul>
+<li>get(i) 获取第几个元素，依次遍历，复杂度O(n)。实际使用二分查找（只分一次），从中间分隔，如果i&lt;一半size,则从头往后找；如果i&gt;一半size,则从末尾向前找。</li>
+<li>add(E) 添加到末尾，复杂度O(1)</li>
+<li>add(index, E) 添加第index个元素，需要先查找到第index个元素，直接指针指向操作，复杂度O(n)。实际使用二分查找（只分一次），同get(i)</li>
+<li>remove(index)删除元素，直接指针指向操作，remove操作的时间复杂度是O(1)，但是查找index位置时间复杂度同get(i)</li>
+<li>remove(Object)删除元素，直接指针指向操作，remove操作的时间复杂度是O(1), 但是查找Object位置的时间复杂度是O(n)，逻辑是从头开始循环知道找到第一个出现Object的位置为止。</li>
+</ul></li>
+</ul>
+
+<p><strong>总结</strong></p>
+
+<ul>
+<li><strong>优点: 底层数据结构是链表，查询慢，增删快。</strong></li>
+<li><strong>缺点: 线程不安全，效率高</strong></li>
+</ul>
+
+<h5 id="vector">Vector</h5>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li>使用可变大小的数组实现（<strong>同ArrayList</strong>），加synchronized锁，线程安全</li>
+
+<li><p>默认初始化容量10（<strong>同ArrayList</strong>），<strong>扩容时如果未设置扩容系数则是双倍扩容，如果设置了扩容系数则按扩容系数扩容</strong>（这点与ArrayList不同，ArrayList每次扩容50%）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">newCapacity</span> <span style="color:#f92672">=</span> oldCapacity <span style="color:#f92672">+</span> ((capacityIncrement <span style="color:#f92672">&gt;</span> 0) <span style="color:#f92672">?</span>
+                            capacityIncrement <span style="color:#f92672">:</span> oldCapacity);</code></pre></div></li>
+
+<li><p>它允许所有元素，<strong>包括多个null，允许重复元素(同ArrayList,LinkedList)</strong></p></li>
+
+<li><p>默认从末尾添加，保持添加顺序；remove时只会remove掉数组中第一个出现的元素</p></li>
+
+<li><p>时间复杂度同ArrayList</p></li>
+</ul>
+
+<p><strong>总结</strong></p>
+
+<ul>
+<li><strong>优点:</strong> 底层数据结构是数组，查询快，增删慢。</li>
+<li><strong>缺点:</strong> 线程安全，效率低</li>
+</ul>
+
+<h4 id="set">Set</h4>
+
+<h5 id="hashset">HashSet</h5>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li>底层数据结构是由哈希表HashMap实现，HashSet的元素作为key, value用同一个new Object()表示 <code>private static final Object PRESENT = new Object();</code>，存入HashMap中。<strong>所以HashSet是对HashMap的简单包装，重点关注HashMap</strong></li>
+<li>HashSet存储元素的顺序并不是按照存入时的顺序（和List不同），是按照<strong>HashCode值顺序</strong>来排序的。</li>
+<li>无重复key，元素唯一；允许null（只有一个null，无重复）</li>
+<li>依赖hashCode()和equals()判断key是否相等</li>
+<li>add时HashSet中如果已经存在，则返回false，否则返回true</li>
+</ul>
+
+<h5 id="linkedhashset">LinkedHashSet</h5>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li>继承HashSet，底层数据结构是LinkedHashMap，链表和哈希表结构，<strong>链表保序（元素保持与添加顺序一致），哈希表保唯一（无重复元素）</strong>，细节请看LinkedHashMap</li>
+<li>元素唯一，不能重复；只能有一个null值；集合顺序保持与添加顺序一致</li>
+</ul>
+
+<h5 id="treeset">TreeSet</h5>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li>底层数据结构是红黑树</li>
+<li>元素有序，但是非添加元素的顺序，顺序为自然排序（比如元素为String，则按照字典排序）或者比较器排序（元素为自定义Object时，如果Object实现了Comparator接口，则以自定义的排序为准）</li>
+</ul>
+
+<h4 id="queue">Queue</h4>
+
+<h5 id="特点">特点</h5>
+
+<ul>
+<li>队列是一种特殊的线性表，它只允许基本操作：在<strong>队列尾部加入一个元素，和从队列头部移除一个元素（以一种先进先出的方式管理数据）</strong></li>
+<li>队列按照是否线程安全可以分为两类：1) 线程不安全：这类主要是LinkedList, 其是实现了Queue接口的，严格意义上来讲算一种队列（非传统意义上的队列，一般讨论队列时不讨论它），其是线程不安全、非堵塞、双端队列；  2）线程安全：剩下的都是线程安全队列，java中并发队列都是在java.util.concurrent并发包下的，本节我们讨论的是这个范畴的队列。在线程安全的队列中，我们分为堵塞队列和非堵塞队列。</li>
+<li>队列家族，Queue家族主要有如下接口</li>
+</ul>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20200615132653270.png" alt="image-20200615132653270" /></p>
+
+<ul>
+<li><p>Queue:FIFO队列</p>
+
+<ul>
+<li>BlockingQueue:这是堵塞队列，接口。主要继承类有ArrayBlockingQueue、LinkedBlockingQueue</li>
+<li>ConcurrentLinkedQueue:这是非堵塞队列，是具体实现类</li>
+<li>Deque:这个数据结构代表的是双向队列，队列的进出并不只是单向的。既然数据的操作形式变成了双向的，那操作方法的定义自然也要变为原来的两倍。
+
+<ul>
+<li>BlockingDeque:这是堵塞队列接口，实现类有LinkedBlockingDeque</li>
+<li>LinkedList:非堵塞队列，是具体实现类</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h5 id="堵塞队列">堵塞队列</h5>
+
+<h6 id="blockingqueue">BlockingQueue</h6>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>抛出异常</th>
+<th>特殊值(false/null)</th>
+<th>阻塞</th>
+<th>超时</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>插入</td>
+<td>add(e)</td>
+<td>offer(e)</td>
+<td>put(e)</td>
+<td>offer(e, time, unit)</td>
+</tr>
+
+<tr>
+<td>移除</td>
+<td>remove()</td>
+<td>poll()</td>
+<td>take()</td>
+<td>poll(time, unit)</td>
+</tr>
+
+<tr>
+<td>检查</td>
+<td>element()</td>
+<td>peek()</td>
+<td>无</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+
+<p>其中带有堵塞功能的接口使用可中断方法<code>lock.lockInterruptibly()</code>，如put(), offer(e, time, unit),take(),poll(time,unit)</p>
+
+<p><strong>ArrayBlockingQueue 技术点</strong></p>
+
+<ul>
+<li>继承自AbstractBlockingQueue，实现BlockingQueue</li>
+<li>底层是<strong>循环数组</strong>保存数据。循环数组：由于队列大小一旦初始化后就固定，当添加队列到数组尾部后，会重新回到头部继续添加(因为出栈是从头部位置依次移出，所以头部位置会空出，这样形成了循环数组)</li>
+<li>创建时，<strong>必须要给它指定一个队列的大小。属于有界队列。</strong></li>
+<li>初始化时指定的容量，就是队列最大的容量，不会出现扩容，容量满，则阻塞进队操作；容量空，则阻塞出队操作</li>
+<li>队列不支持空元素</li>
+<li>线程安全队列，使用ReentrantLock锁，<strong>入栈出栈一把锁。</strong>takeIndex和putIndex分别记录出队和入队的数组下标边界。</li>
+<li>主要方法：
+
+<ul>
+<li>构造函数:需要指定初始化队列的大小和是否公平堵塞；内部使用数组保存队列；构造函数会初始化ReentrantLock对象全局使用。</li>
+<li>add(e):使用抽象类AbstractBlockingQueue的方法。实际会调用offer(e)，offer(e)返回true则返回true，否则抛异常。</li>
+<li>offer(e):如果队列达到数组大小(初始化时设定)，则返回false；否则加入队列</li>
+<li>put(e):先加锁，然后判断队列是否已经满，如满则堵塞线程，等待Condition notFull唤醒</li>
+<li>offer(e,time,unit):队列满时则等待time时间，超时后则返回false。</li>
+<li>remove():使用抽象类AbstractBlockingQueue的方法。实际会调用poll()，如果有数据则返回取出的数据，否是抛异常。</li>
+<li>poll():有数据则返回数据，否则返回null。</li>
+<li>take():有数据则返回数据，否则堵塞(Condition notEmpty.await())。</li>
+<li>poll(time,unit):有数据则返回数据，否则堵塞time时间（notEmpty.awaitNanos(nanos)）。</li>
+<li>enqueue(e):入栈函数。按照当前队列指针插入数据，然后会判断指针是否已经达到队列尾部，如是则指针重新指向0位置；同时队列当前元素个数自加1；唤醒Condition notEmpty堵塞线程（取队列时）。</li>
+<li>dequeue:出栈函数。逻辑与enqueue相反。</li>
+<li>element():使用抽象类AbstractBlockingQueue的方法。实际会调用peek()，peek()返回数据则直接返回，否则抛异常。</li>
+<li>peek():查看当前队列头部元素(takeindex的位置)，如果当前为空队列，则返回null，否则返回当前队列头部元素。</li>
+</ul></li>
+</ul>
+
+<p><strong>LinkedBlockingQueue 技术点</strong></p>
+
+<ul>
+<li>继承自AbstractBlockingQueue，实现BlockingQueue</li>
+<li>底层使用单链表保存数据，链表元素数据结构是Node</li>
+<li><strong>创建队列时可以选择是否指定队列大小。它如果不指定容量，默认为Integer.MAX_VALUE，也就是无界队列；如果指定则以指定大小为准。</strong>为了避免队列过大造成机器负载或者内存爆满的情况出现，我们在使用的时候建议手动传一个队列的大小。<strong>默认是无界队列，指定大小后则是有界队列。</strong></li>
+<li>与ArrayBlockingQueue不同的是，LinkedBlockingQueue内部分别使用了takeLock 和 putLock 对并发进行控制，AtomicInteger count进行计数同步，也就是说，添加和删除操作并不是互斥操作，可以同时进行，这样也就可以大大提高吞吐量。<strong>入栈、出栈两把锁。</strong></li>
+<li>主要方法：
+
+<ul>
+<li>构造函数：支持指定参数和不指定参数两种初始化方式。初始化时定义last和head两个指针 <strong>last</strong> = <strong>head</strong> = <strong>new</strong> Node<E>(<strong>null</strong>);  ，last指针指定队列尾部(当前入栈位置)，head指针针对队列头部(当前出栈位置)。</li>
+<li>enqueue(e):入栈函数。<strong>last</strong> = <strong>last</strong>.<strong>next</strong> = node; 主要逻辑就是last指针往后移动。</li>
+<li>dequeue:出栈函数。去掉头部Node,head指针往后移动。</li>
+</ul></li>
+</ul>
+
+<p><strong>PriorityBlockingQueue 技术点</strong></p>
+
+<ul>
+<li>继承自AbstractBlockingQueue，实现BlockingQueue。</li>
+<li>底层使用数组保存数据</li>
+<li><strong>创建队列时可以选择指定队列大小（如果不指定默认初始队列大小11）；队列是优先级队列，需要初始化时要么指定comparator比较器，要么是队列元素实现了Comparable接口。</strong></li>
+<li>当添加队列大小达到初始队列长度后会自动扩容，理论上能无限扩容，属于<strong>无界阻塞队列</strong></li>
+</ul>
+
+<p><strong>DelayQueue 技术点</strong></p>
+
+<ul>
+<li>继承自AbstractBlockingQueue，实现BlockingQueue。<strong>队列元素需要实现Delayed接口（此接口集成Comparable接口）</strong></li>
+<li>内部使用<code>PriorityQueue&lt;E&gt; q = new PriorityQueue&lt;E&gt;();</code>存放队列。</li>
+<li>取队列元素时，会调用队列元素的Delayed<strong>#</strong>getDelay()方法，来判断是否延迟到期，是则可以取出，否则返回null。</li>
+</ul>
+
+<h6 id="blockingdeque">BlockingDeque</h6>
+
+<p>双端堵塞队列，支持从队头、队尾两头插入和取出。</p>
+
+<p>这类队列原理与单端队列类似，这里不在详细介绍。</p>
+
+<h5 id="非堵塞队列">非堵塞队列</h5>
+
+<p><strong>ConcurrentLinkedQueue 技术点</strong></p>
+
+<ul>
+<li><strong>基于链表实现</strong>的无界线程安全队列。使用CAS算法保证线程安全。不阻塞</li>
+<li>无论入队还是出队，都是在死循环中进行的，也就是说，当一个线程调用了入队、出队操作时，会尝试获取链表的tail、head结点进行插入和删除操作，而插入和删除是通过CAS操作实现的，而CAS具有原子性。故此，如果有其他任何一个线程成功执行了插入、删除都会改变tail/head结点，那么当前线程的插入和删除操作就会失败，则通过循环再次定位tail、head结点位置进行插入、删除，直到成功为止。</li>
+</ul>
+
+<h3 id="map">Map</h3>
+
+<h4 id="hashmap">HashMap</h4>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20200615145333207.png" alt="image-20200615145333207" style="zoom:50%;" /></p>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li><p>存储元素的顺序并不是按照存入时的顺序，是按照hash(HashCode)值顺序来排序的；无重复元素，元素唯一；允许null（只有一个null，无重复）</p></li>
+
+<li><p>时间复杂度</p>
+
+<ul>
+<li>put方法：存数据的时间复杂度是<strong>O(1)</strong>，因为只需要首先根据Key计算哈希值，其实就是数组的下标，找到存放的位置，然后把key-value链表节点链接上去就OK了。</li>
+<li>get方法：取数据的时间复杂度<strong>最好是O(1)，最差是O(n)</strong>。根据根据key计算哈希地址，得到key存储的数组下标，如果该位置就只有一个节点或者要找的节点就在表头，那么就不用再往后遍历链表了，所以最好情况下时间复杂度是O(1)；如果要找到的节点在链表表尾，那么就需要一个一个遍历链表，所以此时最差情况下为O(n)。所以get方法的时间复杂度为O(1)~ O(n)。</li>
+</ul></li>
+
+<li><p>底层数据结构：<strong>数组＋链表＋红黑树。可以理解为Key的存储是数组，Value存储是链表+红黑树</strong></p>
+
+<ul>
+<li>数组：<code>transient Node[] table</code>，这是一个Node类型的数组（也有称作Hash桶），HashMap中每个key值对应数组中一个元素。默认初始化数组大小为16 <code>static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4</code><br /></li>
+<li>链表：每个节点(key)就是<strong>Node</strong> ，Node结构是个单链表。无hash冲突时链表长度就是1，当hash冲突时新增的Value值就添加到链表尾部<strong>(jdk1.7时添加在首部)</strong>。</li>
+<li>红黑树：链表长度大于8的时候转换为红黑树。</li>
+</ul></li>
+
+<li><p>查询元素</p>
+
+<ul>
+<li>通过 <strong>hash(key)</strong> 计算出key的hashcode值，然后散列到数组范围内（为了均匀分布table数据和充分利用空间） 所以在查询上的访问速度比较快。</li>
+</ul>
+
+<blockquote>
+<p>注意：<strong>HashMap.get(key)  如果不存在，会返回null，注意判空</strong></p>
+</blockquote></li>
+
+<li><p>添加元素</p></li>
+</ul>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20200615151349905.png" alt="image-20200615151349905" style="zoom: 67%;" /></p>
+
+<p>以put()为例：</p>
+
+<p>1）判断是否为空table，如果是空table则先进行扩容resize()；</p>
+
+<p>2）根据hash(key)计算出应该添加到table中哪个节点；</p>
+
+<p>3）判断此节点是否为空，为空则直接插入；否则</p>
+
+<p>4）判断待插入的key和此节点已存的key是否完全一致（==、hashcode、equals都一样），如果相等则替换老的元素；否则</p>
+
+<p>5）说明是hash碰撞。先判断当前的节点p是否为红黑树，如果是则存入红黑树，否则</p>
+
+<p>6）以链表的形式保存，把当前传进来的参数生成一个新的节点保存在链表的尾部（JDK1.7保存在首部）</p>
+
+<p>7）添加完链表后判断是否长度超过8，超过则会把链表转成红黑树</p>
+
+<p>8）添加完待插入的数据后，判断是否达到扩容阀值，如果达到，则还需进行扩容（2倍）</p>
+
+<ul>
+<li>加载因子loadFactor</li>
+</ul>
+
+<p>加载因子初始化时可以指定，<strong>默认是0.75f</strong>  <code>static final float DEFAULT_LOAD_FACTOR = 0.75f;</code>, 不建议修改。表示Hsah表中元素的填满的程度，若加载因子越大，填满的元素越多，好处是空间利用率高了，但冲突的机会加大了；反之，加载因子越小，填满的元素越少，好处是冲突的机会减小了，但空间浪费多了。</p>
+
+<ul>
+<li>扩容机制</li>
+</ul>
+
+<p>HashMap扩容可以分为三种情况：</p>
+
+<p><strong>第一种：</strong>使用默认构造方法初始化HashMap。开始初始化的时候会返回一个空的table，并且thershold为0。在第一次put的时候，会先扩容，容量为默认值DEFAULT_INITIAL_CAPACITY也就是16。同时threshold = DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR = 12。（<strong>这里threshold扩容阀值</strong>）</p>
+
+<p><strong>第二种：</strong>指定初始容量的构造方法初始化HashMap，开始初始化的时候会返回一个空的table，threshold设置为最接近初始容量的2^n（比如设置初始容量initialCapacity=13，则初始threshold=16=2^4）。第一次put的时候，会先扩容，扩容容量为newCap=threshold，然后设置threshold = 当前的容量（newCap） * DEFAULT_LOAD_FACTOR。</p>
+
+<blockquote>
+<p>举例：new HashMap时传入capacity=13<br />
+&ndash;》初始化时 threshold=16，此时Node<K,V>[] table = null<br />
+&ndash;》第一次put时，先扩容capacity=threshold=16，初始化Node<K,V>[] newTab = (Node<K,V>[])new Node[16]，threshold=capacity * DEFAULT_LOAD_FACTOR = 16*0.75=12</p>
+</blockquote>
+
+<p><strong>第三种：</strong>HashMap不是第一次扩容。如果HashMap已经扩容过的话，<strong>那么每次table的容量以及threshold量为原有的两倍。</strong></p>
+
+<blockquote>
+<p><strong>这边引申到一个问题HashMap是先插入还是先扩容?</strong></p>
+
+<p>HashMap初始化后首次插入数据时，先发生resize扩容再插入数据，之后每当插入的数据个数达到threshold时就会发生resize，此时是先插入数据再resize</p>
+</blockquote>
+
+<h4 id="linkedhashmap">LinkedHashMap</h4>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li><p>数据结构：HashMap + LinkedList</p>
+
+<ul>
+<li>继承HashMap，沿用HashMap的方法来操作数据结构</li>
+<li>也用LinkedList维护插入元素的先后顺序，每个节点都进行了双向的连接，维持插入的顺序（默认）。head指向第一个插入的节点，tail指向最后一个节点。</li>
+</ul></li>
+
+<li><p>key和value都允许为空；key重复会覆盖,value可以重复；以插入顺序有序排列；LinkedHashMap是非线程安全的</p></li>
+
+<li><p>时间复杂度</p></li>
+
+<li><p>构造器</p>
+
+<ul>
+<li><p>新增accessOrder变量，该属性指取得键值对的方式,是个布尔值,<strong>false表示插入顺序,true表示访问顺序（也就是访问次数，插入和访问都会将当前节点放置到尾部，尾部代表的是最近访问的数据）</strong> <code>private final boolean accessOrder;</code>, 默认都是采用<strong>插入顺序</strong>来维持取出键值对的次序.所有的构造方法都是通过父类的构造方法来建造对象的。</p></li>
+
+<li><p>LinkedHashMap是HashMap的亲儿子，直接继承HashMap类。<strong>LinkedHashMap中的节点元素为Entry，直接继承HashMap.Node</strong>，再此基础上新增<code>Entry&lt;K,V&gt; before, after;</code> 实现双链表，维护顺序关系。 在这里需要明确Entry<K,V>对象内的next,before,after这三个属性的意思: next是用于维护HashMap指定table位置上连接的Entry顺序（即原HashMap链表顺序）;before、after是用于维护Entry插入的先后顺序的。</p></li>
+
+<li><p>新增LinkedHashMap.Entry<K,V> head, tail，用来维护节点间的双链表表头和表尾。<code>transient LinkedHashMap.Entry&lt;K,V&gt; head;</code>,<code>transient LinkedHashMap.Entry&lt;K,V&gt; tail;</code><strong>head、tail、before、after会把所有的Entry连成完整的双链表，来维护插入的顺序（默认）。</strong></p></li>
+</ul>
+
+<blockquote>
+<p>用个例子简单理解一下：
+插入顺序
+<img src="https://jasonqian10.github.io/img/post/image-20200615155513008.png" alt="image-20200615155513008" style="zoom:100%;"/></p>
+
+<p>实际的链表插入顺序关系：
+<img src="https://jasonqian10.github.io/img/post/image-20200615155846083.png" alt="image-20200615155846083" style="zoom:100%;"/></p>
+</blockquote></li>
+
+<li><p>查询元素</p></li>
+</ul>
+
+<p>LinkedHashMap中的<strong>get方法与父类HashMap处理逻辑一样</strong>；新增逻辑是如果查找到节点，则判断accessOrder=true，是则返回值之前，将该节点移动到对应桶中链表的尾部。（通过覆写afterNodeAccess()函数实现）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">V</span> get(Object <span style="color:#a6e22e">key</span>) {
+  		Node <span style="color:#a6e22e">e</span>;
+  		<span style="color:#66d9ef">if</span> ((e <span style="color:#f92672">=</span> getNode(hash(key), key)) <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>)
+  			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+  		<span style="color:#66d9ef">if</span> (accessOrder)
+  			afterNodeAccess(e);
+  		<span style="color:#66d9ef">return</span> e.<span style="color:#a6e22e">value</span>;
+  }</code></pre></div>
+<ul>
+<li>添加元素</li>
+</ul>
+
+<p>put()方法中覆写<code>Node&lt;K,V&gt; newNode</code>方法，创建新节点的时候时把新增的entry添加到双向链表的尾部。其他逻辑沿用HashMap。</p>
+
+<h4 id="treemap">TreeMap</h4>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li>支持排序，可以初始化的时候设置自定义比较器Comparator，如果未设置自定义的比较器则使用key的默认比较器</li>
+<li>TreeMap实现了红黑树的结构，形成了一颗二叉树</li>
+<li>不允许重复key, 不允许key=null</li>
+<li>无序集合，不保持插入顺序</li>
+<li>遍历逻辑put、get:  <code>private transient Entry&lt;K,V&gt; root;</code>  全局变量表示树的根节点，每个遍历从根节点出发，进行查找</li>
+</ul>
+
+<h4 id="hashtable">HashTable</h4>
+
+<p><strong>技术点</strong></p>
+
+<ul>
+<li>不允许key=null，使用<strong>synchronized</strong>实现线程安全</li>
+<li>其他基本上与HashMap一致</li>
+</ul>
+
+<h3 id="常见问题汇总">常见问题汇总</h3>
+
+<h4 id="arraylist和linkedlist的区别">ArrayList和LinkedList的区别？</h4>
+
+<ul>
+<li>ArrayList是实现了基于动态数组的数据结构，LinkedList基于链表的数据结构。</li>
+<li>对于随机访问get和set，ArrayList觉得优于LinkedList，因为LinkedList要移动指针。</li>
+<li>对于新增和删除操作add和remove，LinedList比较占优势，因为ArrayList要移动数据。</li>
+</ul>
+
+<h4 id="jdk1-8前后-hashmap的变动-以及为何有这变动">JDK1.8前后 HashMap的变动，以及为何有这变动？</h4>
+
+<p>HashMap在jdk1.8之前结构为数组+链表，缺点就是哈希函数很难使元素百分百的均匀分布，这会产生一种极端的可能，就是大量的元素存在一个桶里，此时的时间复杂度为O(n)，极大的放慢了计算速率。</p>
+
+<p>在jdk1.8之后，HashMap采用数组加链表或是红黑树的形式：</p>
+
+<ul>
+<li>在HashMap添加元素时，按照数组+链表形式添加，当桶中的数量大于8时，链表会转换成红黑树的形式。</li>
+<li>删除元素、扩容时，同上，数量大于8时，也是采用红黑树形式存贮，但是在数量较少时，即数量小于6时，会将红黑树转换回链表。</li>
+<li>遍历、查找时，使用红黑树，他的时间复杂度O(log n)，便于性能的提高。</li>
+</ul>
+
+<h4 id="hashmap-1-linkedhashmap-2-treemap-3-比较">HashMap(1)、LinkedHashMap(2)、TreeMap(3)比较</h4>
+
+<ul>
+<li><p>key=null: 1,2支持，3不支持</p></li>
+
+<li><p>内部存储节点不同</p></li>
+</ul>
+
+<p>​   1.HashMap</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  HashMap.<span style="color:#a6e22e">Node</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">implements</span> Map.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span>
+  	<span style="color:#a6e22e">final</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">hash</span>;
+  	<span style="color:#66d9ef">final</span> <span style="color:#a6e22e">K</span> key;
+  	V <span style="color:#a6e22e">value</span>;
+  	Node<span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">next</span>;  <span style="color:#f92672">//</span>主要为了存储hash冲突的node</code></pre></div>
+<p>​   2.LinkedHashMap</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  LinkedHashMap.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">extends</span> HashMap.<span style="color:#a6e22e">Node</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span>
+    <span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">before</span>, after;  <span style="color:#75715e">//在1的基础上增加,记录添加顺序
+</span><span style="color:#75715e"></span>  	
+  <span style="color:#66d9ef">transient</span> <span style="color:#a6e22e">LinkedHashMap</span>.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">head</span>,tail;  <span style="color:#f92672">//</span>LinkedHashMap全局的变量<span style="color:#960050;background-color:#1e0010">，</span>非Entry内部的变量<span style="color:#960050;background-color:#1e0010">）</span>增加头尾Entry记录</code></pre></div>
+<p>​   3: TreeMap</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  TreeMap.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">implements</span> Map.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span>
+    <span style="color:#75715e">//典型红黑树结构
+</span><span style="color:#75715e"></span>  	K <span style="color:#a6e22e">key</span>;
+  	V <span style="color:#a6e22e">value</span>;
+  	Entry<span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">left</span>;
+  	Entry<span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">right</span>;
+  	Entry<span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">parent</span>;
+  	<span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> BLACK;</code></pre></div>
+<ul>
+<li>集合的顺序
+
+<ul>
+<li>1是无序集合，以key的Hash值进行排序</li>
+<li>2是有序集合，以元素添加的顺序（或者元素被访问的顺序）排序</li>
+<li>3是无序集合，以自定义比较器或者自然比较排序
+<br /></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>注：这里的&rdquo;有序&rdquo;、&rdquo;无序&rdquo;是指相对于元素被添加的顺序而言的。</p>
+</blockquote>
+
+<h4 id="arrayblockingqueue单锁与linkedblockingqueue双锁">ArrayBlockingQueue单锁与LinkedBlockingQueue双锁?</h4>
+
+<p>主要是数据结构不同。</p>
+
+<p>对于数组(ArrayBlockingQueue)：添加、移除是修改同一个array，需要互斥保护。</p>
+
+<p>对于单链表(LinkedBlockingQueue)：添加、移除其实只是修改头、尾两个Node，无需互斥，可以双锁分别保证头部修改互斥、尾部修改互斥即可。</p>
+
+<h3 id="集合工具类">集合工具类</h3>
+
+<p>。。。</p>
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/java8" rel="tag" title="java8">#java8#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/stream" rel="tag" title="stream">#stream#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/java/java8-stream/" rel="prev" title="【java8】(三)stream 详细用法">
+        【java8】(三)stream 详细用法 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">13</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#collection">Collection</a>
+<ul>
+<li><a href="#list">List</a>
+<ul>
+<li><a href="#arraylist">ArrayList</a></li>
+<li><a href="#linkedlist">LinkedList</a></li>
+<li><a href="#vector">Vector</a></li>
+</ul></li>
+<li><a href="#set">Set</a>
+<ul>
+<li><a href="#hashset">HashSet</a></li>
+<li><a href="#linkedhashset">LinkedHashSet</a></li>
+<li><a href="#treeset">TreeSet</a></li>
+</ul></li>
+<li><a href="#queue">Queue</a>
+<ul>
+<li><a href="#特点">特点</a></li>
+<li><a href="#堵塞队列">堵塞队列</a>
+<ul>
+<li><a href="#blockingqueue">BlockingQueue</a></li>
+<li><a href="#blockingdeque">BlockingDeque</a></li>
+</ul></li>
+<li><a href="#非堵塞队列">非堵塞队列</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#map">Map</a>
+<ul>
+<li><a href="#hashmap">HashMap</a></li>
+<li><a href="#linkedhashmap">LinkedHashMap</a></li>
+<li><a href="#treemap">TreeMap</a></li>
+<li><a href="#hashtable">HashTable</a></li>
+</ul></li>
+<li><a href="#常见问题汇总">常见问题汇总</a>
+<ul>
+<li><a href="#arraylist和linkedlist的区别">ArrayList和LinkedList的区别？</a></li>
+<li><a href="#jdk1-8前后-hashmap的变动-以及为何有这变动">JDK1.8前后 HashMap的变动，以及为何有这变动？</a></li>
+<li><a href="#hashmap-1-linkedhashmap-2-treemap-3-比较">HashMap(1)、LinkedHashMap(2)、TreeMap(3)比较</a></li>
+<li><a href="#arrayblockingqueue单锁与linkedblockingqueue双锁">ArrayBlockingQueue单锁与LinkedBlockingQueue双锁?</a></li>
+</ul></li>
+<li><a href="#集合工具类">集合工具类</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">知不道</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>

@@ -117,6 +117,75 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java-collection/" itemprop="url">
+        【Java集合框架】看这一篇就够了
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-04-16">
+    2020-04-16
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">8904 字 ~18分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="概述">概述</h3>
+
+<p>集合框架是Java编码中最常用的知识点，本篇主要梳理一下Java集合框架，总结出各个常用的集合知识点。</p>
+
+<ul>
+<li>Collection接口下有List、Set、Queue，三者都是接口</li>
+<li>Map是独立接口（与Collection是平级关系），下有Hashtable，LinkedHashMap，HashMap，TreeMap</li>
+<li>List下有ArrayList，Vector，LinkedList</li>
+<li>Set下有HashSet，LinkedHashSet，TreeSet</li>
+<li>Queue下有阻塞队列和非阻塞队列；堵塞队列中又分单端堵塞队列和双端堵塞队列</li>
+</ul>
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/java/java-collection/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
         <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java8-stream/" itemprop="url">
         【java8】(三)stream 详细用法
         </a>
@@ -156,12 +225,14 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">3839 字 ~8分钟</span>
+<span class="leancloud-visitors-count">4178 字 ~9分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    概述 Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。使用Stream API 对集合
+    <h3 id="概述">概述</h3>
+
+<p>Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。使用Stream API 对集合数据进行操作，就类似于使用 SQL 执行的数据库查询。也可以使用 Stream API 来并行执行操作。简而言之，Stream API 提供了一种高效且易于使用的处理数据的方式。</p>
     </div>
     
     <div class="post-more-link text-center">
@@ -220,7 +291,27 @@
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    函数式接口 函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成
+    <h2 id="函数式接口">函数式接口</h2>
+
+<p>函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。</p>
+
+<p>1)函数式接口中的抽象函数就是为了支持 lambda表达式；</p>
+
+<p>2)函数式接口可以被隐式转换为lambda表达式；</p>
+
+<p>3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；</p>
+
+<p>注意：加不加<code>@FunctionalInterface</code>对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。</p>
+
+<p>例外：</p>
+
+<p>函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；</p>
+
+<p>函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；</p>
+
+<p>函数式接口里是可以包含Object里的public方法，如equals()。</p>
+
+<p>下面介绍几种常用的函数式接口。</p>
     </div>
     
     <div class="post-more-link text-center">
@@ -279,7 +370,21 @@
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
-    前言 Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说
+    <h2 id="前言">前言</h2>
+
+<p>Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？</p>
+
+<h2 id="lambda表达式语法">lambda表达式语法</h2>
+
+<h3 id="概念">概念</h3>
+
+<p>可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。</p>
+
+<blockquote>
+<p>lambda表达式依附于<strong>函数式接口</strong>，可以理解为是函数式接口的匿名实现。</p>
+
+<p><strong>函数式接口</strong>后面会详细介绍。</p>
+</blockquote>
     </div>
     
     <div class="post-more-link text-center">
@@ -543,89 +648,6 @@
     <footer class="post-footer"><div class="post-eof"></div></footer>
   </article>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-1/" itemprop="url">
-        【Hadoop索引】我理解的hadoop
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-05">
-    2019-12-05
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/hadoop" itemprop="url" rel="index">
-        <span itemprop="name">Hadoop</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">5534 字 ~12分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第一篇，介绍我学习使用Hadoop后对其的理解。</p>
-
-<h2 id="hadoop概念">Hadoop概念</h2>
-
-<h3 id="官方概念">官方概念</h3>
-
-<p>The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using <strong>simple programming</strong> <strong>models</strong>.</p>
-
-<p>总结：处理大数据、分布式集群、可编程计算框架</p>
-
-<h3 id="hadoop-的核心组件">Hadoop 的核心组件</h3>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191206112523725.png" alt="image-20191206112523725" /></p>
-
-<p>Hadoop由1.0和2.0两个架构版本，2.0最大的变化就是引入YARN这个资源调度框架，更加精细化的分配和调度资源。这里主要以当前最新的2.0展开。感兴趣的同学可以自行了解一下两者差异。</p>
-
-<ul>
-<li><p>HDFS：分布式文件系统</p></li>
-
-<li><p>Mapreduce：分布式运算编程框架</p></li>
-
-<li><p>YARN：运算资源调度系统</p></li>
-</ul>
-
-<p>简单描述一下三者关系：自定义的MapReduce程序（Java进程），通过YARN框架分配资源来运行这个MapReduce程序，MapReduce程序中输出存储到HDFS。</p>
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-1/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
 </section>
 
 
@@ -694,7 +716,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>

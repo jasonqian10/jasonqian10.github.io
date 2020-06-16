@@ -17,7 +17,21 @@
       <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/post/java/java8-lambda/</guid>
-      <description>前言 Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说</description>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？&lt;/p&gt;
+
+&lt;h2 id=&#34;lambda表达式语法&#34;&gt;lambda表达式语法&lt;/h2&gt;
+
+&lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;
+
+&lt;p&gt;可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;lambda表达式依附于&lt;strong&gt;函数式接口&lt;/strong&gt;，可以理解为是函数式接口的匿名实现。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;函数式接口&lt;/strong&gt;后面会详细介绍。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
     </item>
     
   </channel>

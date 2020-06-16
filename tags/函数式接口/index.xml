@@ -17,7 +17,27 @@
       <pubDate>Mon, 30 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/post/java/java8-function-interface/</guid>
-      <description>函数式接口 函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成</description>
+      <description>&lt;h2 id=&#34;函数式接口&#34;&gt;函数式接口&lt;/h2&gt;
+
+&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。&lt;/p&gt;
+
+&lt;p&gt;1)函数式接口中的抽象函数就是为了支持 lambda表达式；&lt;/p&gt;
+
+&lt;p&gt;2)函数式接口可以被隐式转换为lambda表达式；&lt;/p&gt;
+
+&lt;p&gt;3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；&lt;/p&gt;
+
+&lt;p&gt;注意：加不加&lt;code&gt;@FunctionalInterface&lt;/code&gt;对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。&lt;/p&gt;
+
+&lt;p&gt;例外：&lt;/p&gt;
+
+&lt;p&gt;函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；&lt;/p&gt;
+
+&lt;p&gt;函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；&lt;/p&gt;
+
+&lt;p&gt;函数式接口里是可以包含Object里的public方法，如equals()。&lt;/p&gt;
+
+&lt;p&gt;下面介绍几种常用的函数式接口。&lt;/p&gt;</description>
     </item>
     
   </channel>
