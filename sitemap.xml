@@ -1,6 +1,27 @@
 <search>
     
      <entry>
+        <title>【solr配置】stored、docValues区别和使用场景</title>
+        <url>https://jasonqian10.github.io/post/solr/solr-docvalues-stored/</url>
+        <categories>
+          <category>Solr</category><category>Lucene</category>
+        </categories>
+        <tags>
+          <tag>solr</tag><tag>schema配置</tag>
+        </tags>
+        <content type="html"> stored与DocValues stored存储与docValues存储其实都是正排索引，但是两者有区别：
+stored  概念  存储的字段以行间方式将一个文档的所有字段值存储在一起。 在检索中，每个文档一次返回所有字段值，因此加载有关文档的相关信息非常快。
+ 使用场景  加载文档所有字段信息时适用。
+ 面向行存储      A B C     doc1 1 2 3   doc2 2 3 4   doc3 4 3 2     A,B,C为字段名
+ DocValues  概念  docValues是一种记录doc字段值的一种形式，在例如在结果排序和统计Facet查询时，需要通过docid取字段值的场景下是非常高效的。
+ 使用场景  sort，agg，group，facet，函数查询，高亮等场景，这些场景需要批量取field存储的值。
+ 面向列存储      doc1 doc2 doc3     A 1 2 4   B 2 3 3   C 3 4 2     与stored存储形式相比，相当于两者进行了矩阵转置。
+比如某个查询命中一批docId，需要取这批docId字段A的值的时候，DocValues可以批量把所有A字段存储的value取出加载到内存，遍历docId时无需重复去索引文件中加载。而stored只能遍历每个docId，取出整个doc文档，取出doc[&amp;ldquo;A&amp;rdquo;]值。
+  支持压缩存储  面向列存储有一个连续的数据块：A:[1,2,4], B:[2,3,3], C:[3,4,2], 这样可以对每列进行压缩存储，节省存储空间。
+</content>
+    </entry>
+    
+     <entry>
         <title>【Java集合框架】看这一篇就够了</title>
         <url>https://jasonqian10.github.io/post/java/java-collection/</url>
         <categories>

@@ -6,10 +6,28 @@
     <description>Recent content in Categories on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 16 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Lucene</title>
+      <link>https://jasonqian10.github.io/categories/lucene/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/categories/lucene/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Solr</title>
+      <link>https://jasonqian10.github.io/categories/solr/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/categories/solr/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>java</title>
@@ -26,15 +44,6 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/categories/search/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Lucene</title>
-      <link>https://jasonqian10.github.io/categories/lucene/</link>
-      <pubDate>Thu, 26 Dec 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://jasonqian10.github.io/categories/lucene/</guid>
       <description></description>
     </item>
     

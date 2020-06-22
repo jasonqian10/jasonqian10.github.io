@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 16 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>schema配置</title>
+      <link>https://jasonqian10.github.io/tags/schema%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/schema%E9%85%8D%E7%BD%AE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>solr</title>
+      <link>https://jasonqian10.github.io/tags/solr/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/solr/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>java</title>
@@ -80,15 +98,6 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/tags/intellij-idea/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>solr</title>
-      <link>https://jasonqian10.github.io/tags/solr/</link>
-      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://jasonqian10.github.io/tags/solr/</guid>
       <description></description>
     </item>
     
