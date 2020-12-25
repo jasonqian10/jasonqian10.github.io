@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>collapse on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/collapse/</link>
+    <description>Recent content in collapse on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 13 Dec 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://jasonqian10.github.io/tags/collapse/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>【solr源码分析】collapse插件</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</guid>
+      <description>&lt;h3 id=&#34;collapse是什么&#34;&gt;collapse是什么&lt;/h3&gt;
+
+&lt;h4 id=&#34;举个例子&#34;&gt;举个例子&lt;/h4&gt;
+
+&lt;p&gt;为了让大家了解collapse的应用场景，我们举个例子：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20201223160552671.png&#34; alt=&#34;image-20201223160552671&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图，&lt;/p&gt;
+
+&lt;p&gt;查询条件是：&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;PHONE_BRAND&amp;rdquo;字段进行折叠，取&amp;rdquo;RELEASE_TIME&amp;rdquo;最新的选出代表。&lt;/p&gt;
+
+&lt;p&gt;结果：&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;apple&amp;rdquo;品牌是&amp;rdquo;iphone12&amp;rdquo;，&amp;rdquo;huawei&amp;rdquo;品牌是&amp;rdquo;mate40pro&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;如果对每个品牌再进行展开（expand=true）：&lt;/p&gt;
+
+&lt;p&gt;则结果中expanded展示全部剩余的结果。&lt;/p&gt;
+
+&lt;h4 id=&#34;官方解释&#34;&gt;官方解释&lt;/h4&gt;
+
+&lt;p&gt;Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

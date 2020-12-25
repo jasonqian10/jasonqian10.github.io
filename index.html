@@ -117,6 +117,264 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-collapse-plugin/" itemprop="url">
+        【solr源码分析】collapse插件
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-12-13">
+    2020-12-13
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/solr" itemprop="url" rel="index">
+        <span itemprop="name">Solr</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">2250 字 ~5分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="collapse是什么">collapse是什么</h3>
+
+<h4 id="举个例子">举个例子</h4>
+
+<p>为了让大家了解collapse的应用场景，我们举个例子：</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20201223160552671.png" alt="image-20201223160552671" /></p>
+
+<p>如上图，</p>
+
+<p>查询条件是：</p>
+
+<p>&ldquo;PHONE_BRAND&rdquo;字段进行折叠，取&rdquo;RELEASE_TIME&rdquo;最新的选出代表。</p>
+
+<p>结果：</p>
+
+<p>&ldquo;apple&rdquo;品牌是&rdquo;iphone12&rdquo;，&rdquo;huawei&rdquo;品牌是&rdquo;mate40pro&rdquo;。</p>
+
+<p>如果对每个品牌再进行展开（expand=true）：</p>
+
+<p>则结果中expanded展示全部剩余的结果。</p>
+
+<h4 id="官方解释">官方解释</h4>
+
+<p>Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。</p>
+
+<blockquote>
+<p>为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。</p>
+</blockquote>
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/solr/solr-collapse-plugin/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java-concurrency-principle/" itemprop="url">
+        【Java并发编程】(一)原理篇
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-07-01">
+    2020-07-01
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">3557 字 ~8分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    Java并发理论 这部分内容涉及操作系统、CPU、内存、指令以及JMM（Java内存模型）相关的机制。 重排序 重排序通常是编译器或运行时环境为了
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/java/java-concurrency-principle/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java-lock-system/" itemprop="url">
+        【Java并发编程】(三)锁机制
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-07-01">
+    2020-07-01
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">53 字 ~1分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    常见锁 Synchronized 见上 Lock ####Condition 锁的分类 几种锁的原理 偏向锁 轻量级锁 重量级锁 除了偏向锁，其他锁都使用循环CAS的方式获取锁。
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java-concurrency-keyword/" itemprop="url">
+        【Java并发编程】(二)并发关键字
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-07-01">
+    2020-07-01
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">92 字 ~1分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    Synchronized 是锁的一类。有三种锁的形式: 普通同步方法 ==》锁的是当前实例对象 静态同步块 ==》锁的是当前类的Class对象 同步方法块（代码块） ==》锁的
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/java/java-concurrency-keyword/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
         <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-docvalues-stored/" itemprop="url">
         【solr配置】stored、docValues区别和使用场景
         </a>
@@ -163,7 +421,7 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">539 字 ~2分钟</span>
+<span class="leancloud-visitors-count">1113 字 ~3分钟</span>
 </span>
       </div>
     </header>
@@ -354,14 +612,14 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">1309 字 ~3分钟</span>
+<span class="leancloud-visitors-count">1349 字 ~3分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <h2 id="函数式接口">函数式接口</h2>
 
-<p>函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。</p>
+<p>函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)</p>
 
 <p>1)函数式接口中的抽象函数就是为了支持 lambda表达式；</p>
 
@@ -384,268 +642,6 @@
     
     <div class="post-more-link text-center">
     <a class="btn" href="https://jasonqian10.github.io/post/java/java8-function-interface/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java8-lambda/" itemprop="url">
-        【java8】(一)lambda表达式你用对了吗？
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-03-29">
-    2020-03-29
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
-        <span itemprop="name">java</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">1357 字 ~3分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    <h2 id="前言">前言</h2>
-
-<p>Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？</p>
-
-<h2 id="lambda表达式语法">lambda表达式语法</h2>
-
-<h3 id="概念">概念</h3>
-
-<p>可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。</p>
-
-<blockquote>
-<p>lambda表达式依附于<strong>函数式接口</strong>，可以理解为是函数式接口的匿名实现。</p>
-
-<p><strong>函数式接口</strong>后面会详细介绍。</p>
-</blockquote>
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/java/java8-lambda/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr-debug-idea-build/" itemprop="url">
-        Intellij idea搭建solr源码debug调试环境
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-01-15">
-    2020-01-15
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/search" itemprop="url" rel="index">
-        <span itemprop="name">Search</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">540 字 ~2分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    <p>solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。</p>
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/solr-debug-idea-build/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" itemprop="url">
-        搜索引擎中相似度算法TF-IDF和BM25
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-26">
-    2019-12-26
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/lucene" itemprop="url" rel="index">
-        <span itemprop="name">Lucene</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2309 字 ~5分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/nlp-tf-idf-bm25/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" itemprop="url">
-        【Hadoop索引】hadoop调优经验
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-22">
-    2019-12-22
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/hadoop" itemprop="url" rel="index">
-        <span itemprop="name">Hadoop</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2371 字 ~5分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    <p>【Hadoop索引】本篇系列第三篇。主要介绍Hadoop调试过程中的一些问题以及解决方法的总结。</p>
-
-<p>主要有以下几类问题</p>
-
-<ul>
-<li><p>资源分配问题</p></li>
-
-<li><p>性能调优问题</p></li>
-
-<li><p>Yarn框架运行机制问题</p></li>
-
-<li><p>Solr索引问题</p></li>
-</ul>
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" rel="contents">
       阅读全文 &raquo;
     </a>
     </div>
@@ -721,14 +717,14 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
     <div class="site-state-item site-state-categories">    
         <a href="https://jasonqian10.github.io/categories/">      
          
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">4</span>
         
         <span class="site-state-item-name">分类</span>
         
@@ -738,7 +734,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">20</span>
         
         <span class="site-state-item-name">标签</span>
         </a>

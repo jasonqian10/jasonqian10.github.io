@@ -6,10 +6,74 @@
     <description>Recent content on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 13 Dec 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【solr源码分析】collapse插件</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</guid>
+      <description>&lt;h3 id=&#34;collapse是什么&#34;&gt;collapse是什么&lt;/h3&gt;
+
+&lt;h4 id=&#34;举个例子&#34;&gt;举个例子&lt;/h4&gt;
+
+&lt;p&gt;为了让大家了解collapse的应用场景，我们举个例子：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20201223160552671.png&#34; alt=&#34;image-20201223160552671&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图，&lt;/p&gt;
+
+&lt;p&gt;查询条件是：&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;PHONE_BRAND&amp;rdquo;字段进行折叠，取&amp;rdquo;RELEASE_TIME&amp;rdquo;最新的选出代表。&lt;/p&gt;
+
+&lt;p&gt;结果：&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;apple&amp;rdquo;品牌是&amp;rdquo;iphone12&amp;rdquo;，&amp;rdquo;huawei&amp;rdquo;品牌是&amp;rdquo;mate40pro&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;如果对每个品牌再进行展开（expand=true）：&lt;/p&gt;
+
+&lt;p&gt;则结果中expanded展示全部剩余的结果。&lt;/p&gt;
+
+&lt;h4 id=&#34;官方解释&#34;&gt;官方解释&lt;/h4&gt;
+
+&lt;p&gt;Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>【Java并发编程】(一)原理篇</title>
+      <link>https://jasonqian10.github.io/post/java/java-concurrency-principle/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-concurrency-principle/</guid>
+      <description>Java并发理论 这部分内容涉及操作系统、CPU、内存、指令以及JMM（Java内存模型）相关的机制。 重排序 重排序通常是编译器或运行时环境为了</description>
+    </item>
+    
+    <item>
+      <title>【Java并发编程】(三)锁机制</title>
+      <link>https://jasonqian10.github.io/post/java/java-lock-system/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-lock-system/</guid>
+      <description>常见锁 Synchronized 见上 Lock ####Condition 锁的分类 几种锁的原理 偏向锁 轻量级锁 重量级锁 除了偏向锁，其他锁都使用循环CAS的方式获取锁。</description>
+    </item>
+    
+    <item>
+      <title>【Java并发编程】(二)并发关键字</title>
+      <link>https://jasonqian10.github.io/post/java/java-concurrency-keyword/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-concurrency-keyword/</guid>
+      <description>Synchronized 是锁的一类。有三种锁的形式: 普通同步方法 ==》锁的是当前实例对象 静态同步块 ==》锁的是当前类的Class对象 同步方法块（代码块） ==》锁的</description>
+    </item>
     
     <item>
       <title>【solr配置】stored、docValues区别和使用场景</title>
@@ -60,7 +124,7 @@
       <guid>https://jasonqian10.github.io/post/java/java8-function-interface/</guid>
       <description>&lt;h2 id=&#34;函数式接口&#34;&gt;函数式接口&lt;/h2&gt;
 
-&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。&lt;/p&gt;
+&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)&lt;/p&gt;
 
 &lt;p&gt;1)函数式接口中的抽象函数就是为了支持 lambda表达式；&lt;/p&gt;
 
@@ -106,19 +170,19 @@
     
     <item>
       <title>Intellij idea搭建solr源码debug调试环境</title>
-      <link>https://jasonqian10.github.io/post/solr-debug-idea-build/</link>
+      <link>https://jasonqian10.github.io/post/solr/solr-debug-idea-build/</link>
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://jasonqian10.github.io/post/solr-debug-idea-build/</guid>
+      <guid>https://jasonqian10.github.io/post/solr/solr-debug-idea-build/</guid>
       <description>&lt;p&gt;solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>搜索引擎中相似度算法TF-IDF和BM25</title>
-      <link>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</link>
+      <link>https://jasonqian10.github.io/post/lucene/nlp-tf-idf-bm25/</link>
       <pubDate>Thu, 26 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</guid>
+      <guid>https://jasonqian10.github.io/post/lucene/nlp-tf-idf-bm25/</guid>
       <description>前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里</description>
     </item>
     
@@ -191,10 +255,10 @@
     
     <item>
       <title>solr suggest实战</title>
-      <link>https://jasonqian10.github.io/post/solr-suggest/</link>
+      <link>https://jasonqian10.github.io/post/solr/solr-suggest/</link>
       <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://jasonqian10.github.io/post/solr-suggest/</guid>
+      <guid>https://jasonqian10.github.io/post/solr/solr-suggest/</guid>
       <description>&lt;h3 id=&#34;solr-suggest模块介绍&#34;&gt;solr suggest模块介绍&lt;/h3&gt;
 
 &lt;p&gt;自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。&lt;/p&gt;
@@ -206,10 +270,10 @@
     
     <item>
       <title>solr搜索原理解析</title>
-      <link>https://jasonqian10.github.io/post/solr-lucene-principle/</link>
+      <link>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</link>
       <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://jasonqian10.github.io/post/solr-lucene-principle/</guid>
+      <guid>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</guid>
       <description>&lt;h3 id=&#34;solr与lucene的关系&#34;&gt;solr与Lucene的关系&lt;/h3&gt;
 
 &lt;p&gt;讲搜索流程之前先介绍一下solr与Lucene的关系。&lt;/p&gt;

@@ -6,10 +6,37 @@
     <description>Recent content in java on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 16 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【Java并发编程】(一)原理篇</title>
+      <link>https://jasonqian10.github.io/post/java/java-concurrency-principle/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-concurrency-principle/</guid>
+      <description>Java并发理论 这部分内容涉及操作系统、CPU、内存、指令以及JMM（Java内存模型）相关的机制。 重排序 重排序通常是编译器或运行时环境为了</description>
+    </item>
+    
+    <item>
+      <title>【Java并发编程】(三)锁机制</title>
+      <link>https://jasonqian10.github.io/post/java/java-lock-system/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-lock-system/</guid>
+      <description>常见锁 Synchronized 见上 Lock ####Condition 锁的分类 几种锁的原理 偏向锁 轻量级锁 重量级锁 除了偏向锁，其他锁都使用循环CAS的方式获取锁。</description>
+    </item>
+    
+    <item>
+      <title>【Java并发编程】(二)并发关键字</title>
+      <link>https://jasonqian10.github.io/post/java/java-concurrency-keyword/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/java/java-concurrency-keyword/</guid>
+      <description>Synchronized 是锁的一类。有三种锁的形式: 普通同步方法 ==》锁的是当前实例对象 静态同步块 ==》锁的是当前类的Class对象 同步方法块（代码块） ==》锁的</description>
+    </item>
     
     <item>
       <title>【Java集合框架】看这一篇就够了</title>
@@ -49,7 +76,7 @@
       <guid>https://jasonqian10.github.io/post/java/java8-function-interface/</guid>
       <description>&lt;h2 id=&#34;函数式接口&#34;&gt;函数式接口&lt;/h2&gt;
 
-&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。&lt;/p&gt;
+&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)&lt;/p&gt;
 
 &lt;p&gt;1)函数式接口中的抽象函数就是为了支持 lambda表达式；&lt;/p&gt;
 

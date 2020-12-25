@@ -30,7 +30,7 @@
       <guid>https://jasonqian10.github.io/post/java/java8-function-interface/</guid>
       <description>&lt;h2 id=&#34;函数式接口&#34;&gt;函数式接口&lt;/h2&gt;
 
-&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。&lt;/p&gt;
+&lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)&lt;/p&gt;
 
 &lt;p&gt;1)函数式接口中的抽象函数就是为了支持 lambda表达式；&lt;/p&gt;
 

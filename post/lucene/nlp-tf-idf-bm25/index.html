@@ -1,0 +1,505 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>搜索引擎中相似度算法TF-IDF和BM25 - 知不道</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="搜索引擎中相似度算法TF-IDF和BM25">
+    <meta property="og:site_name" content="知不道">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="搜索引擎中相似度算法TF-IDF和BM25 - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">知不道</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/lucene/nlp-tf-idf-bm25/" itemprop="url">
+        搜索引擎中相似度算法TF-IDF和BM25
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-12-26">
+    2019-12-26
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/lucene" itemprop="url" rel="index">
+        <span itemprop="name">Lucene</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">2309 字 ~5分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    
+
+<h2 id="前言">前言</h2>
+
+<p>当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里介绍2种重要的相似度算法：<strong>TF-IDF和BM25</strong>。</p>
+
+<p>TF-IDF是Lucene上一代（6.0以前）相似度算法，BM25是Lucene新一代（6.0以后）正使用的相似度算法。</p>
+
+<p>先举个例子。假如，我们想找和“Lucene”相关的文章。可以想一下，那些内容里只出现过一次“Lucene”的文章，有可能是在讲某种技术，顺便提到了Lucene这个工具。而那些出现了两三次“Lucene”的文章，很可能是专门讨论Lucene的。通过直觉，我们可以得出判断：<strong>关键字出现的次数越多，文档与关键字的匹配度越高</strong>。</p>
+
+<h2 id="tf">TF</h2>
+
+<p>Term Frequency，缩写为TF。通常叫做“词频”，表示文档中关键字出现的次数。</p>
+
+<blockquote>
+<p>通常TF越大，相关性越高。</p>
+</blockquote>
+
+<p>但是，你可能会发现一个问题。例如一篇小短文里出现了一次“Lucene”，而一部好几百页的书里提到两次“Lucene”，此时我们就不能说后者相关度更高了。为了消除文档本身大小的影响，在计算TF时引入文档长度这个参数，做文档长度标准化</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">TF socre ＝ 某个词在文档中出现的次数 ／ 文档的长度</pre></div>
+<p>举例：某文档D，长度为200，其中“Lucene”出现了2次，“的”出现了20次，“原理”出现了3次，那么</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">TF(Lucene|D) = 2/200 = 0.01
+TF(的|D) = 20/200 = 0.1
+TF(原理|D) = 3/200 = 0.015</pre></div>
+<p>其中我们发现“的”这个词的比重非常高，搜索引擎中一般把这种“的、地、得”这些虚词去掉，不计算其分数。</p>
+
+<h2 id="idf">IDF</h2>
+
+<p>Inverse Dcument Frequency, 缩写为IDF。通常叫做“逆文档频率”，其定义为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF = log(语料库的文档总数 / 包含该词的文档数 + 1)</pre></div>
+<p>可见包含该词的文档数越小，分母就越小，IDF越大；该词越常见，分母就越大，IDF越小越接近0。分母之所以要加1，是为了避免分母为0（即所有文档都不包含该词）。</p>
+
+<p>举例：世界上文档总数位100亿，&rdquo;Lucene&rdquo;在1万个文档中出现过，“原理”在2亿个文档中出现过，那么它们的IDF值分别为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF(Lucene) = log(100亿/1万+1) = 19.93
+IDF(原理) ＝ log(100亿/2亿+1) ＝ 5.64</pre></div>
+<p>“Lucene”重要性相当于“原理”的3.5倍，可见“Lucene”更能表征这篇文档。</p>
+
+<h2 id="tf-idf">TF-IDF</h2>
+
+<p>TF-IDF算法的相似度公式就是TF和IDF的加权求和</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = TF1*IDF1 + TF2*IDF2 + ... + TFn*IDFn</pre></div>
+<p>上面的例子最终相似度得分为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity(Lucene的原理|D) = 0.01*19.93 + 0 + 5.64*0.015 ＝ 0.2839</pre></div>
+<p>其中，“Lucene”占了总分70%的权重，“原理”仅占总分30%的权重。</p>
+
+<h2 id="lucene中的tf-idf">Lucene中的TF-IDF</h2>
+
+<p>Lucene对TF-IDF算法做了适当调整，它的相似度公式为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = log(numDocs / (docFreq + 1)) * sqrt(tf) * (1/sqrt(length))</pre></div>
+<p>各参数含义</p>
+
+<ul>
+<li>numDocs： 索引的文档总数量</li>
+<li>docFreq： 包含关键字的文档数量</li>
+<li>tf：关键字在一篇文档中出现的次数。</li>
+<li>length：文档的长度</li>
+</ul>
+
+<p>上面的公式在Lucene打分计算时会被拆分成三个部分：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF Score = log(numDocs / (docFreq + 1))
+TF Score = sqrt(tf)
+fieldNorms = 1/sqrt(length)</pre></div>
+<blockquote>
+<p>log()，sqrt()主要是为了降低分值大小，缩写文档之间分数差距</p>
+
+<p>fieldNorms是对文本长度的归一化(Normalization)，为了消除文档长度对分数的影响</p>
+</blockquote>
+
+<p>所以，上面公式也可以表示成</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = IDF score * TF score * fieldNorms</pre></div>
+<p>Lucene在score打分时会遍历匹配到的每篇文档计算每篇文档的score，每篇文档分别计算这三部分分值。最后默认根据score sort。</p>
+
+<h2 id="bm25-下一代的tf-idf">BM25,下一代的TF-IDF</h2>
+
+<p>新版的Lucene不再把TF-IDF作为默认的相关性算法，而是采用了BM25(BM是Best Matching的意思)。BM25是基于TF-IDF并做了改进的算法。先来看下改进之后的BM25算法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">simlarity = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5)) * ((k1 + 1) * tf) / (K + tf)</pre></div>
+<p>上面的公式在Lucene打分计算时会被拆分成两部分：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))
+TF Score = ((k1 + 1) * tf) / (K + tf)</pre></div>
+<blockquote>
+<p>这里k1和K下面展开讨论</p>
+</blockquote>
+
+<ul>
+<li>#### TF项比较</li>
+</ul>
+
+<p>两者公式如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">传统 TF Score = sqrt(tf)
+BM25的 TF Score = ((k1 + 1) * tf) / (K + tf)</pre></div>
+<p>传统的TF值理论上是可以无限大的。而BM25与之不同，它在TF计算方法中增加了一个常量k1和K，用来限制TF值的增长极限，BM25的 TF Score的范围会控制在<strong>[0, k1+1]</strong>。其中K</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">K = k1(1 - b + b*dl/avgdl)</pre></div>
+<p>取值k1，b是调节因子，Lucene中默认是k1=2，b=0.75，用户可以自定义。dl为文档的长度，avgdl为所有文档的平均长度。</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191226134547226.png" alt="image-20191226134547226" /></p>
+
+<p>两者的分布曲线来看，随着tf增大，BM25的TF会接近k1+1，传统的TF会无限变大。</p>
+
+<p>TF中还引入了文档的长度dl，所有文档的平均长度avgdl，这里假设L = dl/avgdl，下面是不同L的条件下，词频对TFScore影响的走势图</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20191226145110069.png" alt="image-20191226145110069" /></p>
+
+<p>从图上可以看到，文档越短，它逼近上限的速度越快，反之则越慢。这是可以理解的，对于只有几个词的内容，比如文章“标题”，只需要匹配很少的几个词，就可以确定相关性。而对于大篇幅的内容，比如一本书的内容，需要匹配很多词才能知道它的重点是讲什么。所以在专利检索中相关性通常的顺序 TTL &gt; ABST &gt; CLMS &gt; DESC。</p>
+
+<p>关于参数b的作用：公式中L前面有个常系数b，如果把b设置为0，则L完全失去对评分的影响力。b的值越大，L对总评分的影响力越大。</p>
+
+<ul>
+<li>IDF项比较</li>
+</ul>
+
+<p>两者公式如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">传统的 IDF Score = log(numDocs / (docFreq + 1))
+BM25的 IDF Score = log(1 + (numDocs - docFreq + 0.5) / (docFreq + 0.5))</pre></div>
+<p><img src="https://jasonqian10.github.io/img/post/image-20191226144423194.png" alt="image-20191226144423194" /></p>
+
+<p>从分布曲线来看两者走势基本一致。</p>
+
+<h2 id="tf-idf-vs-bm25">TF-IDF vs BM25</h2>
+
+<p>传统的TF-IDF是自然语言搜索的一个基础理论，它符合信息论中的熵的计算原理，你观察IDF公式会发现，它与熵的公式是类似的。实际上IDF就是一个特定条件下关键词概率分布的交叉熵。</p>
+
+<p>BM25在传统TF-IDF的基础上增加了几个可调节的参数，使得它在应用上更佳灵活和强大，具有较高的实用性。</p>
+
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/tf-idf" rel="tag" title="TF-IDF">#TF-IDF#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/bm25" rel="tag" title="BM25">#BM25#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/solr/solr-debug-idea-build/" rel="next" title="Intellij idea搭建solr源码debug调试环境">
+        <i class="fa fa-chevron-left"></i> Intellij idea搭建solr源码debug调试环境
+        </a>
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/" rel="prev" title="【Hadoop索引】hadoop调优经验">
+        【Hadoop索引】hadoop调优经验 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">20</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#tf">TF</a></li>
+<li><a href="#idf">IDF</a></li>
+<li><a href="#tf-idf">TF-IDF</a></li>
+<li><a href="#lucene中的tf-idf">Lucene中的TF-IDF</a></li>
+<li><a href="#bm25-下一代的tf-idf">BM25,下一代的TF-IDF</a></li>
+<li><a href="#tf-idf-vs-bm25">TF-IDF vs BM25</a></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">知不道</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>

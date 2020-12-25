@@ -160,7 +160,7 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">539 字 ~2分钟</span>
+<span class="leancloud-visitors-count">1113 字 ~3分钟</span>
 </span>
       </div>
     </header>
@@ -231,13 +231,34 @@
 <li>概念</li>
 </ul>
 
-<p>docValues是一种记录doc字段值的一种形式，在例如在结果排序和统计Facet查询时，需要通过docid取字段值的场景下是非常高效的。</p>
+<p>在Lucene4.x之后，出现一个重大的特性，就是索引支持DocValues。docValues是一种记录doc字段值的一种形式，在例如在结果排序和统计Facet查询时，需要通过docid取字段值的场景下是非常高效的。</p>
+
+<ul>
+<li><p>优点</p>
+
+<ul>
+<li>节省内存，原来是通过fieldCache来做的，会消耗大量的内存</li>
+<li>对排序，分组和一些聚合操作时能够大大提升性能</li>
+</ul></li>
+
+<li><p>为什么需要使用docValues</p></li>
+</ul>
+
+<p>有人会问solr和es基于倒排索引不是已经实现了快速检索了吗？</p>
+
+<p>是的。倒排索引是建立 <strong>搜索词 &ndash;》文档id列表</strong> 这样的关系映射，然后在搜索时，通过类似hash算法，来快速定位到一个搜索关键词，然后读取其的文档id集合，这就是倒排索引的核心思想，这样搜索数据是非常高效快速的。</p>
+
+<p>当然它也是有缺陷的，假如我们需要对数据做一些聚合操作，比如排序、分组时，lucene内部会遍历提取所有出现在文档集合的排序字段，然后再次构建一个最终的排好序的文档集合list，这个步骤的过程全部维持在内存中操作，而且如果排序数据量巨大的话，非常容易就造成solr内存溢出和性能缓慢。  基于这个原因，在lucene4.x之后出现了docvalue这个新特性，在构建索引时会对开启docvalues的字段，额外构建一个已经排好序的文档到字段级别的一个列式存储映射，它减轻了在排序和分组时，对内存的依赖，而且大大提升了这个过程的性能，当然它也会耗费的一定的磁盘空间。</p>
 
 <ul>
 <li>使用场景</li>
 </ul>
 
 <p>sort，agg，group，facet，函数查询，高亮等场景，这些场景需要批量取field存储的值。</p>
+
+<blockquote>
+<p>注意：docValues存储的是分词后的词，所以分词字段开启docValue是没有意义的。</p>
+</blockquote>
 
 <ul>
 <li>面向列存储</li>
@@ -305,6 +326,10 @@
      <div class="post-nav">
     <div class="post-nav-next post-nav-item">
     
+        <a href="https://jasonqian10.github.io/post/java/java-concurrency-keyword/" rel="next" title="【Java并发编程】(二)并发关键字">
+        <i class="fa fa-chevron-left"></i> 【Java并发编程】(二)并发关键字
+        </a>
+    
     </div>
 
     <div class="post-nav-prev post-nav-item">
@@ -360,14 +385,14 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
     <div class="site-state-item site-state-categories">    
         <a href="https://jasonqian10.github.io/categories/">      
          
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">4</span>
         
         <span class="site-state-item-name">分类</span>
         
@@ -377,7 +402,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">20</span>
         
         <span class="site-state-item-name">标签</span>
         </a>

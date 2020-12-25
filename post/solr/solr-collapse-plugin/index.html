@@ -1,0 +1,518 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>【solr源码分析】collapse插件 - 知不道</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="【solr源码分析】collapse插件">
+    <meta property="og:site_name" content="知不道">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="【solr源码分析】collapse插件 - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">知不道</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-collapse-plugin/" itemprop="url">
+        【solr源码分析】collapse插件
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-12-13">
+    2020-12-13
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/solr" itemprop="url" rel="index">
+        <span itemprop="name">Solr</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">2250 字 ~5分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="collapse是什么">collapse是什么</h3>
+
+<h4 id="举个例子">举个例子</h4>
+
+<p>为了让大家了解collapse的应用场景，我们举个例子：</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20201223160552671.png" alt="image-20201223160552671" /></p>
+
+<p>如上图，</p>
+
+<p>查询条件是：</p>
+
+<p>&ldquo;PHONE_BRAND&rdquo;字段进行折叠，取&rdquo;RELEASE_TIME&rdquo;最新的选出代表。</p>
+
+<p>结果：</p>
+
+<p>&ldquo;apple&rdquo;品牌是&rdquo;iphone12&rdquo;，&rdquo;huawei&rdquo;品牌是&rdquo;mate40pro&rdquo;。</p>
+
+<p>如果对每个品牌再进行展开（expand=true）：</p>
+
+<p>则结果中expanded展示全部剩余的结果。</p>
+
+<h4 id="官方解释">官方解释</h4>
+
+<p>Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。</p>
+
+<blockquote>
+<p>为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。</p>
+</blockquote>
+
+<h3 id="collapse与group区别">collapse与group区别</h3>
+
+<ul>
+<li>功能上：两者基本上功能是重叠的，collapse功能是solr6.6新出的，较新。</li>
+<li>性能上：collapse优于group。</li>
+</ul>
+
+<p>一般情况下，建议使用collapse和expand。</p>
+
+<h3 id="collapse怎么用">collapse怎么用</h3>
+
+<p>Collapse query是post filter query，使用<strong>fq</strong>参数。</p>
+
+<ul>
+<li><p>对字段 group_field进行折叠，组内排序规则是score desc，这也是默认的规则:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">fq={!collapse field=group_field}</pre></div></li>
+
+<li><p>对字段 group_field进行折叠，组内排序规则是numeric_field最小:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">fq={!collapse field=group_field min=numeric_field}</pre></div></li>
+
+<li><p>对字段 group_field进行折叠，组内排序规则是numeric_field最大:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">fq={!collapse field=group_field max=numeric_field}</pre></div></li>
+
+<li><p>对字段 group_field进行折叠，组内排序规则是numeric_field升序，score降序</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">fq={!collapse field=group_field sort=&#39;numeric_field asc, score desc&#39;}</pre></div></li>
+</ul>
+
+<h3 id="collapse源码分析">collapse源码分析</h3>
+
+<h4 id="源码执行流程">源码执行流程</h4>
+
+<p>collapse的核心类是CollapsingQParserPlugin.java，是一类QParserPlugin，build出来的query是post filter query，在正常query之后执行。执行流程嵌在QueryComponent组件中，collapse会将结果集折叠为每个组的单个文档。所有QueryComponent的下游组件（faceting，highlighting等）都可以与折叠的结果集一起工作。</p>
+
+<p>collapse执行主要分为<code>parse阶段</code>、<code>collapse阶段</code>、<code>finish阶段</code>。</p>
+
+<h5 id="parse阶段">parse阶段</h5>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20201224093430685.png" alt="image-20201224093430685" style="zoom:150%;" /></p>
+
+<p>parse阶段是在QueryComponent的prepare()方法执行的。</p>
+
+<p>步骤1,2,3是创建<strong>CollapsingQParser</strong>,这是collapse filter query的QParser；</p>
+
+<p>步骤4-8是创建fq query。</p>
+
+<p>parse阶段是完成fq query的准备，在下面阶段是使用fq query。</p>
+
+<h5 id="collapse阶段和finish阶段">collapse阶段和finish阶段</h5>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20201224133637688.png" alt="image-20201224133637688" style="zoom:120%;" /></p>
+
+<p>这两个阶段是在QueryComponent的process()方法执行的。也就是搜索文档的过程。</p>
+
+<p>步骤1-6是准备collapse的文档收集器；</p>
+
+<p>步骤7-10是文档收集的固定流程，进入scoreAll打分阶段；</p>
+
+<p>步骤11,12 就是<strong>collpase阶段</strong>的核心，对文档收集结果进行折叠，每组选择top1文档。下面会重点梳理。</p>
+
+<p>步骤13是<strong>finish阶段</strong>，主要逻辑是对collapse阶段收集的docid列表进行遍历，取出docid对应的score（collapse阶段存储好了），再链式调用上一级collect方法（CollectorChain是责任链模式一级一级执行）。</p>
+
+<h4 id="collapse核心逻辑">collapse核心逻辑</h4>
+
+<p>collapse是通过collapse自己的Collector类进行文档收集的，每个collector会有自己的collapse strategy。</p>
+
+<p><img src="https://jasonqian10.github.io/img/post/image-20201224170010525.png" alt="image-20201224170010525" style="zoom:120%;" /></p>
+
+<p>上面的思维导图可以看到：</p>
+
+<p>CollectorFactory是创建Collector的工厂类，根据不同collapse组内排序类型(score/min/max/sort)和collapse字段类型(String/Numeric)创建不同的Collector对象。Collector会根据不同组内排序类型(min/max/sort)和排序字段类型(Int/Float/Long)创建不同Collapse策略类。核心collapse逻辑则在策略类的collapse()方法实现。</p>
+
+<ul>
+<li>collapse()逻辑</li>
+</ul>
+
+<p>以<strong>OrdSortSpecStrategy</strong>的collapse(int ord, int contextDoc, int globalDoc)方法为例：</p>
+
+<p>其中</p>
+
+<p><strong>ord</strong>是上一层collect()中取到的collapse field的value在docValues中存储的数组下标位置；</p>
+
+<blockquote>
+<p>collapse是依赖collapse field的docValues的，所以collapse field需要开启docValues。</p>
+
+<p>字段value在docValues中会sort后存储的，ord是sortedValues[]数组的下标，通过ord能够取到value值。</p>
+</blockquote>
+
+<p><strong>contextDoc</strong> 是当前段中的docId；</p>
+
+<p><strong>globalDoc</strong> 是全局docid。</p>
+
+<p><strong>OrdSortSpecStrategy</strong>对象有一个成员变量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">protected int[] ords;</pre></div>
+<p>最核心的逻辑是<strong>冒泡排序</strong>，对于不同类型的排序规则：</p>
+
+<p><strong>sort</strong>: 对于遍历进入的docid，存储并排序sort字段值，判断字段值是否是group head，如果是则把docid存储到ords数组，数组下标是ord。当下一次遍历时如果有同样的ord(同样ord说明是相同的collapse field value)，如果满足group head，则会覆盖ords数组中原值。</p>
+
+<p><strong>max/min</strong>: 不同点是判断是否是group head逻辑不同，其他逻辑一致。</p>
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/solr" rel="tag" title="solr">#solr#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/collapse" rel="tag" title="collapse">#collapse#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/java/java-concurrency-principle/" rel="prev" title="【Java并发编程】(一)原理篇">
+        【Java并发编程】(一)原理篇 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">20</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#collapse是什么">collapse是什么</a>
+<ul>
+<li><a href="#举个例子">举个例子</a></li>
+<li><a href="#官方解释">官方解释</a></li>
+</ul></li>
+<li><a href="#collapse与group区别">collapse与group区别</a></li>
+<li><a href="#collapse怎么用">collapse怎么用</a></li>
+<li><a href="#collapse源码分析">collapse源码分析</a>
+<ul>
+<li><a href="#源码执行流程">源码执行流程</a>
+<ul>
+<li><a href="#parse阶段">parse阶段</a></li>
+<li><a href="#collapse阶段和finish阶段">collapse阶段和finish阶段</a></li>
+</ul></li>
+<li><a href="#collapse核心逻辑">collapse核心逻辑</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">知不道</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>

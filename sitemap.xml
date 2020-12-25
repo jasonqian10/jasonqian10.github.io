@@ -1,6 +1,145 @@
 <search>
     
      <entry>
+        <title>【solr源码分析】collapse插件</title>
+        <url>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</url>
+        <categories>
+          <category>Solr</category>
+        </categories>
+        <tags>
+          <tag>solr</tag><tag>collapse</tag>
+        </tags>
+        <content type="html"> collapse是什么 举个例子 为了让大家了解collapse的应用场景，我们举个例子：
+如上图，
+查询条件是：
+&amp;ldquo;PHONE_BRAND&amp;rdquo;字段进行折叠，取&amp;rdquo;RELEASE_TIME&amp;rdquo;最新的选出代表。
+结果：
+&amp;ldquo;apple&amp;rdquo;品牌是&amp;rdquo;iphone12&amp;rdquo;，&amp;rdquo;huawei&amp;rdquo;品牌是&amp;rdquo;mate40pro&amp;rdquo;。
+如果对每个品牌再进行展开（expand=true）：
+则结果中expanded展示全部剩余的结果。
+官方解释 Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。
+ 为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。
+ collapse与group区别  功能上：两者基本上功能是重叠的，collapse功能是solr6.6新出的，较新。 性能上：collapse优于group。  一般情况下，建议使用collapse和expand。
+collapse怎么用 Collapse query是post filter query，使用fq参数。
+ 对字段 group_field进行折叠，组内排序规则是score desc，这也是默认的规则:
+fq={!collapse field=group_field} 对字段 group_field进行折叠，组内排序规则是numeric_field最小:
+fq={!collapse field=group_field min=numeric_field} 对字段 group_field进行折叠，组内排序规则是numeric_field最大:
+fq={!collapse field=group_field max=numeric_field} 对字段 group_field进行折叠，组内排序规则是numeric_field升序，score降序
+fq={!collapse field=group_field sort=&amp;#39;numeric_field asc, score desc&amp;#39;}  collapse源码分析 源码执行流程 collapse的核心类是CollapsingQParserPlugin.java，是一类QParserPlugin，build出来的query是post filter query，在正常query之后执行。执行流程嵌在QueryComponent组件中，collapse会将结果集折叠为每个组的单个文档。所有QueryComponent的下游组件（faceting，highlighting等）都可以与折叠的结果集一起工作。
+collapse执行主要分为parse阶段、collapse阶段、finish阶段。
+parse阶段 parse阶段是在QueryComponent的prepare()方法执行的。
+步骤1,2,3是创建CollapsingQParser,这是collapse filter query的QParser；
+步骤4-8是创建fq query。
+parse阶段是完成fq query的准备，在下面阶段是使用fq query。
+collapse阶段和finish阶段 这两个阶段是在QueryComponent的process()方法执行的。也就是搜索文档的过程。
+步骤1-6是准备collapse的文档收集器；
+步骤7-10是文档收集的固定流程，进入scoreAll打分阶段；
+步骤11,12 就是collpase阶段的核心，对文档收集结果进行折叠，每组选择top1文档。下面会重点梳理。
+步骤13是finish阶段，主要逻辑是对collapse阶段收集的docid列表进行遍历，取出docid对应的score（collapse阶段存储好了），再链式调用上一级collect方法（CollectorChain是责任链模式一级一级执行）。
+collapse核心逻辑 collapse是通过collapse自己的Collector类进行文档收集的，每个collector会有自己的collapse strategy。
+上面的思维导图可以看到：
+CollectorFactory是创建Collector的工厂类，根据不同collapse组内排序类型(score/min/max/sort)和collapse字段类型(String/Numeric)创建不同的Collector对象。Collector会根据不同组内排序类型(min/max/sort)和排序字段类型(Int/Float/Long)创建不同Collapse策略类。核心collapse逻辑则在策略类的collapse()方法实现。
+ collapse()逻辑  以OrdSortSpecStrategy的collapse(int ord, int contextDoc, int globalDoc)方法为例：
+其中
+ord是上一层collect()中取到的collapse field的value在docValues中存储的数组下标位置；
+ collapse是依赖collapse field的docValues的，所以collapse field需要开启docValues。
+字段value在docValues中会sort后存储的，ord是sortedValues[]数组的下标，通过ord能够取到value值。
+ contextDoc 是当前段中的docId；
+globalDoc 是全局docid。
+OrdSortSpecStrategy对象有一个成员变量
+protected int[] ords; 最核心的逻辑是冒泡排序，对于不同类型的排序规则：
+sort: 对于遍历进入的docid，存储并排序sort字段值，判断字段值是否是group head，如果是则把docid存储到ords数组，数组下标是ord。当下一次遍历时如果有同样的ord(同样ord说明是相同的collapse field value)，如果满足group head，则会覆盖ords数组中原值。
+max/min: 不同点是判断是否是group head逻辑不同，其他逻辑一致。
+</content>
+    </entry>
+    
+     <entry>
+        <title>【Java并发编程】(一)原理篇</title>
+        <url>https://jasonqian10.github.io/post/java/java-concurrency-principle/</url>
+        <categories>
+          <category>java</category>
+        </categories>
+        <tags>
+          <tag>并发编程</tag><tag>底层原理</tag>
+        </tags>
+        <content type="html">  Java并发理论 这部分内容涉及操作系统、CPU、内存、指令以及JMM（Java内存模型）相关的机制。
+重排序 重排序通常是编译器或运行时环境为了优化程序性能而采取的对指令进行重新排序执行的一种手段。重排序分为两类：编译期重排序和运行期重排序，分别对应编译时和运行时环境。
+在并发程序中，程序员会特别关注不同进程或线程之间的数据同步，特别是多个线程同时修改同一变量时，必须采取可靠的同步或其它措施保障数据被正确地修改，这里的一条重要原则是：不要假设指令执行的顺序，你无法预知不同线程之间的指令会以何种顺序执行。
+但是在单线程程序中，通常我们容易假设指令是顺序执行的，否则可以想象程序会发生什么可怕的变化。理想的模型是：各种指令执行的顺序是唯一且有序的，这个顺序就是它们被编写在代码中的顺序，与处理器或其它因素无关，这种模型被称作顺序一致性模型，也是基于冯·诺依曼体系的模型。当然，这种假设本身是合理的，在实践中也鲜有异常发生，但事实上，没有哪个现代多处理器架构会采用这种模型，因为它是在是太低效了。而在编译优化和CPU流水线中，几乎都涉及到指令重排序。
+ 编译期重排序  编译期重排序的典型就是通过调整指令顺序，在不改变程序语义的前提下，尽可能减少寄存器的读取、存储次数，充分复用寄存器的存储值。
+ 假设第一条指令计算一个值赋给变量A并存放在寄存器中，第二条指令与A无关但需要占用寄存器（假设它将占用A所在的那个寄存器），第三条指令使用A的值且与第二条指令无关。那么如果按照顺序一致性模型，A在第一条指令执行过后被放入寄存器，在第二条指令执行时A不再存在，第三条指令执行时A重新被读入寄存器，而这个过程中，A的值没有发生变化。通常编译器都会交换第二和第三条指令的位置，这样第一条指令结束时A存在于寄存器中，接下来可以直接从寄存器中读取A的值，降低了重复读取的开销。
+  重排序对于流水线的意义  现代CPU几乎都采用流水线机制加快指令的处理速度，一般来说，一条指令需要若干个CPU时钟周期处理，而通过流水线并行执行，可以在同等的时钟周期内执行若干条指令，具体做法简单地说就是把指令分为不同的执行周期，例如读取、寻址、解析、执行等步骤，并放在不同的元件中处理，同时在执行单元EU中，功能单元被分为不同的元件，例如加法元件、乘法元件、加载元件、存储元件等，可以进一步实现不同的计算并行执行。
+流水线架构决定了指令应该被并行执行，而不是在顺序化模型中所认为的那样。重排序有利于充分使用流水线，进而达到超标量的效果。
+ 确保顺序性  尽管指令在执行时并不一定按照我们所编写的顺序执行，但毋庸置疑的是，在单线程环境下，指令执行的最终效果应当与其在顺序执行下的效果一致，否则这种优化便会失去意义。
+通常无论是在编译期还是运行期进行的指令重排序，都会满足上面的原则。
+ Java存储模型中的重排序  在Java存储模型（Java Memory Model, JMM）中，重排序是十分重要的一节，特别是在并发编程中。JMM通过happens-before法则保证顺序执行语义，如果想要让执行操作B的线程观察到执行操作A的线程的结果，那么A和B就必须满足happens-before原则，否则，JVM可以对它们进行任意排序以提高程序性能。
+volatile关键字可以保证变量的可见性，因为对volatile的操作都在Main Memory中，而Main Memory是被所有线程所共享的，这里的代价就是牺牲了性能，无法利用寄存器或Cache，因为它们都不是全局的，无法保证可见性，可能产生脏读。
+volatile还有一个作用就是局部阻止重排序的发生，对volatile变量的操作指令都不会被重排序，因为如果重排序，又可能产生可见性问题。
+在保证可见性方面，锁（包括显式锁、对象锁）以及对原子变量的读写都可以确保变量的可见性。但是实现方式略有不同，例如同步锁保证得到锁时从内存里重新读入数据刷新缓存，释放锁时将数据写回内存以保数据可见，而volatile变量干脆都是读写内存。
+as-if-serial内存语义 不管怎么重排序（编译器和处理器为了提高并行度），（单线程）程序的执行结果不能被改变。编译器，runtime 和处理器都必须遵守as-if-serial语义。为了遵守as-if-serial语义，编译器和处理器不会对存在数据依赖关系的操作做重排序，因为这种重排序会改变执行结果。但是，如果操作之间不存在数据依赖关系，这些操作可能被编译器和处理器重排序。as-if-serial语义使单线程程序员无需担心重排序会 干扰他们，也无需担心内存可见性问题。
+happens-before内存语义  概念  表面含义为先行发生，即A happens-before B 就是A先行发生于B。内存含义为前一个操作的结果可以被后续的操作获取。讲白点就是前面一个操作把变量a赋值为1，那后面一个操作肯定能知道a已经变成了1。
+ JDK1.5之后，JVM对happens-before进行了底层实现。
+  为什么需要happens-before？  因为我们现在电脑都是多CPU,并且都有缓存，导致多线程之间的可见性问题（这其实是并发bug的根源）。所以为了解决多线程的可见性问题，就搞出了happens-before原则，让线程之间遵守这些原则。编译器还会优化我们的语句，所以等于是给了编译器优化的约束。
+ 规则  程序顺序性规则：在一个线程内一段代码的执行结果是有序的。即使指令重排，但是随便它怎么排，结果是按照我们代码的顺序生成的不会变！对于这一点，可能会有疑问：顺序性是指，我们可以按照顺序推演程序的执行结果，但是编译器未必一定会按照这个顺序编译，但是编译器保证结果一定==顺序推演的结果。
+管程锁定规则：就是无论是在单线程环境还是多线程环境，对于同一个锁来说，一个线程对这个锁解锁之后，另一个线程获取了这个锁都能看到前一个线程的操作结果！(管程是一种通用的同步原语，synchronized就是管程的实现）
+volatile变量规则：就是如果一个线程先去写一个volatile变量，然后一个线程去读这个变量，那么这个写操作的结果一定对读的这个线程可见。
+线程启动规则：在主线程A执行过程中，启动子线程B，那么线程A在启动子线程B之前对共享变量的修改结果对线程B可见。
+线程终止规则（join()规则）：在主线程A执行过程中，子线程B终止，那么线程B在终止之前对共享变量的修改结果在线程A中可见。
+线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()检测到是否发生中断。
+传递规则：这个简单的，就是happens-before原则具有传递性，即A happens-before B ， B happens-before C，那么A happens-before C。
+对象终结规则：这个也简单的，就是一个对象的初始化的完成，也就是构造函数执行的结束一定 happens-before它的finalize()方法。
+锁的内存语义 内存模型  操作系统内存模型   JVM内存模型  顺序一致性 参考
+https://www.jianshu.com/p/fc61770094a4
+线程安全问题的原因？  内存可见性  这个主要来源于JMM的设计，集中在主内存和线程的工作内存操作不同步而导致的内存可见性问题。
+ 重排序问题  如何做到并发编程时线程安全？ 这个问题可以从上面原因出发
+内存可见性问题 有如下解决方案
+互斥同步 互斥同步（Mutual Exclusion &amp;amp; Synchronization）是最常见的一种并发正确性保证手段，同步是指在多个线程并发访问共享数据时，保证共享数据在同一时刻只被一条（或者是一些，使用信号量的时候）线程使用。而互斥是实现同步的一种手段，临界区（Critical Section）、互斥量（Mutex）和信号量（Sempahore）都是主要的互斥实现方式。因此，在这四个字里面，互斥是因，同步是果，互斥是方法，同步是目的。是一种堵塞同步方法。
+主要的互斥同步手段就是锁机制：
+Synchronize 是JVM实现的锁机制。
+1.一个类的类锁就只有一个，所以一个类的锁都是相同的
+2.一个类中的对象锁有很多个，一个类的对象锁互不相同；
+3.类锁和对象锁互不相同
+ReentrantLock 是JDK实现的锁机制。
+非堵塞同步 乐观并发策略，通俗地说就是先进行操作，如果没有其他线程争用共享数据，那操作就成功了；如果共享数据有争用，产生了冲突，那就再进行其他的补偿措施（最常见的补偿措施就是不断地重试，直到试成功了为止），这种乐观的并发策略的许多实现都不需要把线程挂起。非堵塞同步俗称乐观锁。
+原子操作cas volatile 非同步方案 要保证线程安全，并不是一定就要进行同步，两者没有因果关系。同步只是保障共享数据争用时的正确性的手段，如果一个方法本来就不涉及共享数据，那它自然就无须任何同步措施去保证正确性，因此会有一些代码天生就是线程安全的
+线程本地存储（Thread Local Storage） 锁作用：
+互斥
+内存可见性
+</content>
+    </entry>
+    
+     <entry>
+        <title>【Java并发编程】(三)锁机制</title>
+        <url>https://jasonqian10.github.io/post/java/java-lock-system/</url>
+        <categories>
+          <category>java</category>
+        </categories>
+        <tags>
+          <tag>并发编程</tag><tag>锁机制</tag>
+        </tags>
+        <content type="html">  常见锁 Synchronized 见上
+Lock ####Condition
+锁的分类 几种锁的原理 偏向锁
+轻量级锁
+重量级锁
+除了偏向锁，其他锁都使用循环CAS的方式获取锁。
+</content>
+    </entry>
+    
+     <entry>
+        <title>【Java并发编程】(二)并发关键字</title>
+        <url>https://jasonqian10.github.io/post/java/java-concurrency-keyword/</url>
+        <categories>
+          <category>java</category>
+        </categories>
+        <tags>
+          <tag>并发编程</tag>
+        </tags>
+        <content type="html">  Synchronized 是锁的一类。有三种锁的形式:
+ 普通同步方法 ==》锁的是当前实例对象 静态同步块 ==》锁的是当前类的Class对象 同步方法块（代码块） ==》锁的是Synchronize括号里配置的对象  final volatile </content>
+    </entry>
+    
+     <entry>
         <title>【solr配置】stored、docValues区别和使用场景</title>
         <url>https://jasonqian10.github.io/post/solr/solr-docvalues-stored/</url>
         <categories>
@@ -13,9 +152,15 @@
 stored  概念  存储的字段以行间方式将一个文档的所有字段值存储在一起。 在检索中，每个文档一次返回所有字段值，因此加载有关文档的相关信息非常快。
  使用场景  加载文档所有字段信息时适用。
  面向行存储      A B C     doc1 1 2 3   doc2 2 3 4   doc3 4 3 2     A,B,C为字段名
- DocValues  概念  docValues是一种记录doc字段值的一种形式，在例如在结果排序和统计Facet查询时，需要通过docid取字段值的场景下是非常高效的。
+ DocValues  概念  在Lucene4.x之后，出现一个重大的特性，就是索引支持DocValues。docValues是一种记录doc字段值的一种形式，在例如在结果排序和统计Facet查询时，需要通过docid取字段值的场景下是非常高效的。
+ 优点
+ 节省内存，原来是通过fieldCache来做的，会消耗大量的内存 对排序，分组和一些聚合操作时能够大大提升性能  为什么需要使用docValues
+  有人会问solr和es基于倒排索引不是已经实现了快速检索了吗？
+是的。倒排索引是建立 搜索词 &amp;ndash;》文档id列表 这样的关系映射，然后在搜索时，通过类似hash算法，来快速定位到一个搜索关键词，然后读取其的文档id集合，这就是倒排索引的核心思想，这样搜索数据是非常高效快速的。
+当然它也是有缺陷的，假如我们需要对数据做一些聚合操作，比如排序、分组时，lucene内部会遍历提取所有出现在文档集合的排序字段，然后再次构建一个最终的排好序的文档集合list，这个步骤的过程全部维持在内存中操作，而且如果排序数据量巨大的话，非常容易就造成solr内存溢出和性能缓慢。 基于这个原因，在lucene4.x之后出现了docvalue这个新特性，在构建索引时会对开启docvalues的字段，额外构建一个已经排好序的文档到字段级别的一个列式存储映射，它减轻了在排序和分组时，对内存的依赖，而且大大提升了这个过程的性能，当然它也会耗费的一定的磁盘空间。
  使用场景  sort，agg，group，facet，函数查询，高亮等场景，这些场景需要批量取field存储的值。
- 面向列存储      doc1 doc2 doc3     A 1 2 4   B 2 3 3   C 3 4 2     与stored存储形式相比，相当于两者进行了矩阵转置。
+ 注意：docValues存储的是分词后的词，所以分词字段开启docValue是没有意义的。
+  面向列存储      doc1 doc2 doc3     A 1 2 4   B 2 3 3   C 3 4 2     与stored存储形式相比，相当于两者进行了矩阵转置。
 比如某个查询命中一批docId，需要取这批docId字段A的值的时候，DocValues可以批量把所有A字段存储的value取出加载到内存，遍历docId时无需重复去索引文件中加载。而stored只能遍历每个docId，取出整个doc文档，取出doc[&amp;ldquo;A&amp;rdquo;]值。
   支持压缩存储  面向列存储有一个连续的数据块：A:[1,2,4], B:[2,3,3], C:[3,4,2], 这样可以对每列进行压缩存储，节省存储空间。
 </content>
@@ -149,7 +294,7 @@ stream和parallelStream区别  stream是单管道，parallelStream是多管道�
         <tags>
           <tag>java8</tag><tag>函数式接口</tag>
         </tags>
-        <content type="html"> 函数式接口 函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。
+        <content type="html"> 函数式接口 函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)
 1)函数式接口中的抽象函数就是为了支持 lambda表达式；
 2)函数式接口可以被隐式转换为lambda表达式；
 3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；
@@ -213,9 +358,9 @@ Printer2 printer22 = (a,b) -&amp;gt; System.out.println(a&#43;b); Operation oper
     
      <entry>
         <title>Intellij idea搭建solr源码debug调试环境</title>
-        <url>https://jasonqian10.github.io/post/solr-debug-idea-build/</url>
+        <url>https://jasonqian10.github.io/post/solr/solr-debug-idea-build/</url>
         <categories>
-          <category>Search</category>
+          <category>Solr</category>
         </categories>
         <tags>
           <tag>solr</tag><tag>debug</tag><tag>Intellij idea</tag>
@@ -244,7 +389,7 @@ idea运行solr server 在idea上运行solr server是实际启动的是embedSolrS
     
      <entry>
         <title>搜索引擎中相似度算法TF-IDF和BM25</title>
-        <url>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</url>
+        <url>https://jasonqian10.github.io/post/lucene/nlp-tf-idf-bm25/</url>
         <categories>
           <category>Lucene</category>
         </categories>
@@ -483,9 +628,9 @@ https://blog.csdn.net/weixin_38750084/article/details/82963235
     
      <entry>
         <title>solr suggest实战</title>
-        <url>https://jasonqian10.github.io/post/solr-suggest/</url>
+        <url>https://jasonqian10.github.io/post/solr/solr-suggest/</url>
         <categories>
-          <category>Search</category>
+          <category>Solr</category>
         </categories>
         <tags>
           <tag>solr</tag><tag>lucene</tag><tag>suggest</tag>
@@ -522,9 +667,9 @@ b).build()：build请求走这个函数，调用lookupImpl对象的build()
     
      <entry>
         <title>solr搜索原理解析</title>
-        <url>https://jasonqian10.github.io/post/solr-lucene-principle/</url>
+        <url>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</url>
         <categories>
-          <category>Search</category>
+          <category>Solr</category><category>Lucene</category>
         </categories>
         <tags>
           <tag>solr</tag><tag>lucene</tag>

@@ -6,10 +6,47 @@
     <description>Recent content in Solr on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 13 Dec 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jasonqian10.github.io/categories/solr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【solr源码分析】collapse插件</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-collapse-plugin/</guid>
+      <description>&lt;h3 id=&#34;collapse是什么&#34;&gt;collapse是什么&lt;/h3&gt;
+
+&lt;h4 id=&#34;举个例子&#34;&gt;举个例子&lt;/h4&gt;
+
+&lt;p&gt;为了让大家了解collapse的应用场景，我们举个例子：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20201223160552671.png&#34; alt=&#34;image-20201223160552671&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图，&lt;/p&gt;
+
+&lt;p&gt;查询条件是：&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;PHONE_BRAND&amp;rdquo;字段进行折叠，取&amp;rdquo;RELEASE_TIME&amp;rdquo;最新的选出代表。&lt;/p&gt;
+
+&lt;p&gt;结果：&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;apple&amp;rdquo;品牌是&amp;rdquo;iphone12&amp;rdquo;，&amp;rdquo;huawei&amp;rdquo;品牌是&amp;rdquo;mate40pro&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;如果对每个品牌再进行展开（expand=true）：&lt;/p&gt;
+
+&lt;p&gt;则结果中expanded展示全部剩余的结果。&lt;/p&gt;
+
+&lt;h4 id=&#34;官方解释&#34;&gt;官方解释&lt;/h4&gt;
+
+&lt;p&gt;Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
     
     <item>
       <title>【solr配置】stored、docValues区别和使用场景</title>
@@ -20,6 +57,50 @@
       <description>&lt;h3 id=&#34;stored与docvalues&#34;&gt;stored与DocValues&lt;/h3&gt;
 
 &lt;p&gt;stored存储与docValues存储其实都是&lt;strong&gt;正排索引&lt;/strong&gt;，但是两者有区别：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Intellij idea搭建solr源码debug调试环境</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-debug-idea-build/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-debug-idea-build/</guid>
+      <description>&lt;p&gt;solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>solr suggest实战</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-suggest/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-suggest/</guid>
+      <description>&lt;h3 id=&#34;solr-suggest模块介绍&#34;&gt;solr suggest模块介绍&lt;/h3&gt;
+
+&lt;p&gt;自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20191116164420559.png&#34; alt=&#34;image-20191116164420559&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;本文我们主要就来讲一下solr是如何去实现这样的自动提示功能。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>solr搜索原理解析</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</link>
+      <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</guid>
+      <description>&lt;h3 id=&#34;solr与lucene的关系&#34;&gt;solr与Lucene的关系&lt;/h3&gt;
+
+&lt;p&gt;讲搜索流程之前先介绍一下solr与Lucene的关系。&lt;/p&gt;
+
+&lt;p&gt;Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。&lt;/p&gt;
+
+&lt;p&gt;Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。&lt;/p&gt;
+
+&lt;p&gt;solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。&lt;/p&gt;
+
+&lt;p&gt;solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
+&lt;img src=&#34;https://jasonqian10.github.io/img/post/solr_lucene-1542234.png&#34; alt=&#34;solr_lucene&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

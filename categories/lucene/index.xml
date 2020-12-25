@@ -24,11 +24,31 @@
     
     <item>
       <title>搜索引擎中相似度算法TF-IDF和BM25</title>
-      <link>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</link>
+      <link>https://jasonqian10.github.io/post/lucene/nlp-tf-idf-bm25/</link>
       <pubDate>Thu, 26 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://jasonqian10.github.io/post/nlp-tf-idf-bm25/</guid>
+      <guid>https://jasonqian10.github.io/post/lucene/nlp-tf-idf-bm25/</guid>
       <description>前言 当我们使用搜索引擎时，它总是会把相关性高的内容显示在前面，相关性低的内容显示在后面。那么，搜索引擎是如何计算关键字和内容的相关性呢？这里</description>
+    </item>
+    
+    <item>
+      <title>solr搜索原理解析</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</link>
+      <pubDate>Fri, 18 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-lucene-principle/</guid>
+      <description>&lt;h3 id=&#34;solr与lucene的关系&#34;&gt;solr与Lucene的关系&lt;/h3&gt;
+
+&lt;p&gt;讲搜索流程之前先介绍一下solr与Lucene的关系。&lt;/p&gt;
+
+&lt;p&gt;Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。&lt;/p&gt;
+
+&lt;p&gt;Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。&lt;/p&gt;
+
+&lt;p&gt;solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。&lt;/p&gt;
+
+&lt;p&gt;solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
+&lt;img src=&#34;https://jasonqian10.github.io/img/post/solr_lucene-1542234.png&#34; alt=&#34;solr_lucene&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>
