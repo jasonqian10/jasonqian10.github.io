@@ -159,108 +159,86 @@
     </header>
     <div class="post-body" itemprop="articleBody">
     <h2 id="函数式接口">函数式接口</h2>
-
 <p>函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)</p>
-
 <p>1)函数式接口中的抽象函数就是为了支持 lambda表达式；</p>
-
 <p>2)函数式接口可以被隐式转换为lambda表达式；</p>
-
 <p>3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；</p>
-
 <p>注意：加不加<code>@FunctionalInterface</code>对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。</p>
-
 <p>例外：</p>
-
 <p>函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；</p>
-
 <p>函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；</p>
-
 <p>函数式接口里是可以包含Object里的public方法，如equals()。</p>
-
 <p>下面介绍几种常用的函数式接口。</p>
-
 <h3 id="predicate">Predicate</h3>
-
 <p>主要用于filter条件判断或者断言，接受一个泛型的对象T,调用boolean testT t)方法，返回boolean结果。</p>
-
 <p><strong>常用场景</strong>：list.stream().filter(Predicate p)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Stream<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">filter</span>(Predicate<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span> predicate);</code></pre></div>
-<p>Stream的filter接口的入参就是Predicate函数式接口的lambda表达式。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Stream<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">filter</span><span style="color:#f92672">(</span>Predicate<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> T<span style="color:#f92672">&gt;</span> predicate<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>Stream的filter接口的入参就是Predicate函数式接口的lambda表达式。</p>
 <p>例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//通过Color过滤，入参是 Predicate&lt;T&gt; predicate
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">static</span> List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">filterByColor</span>(List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">list</span>, Predicate<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">predicate</span>) {
-        List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;</span>();
-        <span style="color:#66d9ef">for</span> (Apple <span style="color:#a6e22e">apple</span> <span style="color:#f92672">:</span> list) {
-            <span style="color:#66d9ef">if</span> (predicate.<span style="color:#a6e22e">test</span>(apple)) {
-                result.<span style="color:#a6e22e">add</span>(apple);
-            }
-        }
-        <span style="color:#66d9ef">return</span> result;
-}
-
-<span style="color:#75715e">//初始化list
-</span><span style="color:#75715e"></span>List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">list</span> <span style="color:#f92672">=</span> Arrays.<span style="color:#a6e22e">asList</span>(<span style="color:#66d9ef">new</span> Apple(<span style="color:#e6db74">&#34;green&#34;</span>, 120), <span style="color:#66d9ef">new</span> Apple(<span style="color:#e6db74">&#34;red&#34;</span>, 130));
-<span style="color:#75715e">/*
-</span><span style="color:#75715e">    Predicate&lt;? super T&gt; predicate = apple -&gt; apple.getColor().equals(&#34;green&#34;))
-</span><span style="color:#75715e">    这里的Predicate lambda表达式的泛型T表示Apple类
-</span><span style="color:#75715e"> */</span>
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(filterByColor(list, apple <span style="color:#f92672">-&gt;</span> apple.<span style="color:#a6e22e">getColor</span>().<span style="color:#a6e22e">equals</span>(<span style="color:#e6db74">&#34;green&#34;</span>)));</code></pre></div>
-<p>我们可以通过stream的filter接口来实现同样的功能</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">/*
-</span><span style="color:#75715e">    Predicate&lt;? super T&gt; predicate = l -&gt; l.getColor().equals(&#34;green&#34;)
-</span><span style="color:#75715e">    这里的Predicate lambda表达式的泛型T表示String类
-</span><span style="color:#75715e"> */</span>
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(list.<span style="color:#a6e22e">stream</span>().<span style="color:#a6e22e">filter</span>(l <span style="color:#f92672">-&gt;</span> l.<span style="color:#a6e22e">getColor</span>().<span style="color:#a6e22e">equals</span>(<span style="color:#e6db74">&#34;green&#34;</span>)).<span style="color:#a6e22e">collect</span>(Collectors.<span style="color:#a6e22e">toList</span>()));</code></pre></div>
-<p>Predicate接口还有一些default方法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">default</span> Predicate<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">and</span>(Predicate<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span> other)
-<span style="color:#66d9ef">default</span> Predicate<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">or</span>(Predicate<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span> other)</code></pre></div>
-<p>通过predicate.or()  predicate.and()实现filter条件组合。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//通过Color过滤，入参是 Predicate&lt;T&gt; predicate
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">filterByColor</span><span style="color:#f92672">(</span>List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> list<span style="color:#f92672">,</span> Predicate<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> predicate<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> result <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Apple apple <span style="color:#f92672">:</span> list<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>predicate<span style="color:#f92672">.</span><span style="color:#a6e22e">test</span><span style="color:#f92672">(</span>apple<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                result<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>apple<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//初始化list
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> list <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Apple<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;green&#34;</span><span style="color:#f92672">,</span> 120<span style="color:#f92672">),</span> <span style="color:#66d9ef">new</span> Apple<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;red&#34;</span><span style="color:#f92672">,</span> 130<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Predicate&lt;? super T&gt; predicate = apple -&gt; apple.getColor().equals(&#34;green&#34;))
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    这里的Predicate lambda表达式的泛型T表示Apple类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>filterByColor<span style="color:#f92672">(</span>list<span style="color:#f92672">,</span> apple <span style="color:#f92672">-&gt;</span> apple<span style="color:#f92672">.</span><span style="color:#a6e22e">getColor</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;green&#34;</span><span style="color:#f92672">)));</span>
+</span></span></code></pre></div><p>我们可以通过stream的filter接口来实现同样的功能</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Predicate&lt;? super T&gt; predicate = l -&gt; l.getColor().equals(&#34;green&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    这里的Predicate lambda表达式的泛型T表示String类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>list<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">filter</span><span style="color:#f92672">(</span>l <span style="color:#f92672">-&gt;</span> l<span style="color:#f92672">.</span><span style="color:#a6e22e">getColor</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;green&#34;</span><span style="color:#f92672">)).</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toList</span><span style="color:#f92672">()));</span>
+</span></span></code></pre></div><p>Predicate接口还有一些default方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">default</span> Predicate<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">and</span><span style="color:#f92672">(</span>Predicate<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> T<span style="color:#f92672">&gt;</span> other<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">default</span> Predicate<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">or</span><span style="color:#f92672">(</span>Predicate<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> T<span style="color:#f92672">&gt;</span> other<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>通过predicate.or()  predicate.and()实现filter条件组合。</p>
 <h3 id="consumer">Consumer</h3>
-
 <p>consumer主要是消费数据，接受一个泛型的对象T，调用void accept(T t)方法，无返回结果。 其实就是执行一段自定义的逻辑。</p>
-
 <p><strong>常用场景</strong>：list.steam().forEach()  等执行业务逻辑、无返回结果的函数式接口。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">forEach</span>(Consumer<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span> action);</code></pre></div>
-<p>例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义consumer方法
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">consumer</span>(List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">list</span>, Consumer<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">consumer</span>) {
-<span style="color:#75715e">//        return list.stream().filter(l -&gt; predicate.test(l.getColor())).collect(Collectors.toList());
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (Apple <span style="color:#a6e22e">apple</span> <span style="color:#f92672">:</span> list) {
-            consumer.<span style="color:#a6e22e">accept</span>(apple);
-        }
-}
-
-<span style="color:#75715e">/*
-</span><span style="color:#75715e">    Consumer&lt;Apple&gt; consumer = apple -&gt; System.out.println(apple.getColor());
-</span><span style="color:#75715e"> */</span>
-consumer(list, apple <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(apple.<span style="color:#a6e22e">getColor</span>()));</code></pre></div>
-<p>可以通过forEach接口实现同样的功能</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">list.<span style="color:#a6e22e">stream</span>().<span style="color:#a6e22e">forEach</span>(l <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(l.<span style="color:#a6e22e">getColor</span>()));</code></pre></div>
-<p>Consumer接口还有如下default方法</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">default</span> Consumer<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">andThen</span>(Consumer<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span> after)</code></pre></div>
-<p>消费数据的时候，首先做一个操作，然后再做一个操作，实现组合。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">forEach</span><span style="color:#f92672">(</span>Consumer<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> T<span style="color:#f92672">&gt;</span> action<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//定义consumer方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">consumer</span><span style="color:#f92672">(</span>List<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> list<span style="color:#f92672">,</span> Consumer<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> consumer<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//        return list.stream().filter(l -&gt; predicate.test(l.getColor())).collect(Collectors.toList());
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Apple apple <span style="color:#f92672">:</span> list<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            consumer<span style="color:#f92672">.</span><span style="color:#a6e22e">accept</span><span style="color:#f92672">(</span>apple<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Consumer&lt;Apple&gt; consumer = apple -&gt; System.out.println(apple.getColor());
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>consumer<span style="color:#f92672">(</span>list<span style="color:#f92672">,</span> apple <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>apple<span style="color:#f92672">.</span><span style="color:#a6e22e">getColor</span><span style="color:#f92672">()));</span>
+</span></span></code></pre></div><p>可以通过forEach接口实现同样的功能</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>list<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">(</span>l <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>l<span style="color:#f92672">.</span><span style="color:#a6e22e">getColor</span><span style="color:#f92672">()));</span>
+</span></span></code></pre></div><p>Consumer接口还有如下default方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">default</span> Consumer<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">andThen</span><span style="color:#f92672">(</span>Consumer<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> T<span style="color:#f92672">&gt;</span> after<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>消费数据的时候，首先做一个操作，然后再做一个操作，实现组合。</p>
 <h3 id="supplier">Supplier</h3>
-
 <p>接口仅包含一个无参的方法： T get() 。用来获取一个泛型参数指定类型的对象数据。由于这是一个函数式接口，这也就意味着对应的Lambda表达式需要“<strong>对外提供</strong>”一个符合泛型类型的对象数据。</p>
-
 <p>例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Supplier<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">supplier</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">new</span> Apple(<span style="color:#e6db74">&#34;&#34;</span>, 0);
-Apple <span style="color:#a6e22e">apple</span> <span style="color:#f92672">=</span> supplier.<span style="color:#a6e22e">get</span>();</code></pre></div>
-<h3 id="function">Function</h3>
-
-<p>java.util.function.Function<T,R> 接口用来根据一个类型的数据得到另一个类型的数据，前者称为前置条件，后者称为后置条件将T 转为 R，是一个<strong>类型转换接口</strong></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Supplier<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">&gt;</span> supplier <span style="color:#f92672">=</span> <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">new</span> Apple<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>Apple apple <span style="color:#f92672">=</span> supplier<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">();</span>
+</span></span></code></pre></div><h3 id="function">Function</h3>
+<p>java.util.function.Function&lt;T,R&gt; 接口用来根据一个类型的数据得到另一个类型的数据，前者称为前置条件，后者称为后置条件将T 转为 R，是一个<strong>类型转换接口</strong></p>
 <p><strong>常用场景</strong>：list.stream().map()</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>R<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">Stream</span><span style="color:#f92672">&lt;</span>R<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">map</span>(Function<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> <span style="color:#a6e22e">T</span>, <span style="color:#f92672">?</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">R</span><span style="color:#f92672">&gt;</span> mapper);</code></pre></div>
-<p>Stream的map接口接收的就是Function函数式接口对象，将集合中的元素转换成另一个类型。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>R<span style="color:#f92672">&gt;</span> Stream<span style="color:#f92672">&lt;</span>R<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>Function<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">super</span> T<span style="color:#f92672">,</span> <span style="color:#f92672">?</span> <span style="color:#66d9ef">extends</span> R<span style="color:#f92672">&gt;</span> mapper<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>Stream的map接口接收的就是Function函数式接口对象，将集合中的元素转换成另一个类型。</p>
 <p>例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Function<span style="color:#f92672">&lt;</span>Apple, String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">function</span> <span style="color:#f92672">=</span> apple <span style="color:#f92672">-&gt;</span> apple.<span style="color:#a6e22e">getColor</span>();
-function.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">new</span> Apple(<span style="color:#e6db74">&#34;red&#34;</span>,100));</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Function<span style="color:#f92672">&lt;</span>Apple<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;</span> function <span style="color:#f92672">=</span> apple <span style="color:#f92672">-&gt;</span> apple<span style="color:#f92672">.</span><span style="color:#a6e22e">getColor</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>function<span style="color:#f92672">.</span><span style="color:#a6e22e">apply</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Apple<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;red&#34;</span><span style="color:#f92672">,</span>100<span style="color:#f92672">));</span>
+</span></span></code></pre></div>
     </div>
     <footer class="post-footer">
      
@@ -337,7 +315,7 @@ function.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">ne
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -354,7 +332,7 @@ function.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">ne
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -392,18 +370,16 @@ function.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">ne
 <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
     <div class="post-toc">
         <div class="post-toc-content"><nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#函数式接口">函数式接口</a>
-<ul>
-<li><a href="#predicate">Predicate</a></li>
-<li><a href="#consumer">Consumer</a></li>
-<li><a href="#supplier">Supplier</a></li>
-<li><a href="#function">Function</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#函数式接口">函数式接口</a>
+      <ul>
+        <li><a href="#predicate">Predicate</a></li>
+        <li><a href="#consumer">Consumer</a></li>
+        <li><a href="#supplier">Supplier</a></li>
+        <li><a href="#function">Function</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav></div>
     </div>
 </section>
@@ -418,12 +394,12 @@ function.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">ne
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2020</span>
+  2009 - 2022</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>
 <div class="powered-by">
-  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
 </div>
 <div class="theme-info">
   Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT

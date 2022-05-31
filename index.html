@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-	<meta name="generator" content="Hugo 0.58.3" />
+	<meta name="generator" content="Hugo 0.96.0" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
@@ -59,7 +59,7 @@
     <ul id="menu" class="menu">
       
       
-        <li class="menu-item menu-item-active">
+        <li class="menu-item ">
           <a href="https://jasonqian10.github.io/" rel="section">
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
           </a>
@@ -117,6 +117,67 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-distribute/" itemprop="url">
+        solr cloud请求分发机制
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2022-05-20">
+    2022-05-20
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/solr" itemprop="url" rel="index">
+        <span itemprop="name">Solr</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">1963 字 ~4分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="前言">前言</h3>
+<p>前面有篇总结博客 <a href="http://qianjiasong.com/post/solr/solr-lucene-principle/">solr搜索原理解析</a> 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 <code>SearchHandler#handleRequestBody()</code> ，所有 <code>/select</code> 的请求都会进入这个入口。</p>
+<!-- raw HTML omitted -->
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/solr/solr-distribute/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
         <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-collapse-plugin/" itemprop="url">
         【solr源码分析】collapse插件
         </a>
@@ -156,37 +217,24 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2250 字 ~5分钟</span>
+<span class="leancloud-visitors-count">2243 字 ~5分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <h3 id="collapse是什么">collapse是什么</h3>
-
 <h4 id="举个例子">举个例子</h4>
-
 <p>为了让大家了解collapse的应用场景，我们举个例子：</p>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20201223160552671.png" alt="image-20201223160552671" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20201223160552671.png" alt="image-20201223160552671"></p>
 <p>如上图，</p>
-
 <p>查询条件是：</p>
-
-<p>&ldquo;PHONE_BRAND&rdquo;字段进行折叠，取&rdquo;RELEASE_TIME&rdquo;最新的选出代表。</p>
-
+<p>&ldquo;PHONE_BRAND&quot;字段进行折叠，取&quot;RELEASE_TIME&quot;最新的选出代表。</p>
 <p>结果：</p>
-
-<p>&ldquo;apple&rdquo;品牌是&rdquo;iphone12&rdquo;，&rdquo;huawei&rdquo;品牌是&rdquo;mate40pro&rdquo;。</p>
-
+<p>&ldquo;apple&quot;品牌是&quot;iphone12&rdquo;，&ldquo;huawei&quot;品牌是&quot;mate40pro&rdquo;。</p>
 <p>如果对每个品牌再进行展开（expand=true）：</p>
-
 <p>则结果中expanded展示全部剩余的结果。</p>
-
 <h4 id="官方解释">官方解释</h4>
-
 <p>Collapsing 查询解析器和 Expand 组件结合起来，形成了在 Solr 搜索结果中为字段折叠而对文档进行分组的方法。功能点和Result Grouping的相似，官方更推崇使用这种方法。</p>
-
 <blockquote>
 <p>为了在 SolrCloud 中使用这些功能，文档必须位于同一个分片上。</p>
 </blockquote>
@@ -427,7 +475,6 @@
     </header>
     <div class="post-body" itemprop="articleBody">
     <h3 id="stored与docvalues">stored与DocValues</h3>
-
 <p>stored存储与docValues存储其实都是<strong>正排索引</strong>，但是两者有区别：</p>
     </div>
     
@@ -482,15 +529,13 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">8904 字 ~18分钟</span>
+<span class="leancloud-visitors-count">8973 字 ~18分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <h3 id="概述">概述</h3>
-
 <p>集合框架是Java编码中最常用的知识点，本篇主要梳理一下Java集合框架，总结出各个常用的集合知识点。</p>
-
 <ul>
 <li>Collection接口下有List、Set、Queue，三者都是接口</li>
 <li>Map是独立接口（与Collection是平级关系），下有Hashtable，LinkedHashMap，HashMap，TreeMap</li>
@@ -551,97 +596,17 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">4178 字 ~9分钟</span>
+<span class="leancloud-visitors-count">3935 字 ~8分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <h3 id="概述">概述</h3>
-
 <p>Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。使用Stream API 对集合数据进行操作，就类似于使用 SQL 执行的数据库查询。也可以使用 Stream API 来并行执行操作。简而言之，Stream API 提供了一种高效且易于使用的处理数据的方式。</p>
     </div>
     
     <div class="post-more-link text-center">
     <a class="btn" href="https://jasonqian10.github.io/post/java/java8-stream/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java8-function-interface/" itemprop="url">
-        【java8】(二)高大上的函数式接口怎么用
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-03-30">
-    2020-03-30
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
-        <span itemprop="name">java</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">1349 字 ~3分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    <h2 id="函数式接口">函数式接口</h2>
-
-<p>函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)</p>
-
-<p>1)函数式接口中的抽象函数就是为了支持 lambda表达式；</p>
-
-<p>2)函数式接口可以被隐式转换为lambda表达式；</p>
-
-<p>3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；</p>
-
-<p>注意：加不加<code>@FunctionalInterface</code>对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。</p>
-
-<p>例外：</p>
-
-<p>函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；</p>
-
-<p>函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；</p>
-
-<p>函数式接口里是可以包含Object里的public方法，如equals()。</p>
-
-<p>下面介绍几种常用的函数式接口。</p>
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/java/java8-function-interface/" rel="contents">
       阅读全文 &raquo;
     </a>
     </div>
@@ -687,6 +652,12 @@
         
         
     
+        
+        
+          <a class="page-number" href="https://jasonqian10.github.io/p/3/">3</a>
+        
+        
+    
     <a class="extend next" rel="next" href="https://jasonqian10.github.io/p/2/"><i class="fa fa-angle-right"></i></a>
 </nav>
 
@@ -717,7 +688,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -734,7 +705,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -786,12 +757,12 @@
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2020</span>
+  2009 - 2022</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>
 <div class="powered-by">
-  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
 </div>
 <div class="theme-info">
   Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT

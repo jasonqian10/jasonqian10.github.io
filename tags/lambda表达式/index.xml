@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>lambda表达式 on 知不道</title>
@@ -6,11 +6,7 @@
     <description>Recent content in lambda表达式 on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 29 Mar 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jasonqian10.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 29 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jasonqian10.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【java8】(一)lambda表达式你用对了吗？</title>
       <link>https://jasonqian10.github.io/post/java/java8-lambda/</link>
@@ -18,18 +14,12 @@
       
       <guid>https://jasonqian10.github.io/post/java/java8-lambda/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
-
 &lt;p&gt;Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？&lt;/p&gt;
-
 &lt;h2 id=&#34;lambda表达式语法&#34;&gt;lambda表达式语法&lt;/h2&gt;
-
 &lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;
-
 &lt;p&gt;可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;lambda表达式依附于&lt;strong&gt;函数式接口&lt;/strong&gt;，可以理解为是函数式接口的匿名实现。&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;函数式接口&lt;/strong&gt;后面会详细介绍。&lt;/p&gt;
 &lt;/blockquote&gt;</description>
     </item>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hadoop on 知不道</title>
@@ -6,11 +6,7 @@
     <description>Recent content in Hadoop on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 22 Dec 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jasonqian10.github.io/categories/hadoop/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 22 Dec 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://jasonqian10.github.io/categories/hadoop/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【Hadoop索引】hadoop调优经验</title>
       <link>https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/</link>
@@ -18,17 +14,20 @@
       
       <guid>https://jasonqian10.github.io/post/mapreduce/mapreduce-index-3/</guid>
       <description>&lt;p&gt;【Hadoop索引】本篇系列第三篇。主要介绍Hadoop调试过程中的一些问题以及解决方法的总结。&lt;/p&gt;
-
 &lt;p&gt;主要有以下几类问题&lt;/p&gt;
-
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;资源分配问题&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;性能调优问题&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Yarn框架运行机制问题&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Solr索引问题&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;资源分配问题&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;性能调优问题&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Yarn框架运行机制问题&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Solr索引问题&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;</description>
     </item>
     
@@ -39,9 +38,7 @@
       
       <guid>https://jasonqian10.github.io/post/mapreduce/mapreduce-index-2/</guid>
       <description>&lt;p&gt;【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第二篇，介绍如何应用Hadoop到solr index。&lt;/p&gt;
-
 &lt;h2 id=&#34;为什么使用hadoop来做solr索引&#34;&gt;为什么使用Hadoop来做solr索引？&lt;/h2&gt;
-
 &lt;p&gt;这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。Hadoop的MapReduce计算框架分map阶段和reduce阶段。map阶段转换solr document，reduce阶段进行solr index操作。MapReduce流程契合solr索引的流程。&lt;/p&gt;</description>
     </item>
     
@@ -52,29 +49,24 @@
       
       <guid>https://jasonqian10.github.io/post/mapreduce/mapreduce-index-1/</guid>
       <description>&lt;p&gt;【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第一篇，介绍我学习使用Hadoop后对其的理解。&lt;/p&gt;
-
 &lt;h2 id=&#34;hadoop概念&#34;&gt;Hadoop概念&lt;/h2&gt;
-
 &lt;h3 id=&#34;官方概念&#34;&gt;官方概念&lt;/h3&gt;
-
 &lt;p&gt;The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using &lt;strong&gt;simple programming&lt;/strong&gt; &lt;strong&gt;models&lt;/strong&gt;.&lt;/p&gt;
-
 &lt;p&gt;总结：处理大数据、分布式集群、可编程计算框架&lt;/p&gt;
-
 &lt;h3 id=&#34;hadoop-的核心组件&#34;&gt;Hadoop 的核心组件&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20191206112523725.png&#34; alt=&#34;image-20191206112523725&#34; /&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;img src=&#34;https://jasonqian10.github.io/img/post/image-20191206112523725.png&#34; alt=&#34;image-20191206112523725&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Hadoop由1.0和2.0两个架构版本，2.0最大的变化就是引入YARN这个资源调度框架，更加精细化的分配和调度资源。这里主要以当前最新的2.0展开。感兴趣的同学可以自行了解一下两者差异。&lt;/p&gt;
-
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;HDFS：分布式文件系统&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Mapreduce：分布式运算编程框架&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;YARN：运算资源调度系统&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;HDFS：分布式文件系统&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mapreduce：分布式运算编程框架&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;YARN：运算资源调度系统&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;简单描述一下三者关系：自定义的MapReduce程序（Java进程），通过YARN框架分配资源来运行这个MapReduce程序，MapReduce程序中输出存储到HDFS。&lt;/p&gt;</description>
     </item>
     

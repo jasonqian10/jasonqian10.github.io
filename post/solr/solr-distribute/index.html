@@ -1,0 +1,465 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>solr cloud请求分发机制 - 知不道</title>
+    <meta name="keywords" content="蘭陵N散記,兰陵,独立,博客,程序员,架构师,个人,思考,读书,笔记,技术,分享,Golang">
+    
+    <meta property="og:title" content="solr cloud请求分发机制">
+    <meta property="og:site_name" content="知不道">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="solr cloud请求分发机制 - 知不道" />
+    <meta name="description" content="博客 | 软件 | 架构 | Java | 搜索"> 
+    <link rel="shortcut icon" href="https://jasonqian10.github.io/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://jasonqian10.github.io/img/apple-touch-icon.png" />
+    <link href="https://jasonqian10.github.io/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://jasonqian10.github.io/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+     fancybox: true, 
+    motion: true
+  };
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://jasonqian10.github.io/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">知不道</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一指流沙，程序年华</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/post/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/categories/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />分类
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/tags/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://jasonqian10.github.io/about/" rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-distribute/" itemprop="url">
+        solr cloud请求分发机制
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2022-05-20">
+    2022-05-20
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/solr" itemprop="url" rel="index">
+        <span itemprop="name">Solr</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">1963 字 ~4分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h3 id="前言">前言</h3>
+<p>前面有篇总结博客 <a href="http://qianjiasong.com/post/solr/solr-lucene-principle/">solr搜索原理解析</a> 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 <code>SearchHandler#handleRequestBody()</code> ，所有 <code>/select</code> 的请求都会进入这个入口。</p>
+<!-- raw HTML omitted -->
+<h3 id="集群模式">集群模式</h3>
+<p>solr cloud环境下请求以cloud模式进入 <code>SearchHandler#handleRequestBody()</code>,方法内部主要核心步骤：</p>
+<p><strong>step1 注册Component</strong></p>
+<p>通过<code>getComponents()</code>获取注册的 <code>SearchComponent</code> 列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>List<span style="color:#f92672">&lt;</span>SearchComponent<span style="color:#f92672">&gt;</span> components  <span style="color:#f92672">=</span> getComponents<span style="color:#f92672">();</span>
+</span></span></code></pre></div><p>如果第一次请求进入，则会先注册列表<code>initComponents()</code>, 注册列表定义优先找<code>solrconfig.xml</code>中 <code>requestHandler</code> 标签下的 <code>component</code> 标签，如果未定义则会<code>getDefaultComponents()</code>取默认列表。</p>
+<p><strong>step2 执行Component prepare(stag=STAGE_PARSE_QUERY)</strong></p>
+<p>依次执行 components 列表的prepare()</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span> SearchComponent c <span style="color:#f92672">:</span> components <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        c<span style="color:#f92672">.</span><span style="color:#a6e22e">prepare</span><span style="color:#f92672">(</span>rb<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>最核心的是<code>QueryComponent#prepare()</code>,完成query的解析，生成Query对象。<code>QueryComponent</code>会完成query解析、query执行召回文档、拉取返回字段信息等，默认是第一个执行的component，后面的 component 列表会依赖它。</p>
+<p><strong>step3 计算执行阶段（分发前准备）</strong></p>
+<p>先介绍一下集群模式下solr请求的执行阶段</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> STAGE_START <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>   <span style="color:#75715e">//开始
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> STAGE_PARSE_QUERY <span style="color:#f92672">=</span> 1000<span style="color:#f92672">;</span>  <span style="color:#75715e">//解析query
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> STAGE_TOP_GROUPS <span style="color:#f92672">=</span> 1500<span style="color:#f92672">;</span>   <span style="color:#75715e">//获取分组（group场景）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> STAGE_EXECUTE_QUERY <span style="color:#f92672">=</span> 2000<span style="color:#f92672">;</span>  <span style="color:#75715e">//执行query
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> STAGE_GET_FIELDS <span style="color:#f92672">=</span> 3000<span style="color:#f92672">;</span>  <span style="color:#75715e">//获取返回字段
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> STAGE_DONE <span style="color:#f92672">=</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_VALUE</span><span style="color:#f92672">;</span> <span style="color:#75715e">//结束
+</span></span></span></code></pre></div><p>计算方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>rb<span style="color:#f92672">.</span><span style="color:#a6e22e">stage</span> <span style="color:#f92672">=</span> nextStage<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>nextStage <span style="color:#f92672">=</span> ResponseBuilder<span style="color:#f92672">.</span><span style="color:#a6e22e">STAGE_DONE</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// call all components
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span> SearchComponent c <span style="color:#f92672">:</span> components <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// the next stage is the minimum of what all components report
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	nextStage <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">min</span><span style="color:#f92672">(</span>nextStage<span style="color:#f92672">,</span> c<span style="color:#f92672">.</span><span style="color:#a6e22e">distributedProcess</span><span style="color:#f92672">(</span>rb<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>在每个阶段执行之前，会先调用 <code>c.distributedProcess(rb)</code> 计算下一阶段是哪个阶段，每个 component 决定是否需要在本阶段执行。
+由于<strong>step2</strong> 已经构建好Query，所以<code>STAGE_START</code> <code>STAGE_PARSE_QUERY</code>直接走流程，无实际操作，每个stage结束都需要执行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>SearchComponent c <span style="color:#f92672">:</span> components<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   c<span style="color:#f92672">.</span><span style="color:#a6e22e">finishStage</span><span style="color:#f92672">(</span>rb<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p><strong>step4 执行query(stag=STAGE_EXECUTE_QUERY)</strong></p>
+<p><code>STAGE_EXECUTE_QUERY</code> 比较重要，会完成query执行，召回topN ids。这个阶段会通过分布式的方式分发到各个shard执行。
+在本阶段 <code>QueryComponent</code>执行 <code>c.distributedProcess(rb)</code> 会调用 <code>QueryComponent#createMainQuery()</code>完成分发请求的参数准备</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>ShardRequest sreq <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ShardRequest<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>outgoing<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>sreq<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>加入到 outgoing 列表中。循环提交分发请求，直到outgoing列表为空。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>rb<span style="color:#f92672">.</span><span style="color:#a6e22e">outgoing</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>	params<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>ShardParams<span style="color:#f92672">.</span><span style="color:#a6e22e">SHARDS</span><span style="color:#f92672">);</span>      <span style="color:#75715e">// not a top-level request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  params<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>DISTRIB<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;false&#34;</span><span style="color:#f92672">);</span>               <span style="color:#75715e">// not a top-level request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  params<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;indent&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>  params<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>CommonParams<span style="color:#f92672">.</span><span style="color:#a6e22e">HEADER_ECHO_PARAMS</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>  params<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>ShardParams<span style="color:#f92672">.</span><span style="color:#a6e22e">IS_SHARD</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>  <span style="color:#75715e">// a sub (shard) request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  params<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>ShardParams<span style="color:#f92672">.</span><span style="color:#a6e22e">SHARDS_PURPOSE</span><span style="color:#f92672">,</span> sreq<span style="color:#f92672">.</span><span style="color:#a6e22e">purpose</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>  params<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>ShardParams<span style="color:#f92672">.</span><span style="color:#a6e22e">SHARD_URL</span><span style="color:#f92672">,</span> shard<span style="color:#f92672">);</span> <span style="color:#75715e">// so the shard knows what was asked
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#960050;background-color:#1e0010">····</span>
+</span></span><span style="display:flex;"><span>  shardHandler1<span style="color:#f92672">.</span><span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>sreq<span style="color:#f92672">,</span> shard<span style="color:#f92672">,</span> params<span style="color:#f92672">);</span> <span style="color:#75715e">//提交分发请求
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p><code>shardHandler1.submit</code> 之后，则会进入到下一节 <strong>单机模式</strong> 的流程。</p>
+<p><strong>step5 处理各shard返回结果</strong></p>
+<p>当各shard处理请求返回后，汇总节点会调用</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>SearchComponent c <span style="color:#f92672">:</span> components<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	c<span style="color:#f92672">.</span><span style="color:#a6e22e">handleResponses</span><span style="color:#f92672">(</span>rb<span style="color:#f92672">,</span> srsp<span style="color:#f92672">.</span><span style="color:#a6e22e">getShardRequest</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>注意 <code>SearchComponent#handleResponses()</code> 只会在集群模式下在汇总节点被执行到。单机模式下不会执行到此方法。
+重点关注一下 <code>QueryComponent#handleResponses()</code>，在此方法中主要完成各个shard返回结果的ids合并，取Uniquekey和score(如需)字段，详细见 <code>mergeIds()</code>。
+当 outgoing 列表全部处理完分发请求、handleResponse之后，会继续调用当前stag的</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>SearchComponent c <span style="color:#f92672">:</span> components<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   c<span style="color:#f92672">.</span><span style="color:#a6e22e">finishStage</span><span style="color:#f92672">(</span>rb<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p><strong>step6 获取fl字段(stag=STAGE_GET_FIELDS)</strong></p>
+<p>上一阶段已经召回了命中的所有uniquekey，这一节点则会分发请求，去各个shard获取返回的字段。
+整体处理流程与<strong>step4+step5</strong>一样，这里我们重点讲解一下<code>QueryComponent</code>的几个重要方法。
+在本阶段 <code>QueryComponent</code>执行 <code>c.distributedProcess(rb)</code> 会调用<code>createRetrieveDocs()</code>将各个shard的uniquekey封装在请求体中，用于分发请求。去各个shard只会取指定uniquekey的字段值。
+<code>QueryComponent#handleResponses()</code>中会处理每个shard返回结果，取出fl字段，封装在 <code>rb.getResponseDocs()</code>。</p>
+<p>以上就是一个集群模式下请求的核心处理步骤。</p>
+<h3 id="单机模式">单机模式</h3>
+<p>单机模式的核心代码与集群模式一样，见 <code>SearchHandler#handleRequestBody()</code>,方法内部主要核心步骤（这里只会重点介绍与集群模式不一样的地方）：</p>
+<p><strong>step1 注册Component</strong></p>
+<p><strong>step2 执行Component prepare</strong></p>
+<p><strong>step3 执行query</strong></p>
+<p>判断非集群模式，则遍历执行 <code>components</code>列表的<code>SearchComponent#process()</code>方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>rb<span style="color:#f92672">.</span><span style="color:#a6e22e">isDistrib</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span><span style="color:#f92672">(</span> SearchComponent c <span style="color:#f92672">:</span> components <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  	c<span style="color:#f92672">.</span><span style="color:#a6e22e">process</span><span style="color:#f92672">(</span>rb<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>solr查询最核心的就是<code>QueryComponent#process()</code>,方法内部会进入 <code>IndexSearcher#search()</code> 完成倒排表合并、文档打分等得到最终docSet、docList。这个流程很复杂，我后续会单独讲一下这个流程。</p>
+<blockquote>
+<p>注意：单机模式下 <code>process()</code>就是 <code>SearchComponent</code>的的最后一步，不会走<code>handleRequestBody()</code>和<code>finishStage()</code></p>
+</blockquote>
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://jasonqian10.github.io/tags/solr" rel="tag" title="solr">#solr#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/lucene" rel="tag" title="lucene">#lucene#</a>
+    
+    <a href="https://jasonqian10.github.io/tags/solr-cloud" rel="tag" title="solr cloud">#solr cloud#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://jasonqian10.github.io/post/solr/solr-collapse-plugin/" rel="prev" title="【solr源码分析】collapse插件">
+        【solr源码分析】collapse插件 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://jasonqian10.github.io/img/author.jpg"
+        alt="Jason" />
+    <p class="site-author-name" itemprop="name">Jason</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Programmer</p>
+</div>
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://jasonqian10.github.io/post/">
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://jasonqian10.github.io/categories/">      
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://jasonqian10.github.io/tags/">
+         
+        <span class="site-state-item-count">21</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-author motion-element">
+    
+        <span class="links-of-author-item">
+        <a href="https://github.com/jasonqian10" target="_blank" title="GitHub">
+            <i class="fa fa-fw fa-github"></i>
+            GitHub
+        </a>
+        </span>
+    
+        <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+            <i class="fa fa-fw fa-globe"></i>
+            知乎
+        </a>
+        </span>
+    
+</div>
+
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=5b4f2ucxar6&amp;m=0&amp;s=220&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33&amp;bv=35" async="async"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#集群模式">集群模式</a></li>
+        <li><a href="#单机模式">单机模式</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  <span itemprop="copyrightYear">  &copy; 
+  2009 - 2022</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder">知不道</span>
+</div>
+<div class="powered-by">
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
+</div>
+<div class="theme-info">
+  Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT
+  </a>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script> 
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="https://jasonqian10.github.io/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://jasonqian10.github.io/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/utils.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/motion.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/affix.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/post-details.js"></script>
+<script type="text/javascript" src="https://jasonqian10.github.io/js/toc.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://jasonqian10.github.io/js/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+</body>
+</html>

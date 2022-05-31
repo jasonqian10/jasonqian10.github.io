@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 知不道</title>
@@ -6,10 +6,33 @@
     <description>Recent content in Tags on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 13 Dec 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://jasonqian10.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>lucene</title>
+      <link>https://jasonqian10.github.io/tags/lucene/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/lucene/</guid>
+      <description></description>
+    </item>
     
-	<atom:link href="https://jasonqian10.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>solr</title>
+      <link>https://jasonqian10.github.io/tags/solr/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/solr/</guid>
+      <description></description>
+    </item>
     
+    <item>
+      <title>solr cloud</title>
+      <link>https://jasonqian10.github.io/tags/solr-cloud/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/tags/solr-cloud/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>collapse</title>
@@ -17,15 +40,6 @@
       <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/tags/collapse/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>solr</title>
-      <link>https://jasonqian10.github.io/tags/solr/</link>
-      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://jasonqian10.github.io/tags/solr/</guid>
       <description></description>
     </item>
     
@@ -170,15 +184,6 @@
       <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://jasonqian10.github.io/tags/mapreduce/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>lucene</title>
-      <link>https://jasonqian10.github.io/tags/lucene/</link>
-      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://jasonqian10.github.io/tags/lucene/</guid>
       <description></description>
     </item>
     

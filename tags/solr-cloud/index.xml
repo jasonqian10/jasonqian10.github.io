@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>solr cloud on 知不道</title>
+    <link>https://jasonqian10.github.io/tags/solr-cloud/</link>
+    <description>Recent content in solr cloud on 知不道</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 20 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://jasonqian10.github.io/tags/solr-cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>solr cloud请求分发机制</title>
+      <link>https://jasonqian10.github.io/post/solr/solr-distribute/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasonqian10.github.io/post/solr/solr-distribute/</guid>
+      <description>&lt;h3 id=&#34;前言&#34;&gt;前言&lt;/h3&gt;
+&lt;p&gt;前面有篇总结博客 &lt;a href=&#34;http://qianjiasong.com/post/solr/solr-lucene-principle/&#34;&gt;solr搜索原理解析&lt;/a&gt; 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 &lt;code&gt;SearchHandler#handleRequestBody()&lt;/code&gt; ，所有 &lt;code&gt;/select&lt;/code&gt; 的请求都会进入这个入口。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

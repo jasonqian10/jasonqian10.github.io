@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>schema配置 on 知不道</title>
@@ -6,11 +6,7 @@
     <description>Recent content in schema配置 on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jasonqian10.github.io/tags/schema%E9%85%8D%E7%BD%AE/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jasonqian10.github.io/tags/schema%E9%85%8D%E7%BD%AE/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【solr配置】stored、docValues区别和使用场景</title>
       <link>https://jasonqian10.github.io/post/solr/solr-docvalues-stored/</link>
@@ -18,7 +14,6 @@
       
       <guid>https://jasonqian10.github.io/post/solr/solr-docvalues-stored/</guid>
       <description>&lt;h3 id=&#34;stored与docvalues&#34;&gt;stored与DocValues&lt;/h3&gt;
-
 &lt;p&gt;stored存储与docValues存储其实都是&lt;strong&gt;正排索引&lt;/strong&gt;，但是两者有区别：&lt;/p&gt;</description>
     </item>
     

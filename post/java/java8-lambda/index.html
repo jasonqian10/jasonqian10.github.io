@@ -159,165 +159,146 @@
     </header>
     <div class="post-body" itemprop="articleBody">
     <h2 id="前言">前言</h2>
-
 <p>Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？</p>
-
 <h2 id="lambda表达式语法">lambda表达式语法</h2>
-
 <h3 id="概念">概念</h3>
-
 <p>可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。</p>
-
 <blockquote>
 <p>lambda表达式依附于<strong>函数式接口</strong>，可以理解为是函数式接口的匿名实现。</p>
-
 <p><strong>函数式接口</strong>后面会详细介绍。</p>
 </blockquote>
-
 <h3 id="语法格式">语法格式</h3>
-
 <p>java8中，引入了一个新的操作符“-&gt;”：</p>
-
 <p>左侧：lambda表达式参数列表。这个参数列表是接口的入参。</p>
-
 <p>右侧：lambda表达式所需执行的功能，即lambda函数体。这个是接口的具体实现函数。</p>
-
-<h4 id="无参数-无返回值用法">无参数，无返回值用法</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//应用lambda表达式之前
-</span><span style="color:#75715e"></span>Runnable <span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Runnable() {
-            <span style="color:#a6e22e">@Override</span>
-            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> run() {
-                System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;无参数，无返回值&#34;</span>);
-            }
-        };
-r1.<span style="color:#a6e22e">run</span>();
-<span style="color:#75715e">//应用lambda表达式之前
-</span><span style="color:#75715e"></span>Runnable <span style="color:#a6e22e">r2</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;无参数，无返回值&#34;</span>);
-r2.<span style="color:#a6e22e">run</span>();</code></pre></div>
-<p>Runnable接口(Java8改造成一种函数式接口了) 就是场景的例子。 这里<code>-&gt;</code>左侧参数列表即使接口函数<code>public void run()</code>的入参；右侧是<code>run()</code>接口的实现体。</p>
-
-<h4 id="无参数-有返回值">无参数，有返回值</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义获取状态的接口
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Status {
-   <span style="color:#66d9ef">public</span>  <span style="color:#a6e22e">String</span> getStatus();
-}
-
-<span style="color:#75715e">//应用lambda表达式之前
-</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Status() {
-            <span style="color:#a6e22e">@Override</span>
-            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">String</span> getStatus() {
-                <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
-            }
-};
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(status1.<span style="color:#a6e22e">getStatus</span>());
-<span style="color:#75715e">//应用lambda表达式之后
-</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status2</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(status2.<span style="color:#a6e22e">getStatus</span>());</code></pre></div>
-<p>与上面一类场景相比，这里右侧的函数体是有返回值的。可以通过函数体最终结果是void还是Object来判断是否有返回值。</p>
-
+<h4 id="无参数无返回值用法">无参数，无返回值用法</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之前
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Runnable r1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Runnable<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;无参数，无返回值&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>r1<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之前
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Runnable r2 <span style="color:#f92672">=</span> <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;无参数，无返回值&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>r2<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">();</span>
+</span></span></code></pre></div><p>Runnable接口(Java8改造成一种函数式接口了) 就是场景的例子。 这里<code>-&gt;</code>左侧参数列表即使接口函数<code>public void run()</code>的入参；右侧是<code>run()</code>接口的实现体。</p>
+<h4 id="无参数有返回值">无参数，有返回值</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//定义获取状态的接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Status</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">public</span>  String <span style="color:#a6e22e">getStatus</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之前
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status status1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Status<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getStatus</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;stop&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>status1<span style="color:#f92672">.</span><span style="color:#a6e22e">getStatus</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之后
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status status2 <span style="color:#f92672">=</span> <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;stop&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>status2<span style="color:#f92672">.</span><span style="color:#a6e22e">getStatus</span><span style="color:#f92672">());</span>
+</span></span></code></pre></div><p>与上面一类场景相比，这里右侧的函数体是有返回值的。可以通过函数体最终结果是void还是Object来判断是否有返回值。</p>
 <p>注意有返回值时右侧函数体如果只有一行，可以省略<code>return</code>和<code>{}</code>,即也可以这样写</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//lambda写法1
-</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status2</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
-<span style="color:#75715e">//lambda写法2
-</span><span style="color:#75715e"></span>Status <span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> () <span style="color:#f92672">-&gt;</span> {
-    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;stop&#34;</span>;
-};
-
-<span style="color:#f92672">//</span>建议第一种</code></pre></div>
-<h4 id="有1个参数-无返回值">有1个参数，无返回值</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义打印信息的接口
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Printer {
-        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> print(String <span style="color:#a6e22e">str</span>);
-}
-
-<span style="color:#75715e">//应用lambda表达式之前
-</span><span style="color:#75715e"></span>Printer <span style="color:#a6e22e">printer1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Printer() {
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> print(String <span style="color:#a6e22e">str</span>) {
-        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str);
-    }
-};
-printer1.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;123&#34;</span>);
-<span style="color:#75715e">//应用lambda表达式之后
-</span><span style="color:#75715e"></span>Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> (str <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));
-printer2.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;123&#34;</span>);</code></pre></div>
-<p>这里注意有1个参数时，左侧的参数括号可以省略。下面是几种扩展写法</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> (str <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));
-Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> ((str) <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));
-Printer <span style="color:#a6e22e">printer2</span> <span style="color:#f92672">=</span> ((String <span style="color:#a6e22e">str</span>)<span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(str));</code></pre></div>
-<h4 id="有1个参数-有返回值">有1个参数，有返回值</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义int到String转换接口
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Exchanger {
-        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">String</span> exchange(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">n</span>);
-    }
-  
-Exchanger <span style="color:#a6e22e">exchanger1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Exchanger() {
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">String</span> exchange(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">n</span>) {
-        <span style="color:#66d9ef">return</span> String.<span style="color:#a6e22e">valueOf</span>(n);
-    }
-};
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(exchanger1.<span style="color:#a6e22e">exchange</span>(10));
-
-Exchanger <span style="color:#a6e22e">exchanger2</span> <span style="color:#f92672">=</span> (n <span style="color:#f92672">-&gt;</span> String.<span style="color:#a6e22e">valueOf</span>(n));
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(exchanger2.<span style="color:#a6e22e">exchange</span>(20));</code></pre></div>
-<h4 id="有多个参数-无返回值">有多个参数，无返回值</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//定义加法接口
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">interface</span> Operation {
-        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">int</span> plus(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">a</span>, <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">b</span>);
-    }
-    
-Printer2 <span style="color:#a6e22e">printer21</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Printer2() {
-            <span style="color:#a6e22e">@Override</span>
-            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">void</span> print(<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">a</span>, <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">b</span>) {
-                System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b);
-            }
-        };
-printer21.<span style="color:#a6e22e">print</span>(5,3);
-
-Printer2 <span style="color:#a6e22e">printer22</span> <span style="color:#f92672">=</span> (a,b) <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b);
-printer22.<span style="color:#a6e22e">print</span>(20,30);</code></pre></div>
-<p>这里要注意左侧参数列表有多个参数时，括号一定要保留。下面Lambda多种扩展写法。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Printer2 <span style="color:#a6e22e">printer22</span> <span style="color:#f92672">=</span> (a,b) <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b);
-Operation <span style="color:#a6e22e">operation2</span> <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">a</span>,<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">b</span>) <span style="color:#f92672">-&gt;</span> { System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(a<span style="color:#f92672">+</span>b) };</code></pre></div>
-<h4 id="有多个参数-有返回值">有多个参数，有返回值</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//这里我们直接使用现有的Comparator接口
-</span><span style="color:#75715e">//应用lambda表达式之前
-</span><span style="color:#75715e"></span>Comparator <span style="color:#a6e22e">comparator1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Comparator() {
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">int</span> compare(Object <span style="color:#a6e22e">o1</span>, Object <span style="color:#a6e22e">o2</span>) {
-        <span style="color:#66d9ef">return</span> o1.<span style="color:#a6e22e">hashCode</span>() <span style="color:#f92672">-</span> o2.<span style="color:#a6e22e">hashCode</span>();
-    }
-};
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(comparator1.<span style="color:#a6e22e">compare</span>(<span style="color:#66d9ef">new</span> Integer(5), <span style="color:#66d9ef">new</span> Integer(10)));
-<span style="color:#75715e">//应用lambda表达式之后
-</span><span style="color:#75715e"></span>Comparator <span style="color:#a6e22e">comparator2</span> <span style="color:#f92672">=</span> ((o1, o2) <span style="color:#f92672">-&gt;</span> o1.<span style="color:#a6e22e">hashCode</span>() <span style="color:#f92672">-</span> o2.<span style="color:#a6e22e">hashCode</span>());
-System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(comparator2.<span style="color:#a6e22e">compare</span>(<span style="color:#66d9ef">new</span> Integer(3), <span style="color:#66d9ef">new</span> Integer(10)));</code></pre></div>
-<p>当右侧函数体有多行时，一定需要<code>{}</code></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//lambda写法1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status status2 <span style="color:#f92672">=</span> <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;stop&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//lambda写法2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status status <span style="color:#f92672">=</span> <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;stop&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//建议第一种
+</span></span></span></code></pre></div><h4 id="有1个参数无返回值">有1个参数，无返回值</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//定义打印信息的接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Printer</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>String str<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之前
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Printer printer1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Printer<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>String str<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>str<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>printer1<span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;123&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之后
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Printer printer2 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>str <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>str<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>printer2<span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;123&#34;</span><span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>这里注意有1个参数时，左侧的参数括号可以省略。下面是几种扩展写法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Printer printer2 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>str <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>str<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>Printer printer2 <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>str<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>str<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>Printer printer2 <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>String str<span style="color:#f92672">)-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>str<span style="color:#f92672">));</span>
+</span></span></code></pre></div><h4 id="有1个参数有返回值">有1个参数，有返回值</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//定义int到String转换接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Exchanger</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">exchange</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> n<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Exchanger exchanger1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Exchanger<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">exchange</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> n<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> String<span style="color:#f92672">.</span><span style="color:#a6e22e">valueOf</span><span style="color:#f92672">(</span>n<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>exchanger1<span style="color:#f92672">.</span><span style="color:#a6e22e">exchange</span><span style="color:#f92672">(</span>10<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Exchanger exchanger2 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>n <span style="color:#f92672">-&gt;</span> String<span style="color:#f92672">.</span><span style="color:#a6e22e">valueOf</span><span style="color:#f92672">(</span>n<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>exchanger2<span style="color:#f92672">.</span><span style="color:#a6e22e">exchange</span><span style="color:#f92672">(</span>20<span style="color:#f92672">));</span>
+</span></span></code></pre></div><h4 id="有多个参数无返回值">有多个参数，无返回值</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//定义加法接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">@FunctionalInterface</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Operation</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">plus</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> b<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>Printer2 printer21 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Printer2<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">print</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> b<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">+</span>b<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>printer21<span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>5<span style="color:#f92672">,</span>3<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Printer2 printer22 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span>b<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">+</span>b<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>printer22<span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>20<span style="color:#f92672">,</span>30<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>这里要注意左侧参数列表有多个参数时，括号一定要保留。下面Lambda多种扩展写法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Printer2 printer22 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>a<span style="color:#f92672">,</span>b<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">+</span>b<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>Operation operation2 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">,</span><span style="color:#66d9ef">int</span> b<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">+</span>b<span style="color:#f92672">)</span> <span style="color:#f92672">};</span>
+</span></span></code></pre></div><h4 id="有多个参数有返回值">有多个参数，有返回值</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//这里我们直接使用现有的Comparator接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之前
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Comparator comparator1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Comparator<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">compare</span><span style="color:#f92672">(</span>Object o1<span style="color:#f92672">,</span> Object o2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> o1<span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">()</span> <span style="color:#f92672">-</span> o2<span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">};</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>comparator1<span style="color:#f92672">.</span><span style="color:#a6e22e">compare</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Integer<span style="color:#f92672">(</span>5<span style="color:#f92672">),</span> <span style="color:#66d9ef">new</span> Integer<span style="color:#f92672">(</span>10<span style="color:#f92672">)));</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//应用lambda表达式之后
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Comparator comparator2 <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>o1<span style="color:#f92672">,</span> o2<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> o1<span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">()</span> <span style="color:#f92672">-</span> o2<span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>comparator2<span style="color:#f92672">.</span><span style="color:#a6e22e">compare</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Integer<span style="color:#f92672">(</span>3<span style="color:#f92672">),</span> <span style="color:#66d9ef">new</span> Integer<span style="color:#f92672">(</span>10<span style="color:#f92672">)));</span>
+</span></span></code></pre></div><p>当右侧函数体有多行时，一定需要<code>{}</code></p>
 <h3 id="总结">总结</h3>
-
 <ul>
-<li>左侧参数列表</li>
-</ul>
-
+<li>
+<p>左侧参数列表</p>
 <p>无参数和有多个参数时一定需要括号()</p>
-
 <p>有一个参数时，可以省略括号()</p>
-
 <p>当使用括号()时，参数的类型可以省略不写</p>
-
-<ul>
-<li>右侧函数体</li>
-</ul>
-
+</li>
+<li>
+<p>右侧函数体</p>
 <p>单行代码：可以省略花括号{}和return(无论是否有返回值)</p>
-
 <p>多行代码：一定要写花括号{}和return(如果有返回值)</p>
+</li>
+</ul>
     </div>
     <footer class="post-footer">
      
@@ -394,7 +375,7 @@ System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printl
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -411,7 +392,7 @@ System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printl
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -449,26 +430,16 @@ System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printl
 <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
     <div class="post-toc">
         <div class="post-toc-content"><nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#lambda表达式语法">lambda表达式语法</a>
-<ul>
-<li><a href="#概念">概念</a></li>
-<li><a href="#语法格式">语法格式</a>
-<ul>
-<li><a href="#无参数-无返回值用法">无参数，无返回值用法</a></li>
-<li><a href="#无参数-有返回值">无参数，有返回值</a></li>
-<li><a href="#有1个参数-无返回值">有1个参数，无返回值</a></li>
-<li><a href="#有1个参数-有返回值">有1个参数，有返回值</a></li>
-<li><a href="#有多个参数-无返回值">有多个参数，无返回值</a></li>
-<li><a href="#有多个参数-有返回值">有多个参数，有返回值</a></li>
-</ul></li>
-<li><a href="#总结">总结</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#lambda表达式语法">lambda表达式语法</a>
+      <ul>
+        <li><a href="#概念">概念</a></li>
+        <li><a href="#语法格式">语法格式</a></li>
+        <li><a href="#总结">总结</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav></div>
     </div>
 </section>
@@ -483,12 +454,12 @@ System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printl
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2020</span>
+  2009 - 2022</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>
 <div class="powered-by">
-  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
 </div>
 <div class="theme-info">
   Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT

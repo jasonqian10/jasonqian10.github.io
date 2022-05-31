@@ -159,74 +159,51 @@
     </header>
     <div class="post-body" itemprop="articleBody">
     <p>solr源码debug环境对于研究solr和Lucene源码很有必要，本文总结本人搭建的详细步骤。</p>
-
 <h4 id="clone代码">clone代码</h4>
-
 <p>git clone <a href="https://github.com/apache/lucene-solr.git">https://github.com/apache/lucene-solr.git</a></p>
-
 <p>下载后阅读根目录下README.md。</p>
-
 <h4 id="下载ant依赖">下载ant依赖</h4>
-
 <p>如果本地没有安装过ant的请自行安装。</p>
-
 <p>在项目根目录下执行命令</p>
-
 <p><code>ant ivy-bootstrap</code></p>
-
 <p>自动下载ant依赖包。第一次执行需要较长时间，显示<code>BUILD SUCCESSFUL</code>则成功。</p>
-
 <blockquote>
 <p>这一步只需要执行一次，后面不需重复执行。</p>
 </blockquote>
-
 <h4 id="ant项目转换成maven项目">ant项目转换成maven项目</h4>
-
 <p>项目根目录下执行命令</p>
-
 <p><code>ant idea</code></p>
-
 <blockquote>
 <p>注意：执行完此步骤才可以用intellj idea打开项目。未转换先打开了会有问题。</p>
 </blockquote>
-
 <h4 id="编译项目">编译项目</h4>
-
 <p>进入项目根目录 <strong>solr/</strong> 目录，执行命令</p>
-
 <p><code>ant server</code></p>
-
 <h4 id="idea运行solr-server">idea运行solr server</h4>
-
 <p>在idea上运行solr server是实际启动的是embedSolrServer。</p>
-
 <ul>
-<li><p>先准备一个solr_home，放在solr/server/ 目录下</p></li>
-
-<li><p>在项目 <code>solr/solrj/src/test/org/apache/solr/client/solrj/StartSolrJetty.java</code> 中增加上面准备的solr_hom的路径；设置webapp war路径</p></li>
+<li>
+<p>先准备一个solr_home，放在solr/server/ 目录下</p>
+</li>
+<li>
+<p>在项目 <code>solr/solrj/src/test/org/apache/solr/client/solrj/StartSolrJetty.java</code> 中增加上面准备的solr_hom的路径；设置webapp war路径</p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20200116154404740.png" alt="image-20200116154404740"></p>
+</li>
+<li>
+<p><code>solr/solrj/src/resources</code> 目录下添加log4j2配置文件（solr/solrj/src/resources/log4j2.xml）</p>
+</li>
+<li>
+<p><code>run StartSolrJetty.java</code>，然后访问 <code>localhost:8983/solr</code></p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20200116155039575.png" alt="image-20200116155039575"></p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20200116155134024.png" alt="image-20200116155134024"></p>
+</li>
+<li>
+<p>对源码打断点，<code>debug StartSolrJetty.java</code> 即可进行源码调试</p>
+</li>
 </ul>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20200116154404740.png" alt="image-20200116154404740" /></p>
-
-<ul>
-<li><p><code>solr/solrj/src/resources</code> 目录下添加log4j2配置文件（solr/solrj/src/resources/log4j2.xml）</p></li>
-
-<li><p><code>run StartSolrJetty.java</code>，然后访问 <code>localhost:8983/solr</code></p></li>
-</ul>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20200116155039575.png" alt="image-20200116155039575" /></p>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20200116155134024.png" alt="image-20200116155134024" /></p>
-
-<ul>
-<li>对源码打断点，<code>debug StartSolrJetty.java</code> 即可进行源码调试</li>
-</ul>
-
 <h4 id="导入自定义jar">导入自定义jar</h4>
-
 <p>如果有基于源码自定义的插件jar，也可以把插件代码导入到源码项目中进行debug。</p>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20200116170236585.png" alt="image-20200116170236585" /></p>
+<p><img src="https://jasonqian10.github.io/img/post/image-20200116170236585.png" alt="image-20200116170236585"></p>
     </div>
     <footer class="post-footer">
      
@@ -305,7 +282,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -322,7 +299,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -360,23 +337,13 @@
 <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
     <div class="post-toc">
         <div class="post-toc-content"><nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#clone代码">clone代码</a></li>
-<li><a href="#下载ant依赖">下载ant依赖</a></li>
-<li><a href="#ant项目转换成maven项目">ant项目转换成maven项目</a></li>
-<li><a href="#编译项目">编译项目</a></li>
-<li><a href="#idea运行solr-server">idea运行solr server</a></li>
-<li><a href="#导入自定义jar">导入自定义jar</a></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
 </nav></div>
     </div>
 </section>
@@ -391,12 +358,12 @@
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2020</span>
+  2009 - 2022</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>
 <div class="powered-by">
-  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
 </div>
 <div class="theme-info">
   Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT

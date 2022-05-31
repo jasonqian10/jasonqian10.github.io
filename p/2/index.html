@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-	<meta name="generator" content="Hugo 0.58.3" />
+	<meta name="generator" content="Hugo 0.96.0" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
@@ -59,7 +59,7 @@
     <ul id="menu" class="menu">
       
       
-        <li class="menu-item menu-item-active">
+        <li class="menu-item ">
           <a href="https://jasonqian10.github.io/" rel="section">
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
           </a>
@@ -117,6 +117,75 @@
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java8-function-interface/" itemprop="url">
+        【java8】(二)高大上的函数式接口怎么用
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-03-30">
+    2020-03-30
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://jasonqian10.github.io/categories/java" itemprop="url" rel="index">
+        <span itemprop="name">java</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">1349 字 ~3分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h2 id="函数式接口">函数式接口</h2>
+<p>函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)</p>
+<p>1)函数式接口中的抽象函数就是为了支持 lambda表达式；</p>
+<p>2)函数式接口可以被隐式转换为lambda表达式；</p>
+<p>3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；</p>
+<p>注意：加不加<code>@FunctionalInterface</code>对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。</p>
+<p>例外：</p>
+<p>函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；</p>
+<p>函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；</p>
+<p>函数式接口里是可以包含Object里的public方法，如equals()。</p>
+<p>下面介绍几种常用的函数式接口。</p>
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://jasonqian10.github.io/post/java/java8-function-interface/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
         <a class="post-title-link" href="https://jasonqian10.github.io/post/java/java8-lambda/" itemprop="url">
         【java8】(一)lambda表达式你用对了吗？
         </a>
@@ -162,18 +231,12 @@
     </header>
     <div class="post-body" itemprop="articleBody">
     <h2 id="前言">前言</h2>
-
 <p>Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？</p>
-
 <h2 id="lambda表达式语法">lambda表达式语法</h2>
-
 <h3 id="概念">概念</h3>
-
 <p>可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。</p>
-
 <blockquote>
 <p>lambda表达式依附于<strong>函数式接口</strong>，可以理解为是函数式接口的匿名实现。</p>
-
 <p><strong>函数式接口</strong>后面会详细介绍。</p>
 </blockquote>
     </div>
@@ -288,7 +351,7 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2309 字 ~5分钟</span>
+<span class="leancloud-visitors-count">2311 字 ~5分钟</span>
 </span>
       </div>
     </header>
@@ -347,23 +410,26 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2371 字 ~5分钟</span>
+<span class="leancloud-visitors-count">2338 字 ~5分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <p>【Hadoop索引】本篇系列第三篇。主要介绍Hadoop调试过程中的一些问题以及解决方法的总结。</p>
-
 <p>主要有以下几类问题</p>
-
 <ul>
-<li><p>资源分配问题</p></li>
-
-<li><p>性能调优问题</p></li>
-
-<li><p>Yarn框架运行机制问题</p></li>
-
-<li><p>Solr索引问题</p></li>
+<li>
+<p>资源分配问题</p>
+</li>
+<li>
+<p>性能调优问题</p>
+</li>
+<li>
+<p>Yarn框架运行机制问题</p>
+</li>
+<li>
+<p>Solr索引问题</p>
+</li>
 </ul>
     </div>
     
@@ -418,15 +484,13 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2033 字 ~5分钟</span>
+<span class="leancloud-visitors-count">2073 字 ~5分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第二篇，介绍如何应用Hadoop到solr index。</p>
-
 <h2 id="为什么使用hadoop来做solr索引">为什么使用Hadoop来做solr索引？</h2>
-
 <p>这与Hadoop特点有关，hadoop适用于处理大数据并行计算，提高solr索引速度。Hadoop的MapReduce计算框架分map阶段和reduce阶段。map阶段转换solr document，reduce阶段进行solr index操作。MapReduce流程契合solr索引的流程。</p>
     </div>
     
@@ -481,35 +545,30 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">5534 字 ~12分钟</span>
+<span class="leancloud-visitors-count">5667 字 ~12分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第一篇，介绍我学习使用Hadoop后对其的理解。</p>
-
 <h2 id="hadoop概念">Hadoop概念</h2>
-
 <h3 id="官方概念">官方概念</h3>
-
 <p>The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using <strong>simple programming</strong> <strong>models</strong>.</p>
-
 <p>总结：处理大数据、分布式集群、可编程计算框架</p>
-
 <h3 id="hadoop-的核心组件">Hadoop 的核心组件</h3>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191206112523725.png" alt="image-20191206112523725" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20191206112523725.png" alt="image-20191206112523725"></p>
 <p>Hadoop由1.0和2.0两个架构版本，2.0最大的变化就是引入YARN这个资源调度框架，更加精细化的分配和调度资源。这里主要以当前最新的2.0展开。感兴趣的同学可以自行了解一下两者差异。</p>
-
 <ul>
-<li><p>HDFS：分布式文件系统</p></li>
-
-<li><p>Mapreduce：分布式运算编程框架</p></li>
-
-<li><p>YARN：运算资源调度系统</p></li>
+<li>
+<p>HDFS：分布式文件系统</p>
+</li>
+<li>
+<p>Mapreduce：分布式运算编程框架</p>
+</li>
+<li>
+<p>YARN：运算资源调度系统</p>
+</li>
 </ul>
-
 <p>简单描述一下三者关系：自定义的MapReduce程序（Java进程），通过YARN框架分配资源来运行这个MapReduce程序，MapReduce程序中输出存储到HDFS。</p>
     </div>
     
@@ -564,99 +623,19 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">2628 字 ~6分钟</span>
+<span class="leancloud-visitors-count">2626 字 ~6分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <h3 id="solr-suggest模块介绍">solr suggest模块介绍</h3>
-
 <p>自动提示功能在现今的互联网产品中的应用几乎遍地都是。比如在京东主页搜索”苹果“，输入框下面就会自动联想出与苹果相关的关键词。</p>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191116164420559.png" alt="image-20191116164420559" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20191116164420559.png" alt="image-20191116164420559"></p>
 <p>本文我们主要就来讲一下solr是如何去实现这样的自动提示功能。</p>
     </div>
     
     <div class="post-more-link text-center">
     <a class="btn" href="https://jasonqian10.github.io/post/solr/solr-suggest/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://jasonqian10.github.io/post/solr/solr-lucene-principle/" itemprop="url">
-        solr搜索原理解析
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2019-10-18">
-    2019-10-18
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/solr" itemprop="url" rel="index">
-        <span itemprop="name">Solr</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://jasonqian10.github.io/categories/lucene" itemprop="url" rel="index">
-        <span itemprop="name">Lucene</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-eye"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">5540 字 ~12分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    <h3 id="solr与lucene的关系">solr与Lucene的关系</h3>
-
-<p>讲搜索流程之前先介绍一下solr与Lucene的关系。</p>
-
-<p>Lucene是一个索引与搜索类库，而不是完整的程序。使用Lucene的方式主要有二种：一是自己编写程序，调用类库；二是使用第三方基于Lucene编写的程序，如下面介绍的Solr等。</p>
-
-<p>Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。</p>
-
-<p>solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。</p>
-
-<p>solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
-<img src="https://jasonqian10.github.io/img/post/solr_lucene-1542234.png" alt="solr_lucene" style="zoom:40%;" /></p>
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://jasonqian10.github.io/post/solr/solr-lucene-principle/" rel="contents">
       阅读全文 &raquo;
     </a>
     </div>
@@ -702,7 +681,13 @@
         
         
     
+        
+        
+          <a class="page-number" href="https://jasonqian10.github.io/p/3/">3</a>
+        
+        
     
+    <a class="extend next" rel="next" href="https://jasonqian10.github.io/p/3/"><i class="fa fa-angle-right"></i></a>
 </nav>
 
 
@@ -732,7 +717,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -749,7 +734,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -801,12 +786,12 @@
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2020</span>
+  2009 - 2022</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>
 <div class="powered-by">
-  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
 </div>
 <div class="theme-info">
   Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT

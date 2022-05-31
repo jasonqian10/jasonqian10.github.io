@@ -153,133 +153,99 @@
     <i class="fa fa-eye"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">5534 字 ~12分钟</span>
+<span class="leancloud-visitors-count">5667 字 ~12分钟</span>
 </span>
       </div>
     </header>
     <div class="post-body" itemprop="articleBody">
     <p>【Hadoop索引】将介绍如何使用Hadoop框架进行solr索引。本篇系列第一篇，介绍我学习使用Hadoop后对其的理解。</p>
-
 <h2 id="hadoop概念">Hadoop概念</h2>
-
 <h3 id="官方概念">官方概念</h3>
-
 <p>The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using <strong>simple programming</strong> <strong>models</strong>.</p>
-
 <p>总结：处理大数据、分布式集群、可编程计算框架</p>
-
 <h3 id="hadoop-的核心组件">Hadoop 的核心组件</h3>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191206112523725.png" alt="image-20191206112523725" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20191206112523725.png" alt="image-20191206112523725"></p>
 <p>Hadoop由1.0和2.0两个架构版本，2.0最大的变化就是引入YARN这个资源调度框架，更加精细化的分配和调度资源。这里主要以当前最新的2.0展开。感兴趣的同学可以自行了解一下两者差异。</p>
-
 <ul>
-<li><p>HDFS：分布式文件系统</p></li>
-
-<li><p>Mapreduce：分布式运算编程框架</p></li>
-
-<li><p>YARN：运算资源调度系统</p></li>
+<li>
+<p>HDFS：分布式文件系统</p>
+</li>
+<li>
+<p>Mapreduce：分布式运算编程框架</p>
+</li>
+<li>
+<p>YARN：运算资源调度系统</p>
+</li>
 </ul>
-
 <p>简单描述一下三者关系：自定义的MapReduce程序（Java进程），通过YARN框架分配资源来运行这个MapReduce程序，MapReduce程序中输出存储到HDFS。</p>
-
 <h2 id="yarn框架">YARN框架</h2>
-
 <p>Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统，可为上层应用提供统一的资源管理和调度。它将资源管理和处理组件分开，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大好处。</p>
-
-<h3 id="yarn框架几个重要组件-概念">YARN框架几个重要组件/概念</h3>
-
+<h3 id="yarn框架几个重要组件概念">YARN框架几个重要组件/概念</h3>
 <ul>
-<li><strong>ResourceManager(RM)</strong></li>
-</ul>
-
+<li>
+<p><strong>ResourceManager(RM)</strong></p>
 <p>ResourceManager包含两个主要的组件：定时调用器(Scheduler)以及应用管理器(ApplicationsManager (AsM))。</p>
-
 <ol>
-<li><p>定时调度器(Scheduler)：这个组件完全是插拔式的，用户可以根据自己的需求实现不同的调度器，目前YARN提供了FIFO、容量以及公平调度器。这个组件的唯一功能就是给提交到集群的应用程序分配资源，并且对可用的资源和运行的队列进行限制。Scheduler并不对作业进行监控，并且它不保证会重启由于应用程序本身或硬件出错而执行失败的应用程序。</p>
-
+<li>
+<p>定时调度器(Scheduler)：这个组件完全是插拔式的，用户可以根据自己的需求实现不同的调度器，目前YARN提供了FIFO、容量以及公平调度器。这个组件的唯一功能就是给提交到集群的应用程序分配资源，并且对可用的资源和运行的队列进行限制。Scheduler并不对作业进行监控，并且它不保证会重启由于应用程序本身或硬件出错而执行失败的应用程序。</p>
 <blockquote>
 <p><strong>为所有AM分配资源</strong></p>
-</blockquote></li>
-
-<li><p>应用管理器(ApplicationsManager (AsM))：这个组件用于管理整个集群应用程序的application masters，负责接收应用程序的提交；为application master启动提供资源；监控应用程序的运行进度以及在应用程序出现故障时重启它。</p>
-
+</blockquote>
+</li>
+<li>
+<p>应用管理器(ApplicationsManager (AsM))：这个组件用于管理整个集群应用程序的application masters，负责接收应用程序的提交；为application master启动提供资源；监控应用程序的运行进度以及在应用程序出现故障时重启它。</p>
 <blockquote>
 <p><strong>用于管理所有AM</strong></p>
-</blockquote></li>
+</blockquote>
+</li>
 </ol>
-
-<ul>
-<li><strong>NodeManager(NM)</strong></li>
-</ul>
-
+</li>
+<li>
+<p><strong>NodeManager(NM)</strong></p>
 <p>是YARN中每个节点上的代理，它管理Hadoop集群中单个计算节点，根据相关的设置来启动容器的。NodeManager会定期向ResourceManager发送心跳信息来更新其健康状态。同时其也会监督Container的生命周期管理，监控每个Container的资源使用（内存、CPU等）情况，追踪节点健康状况，管理日志和不同应用程序用到的附属服务（auxiliary service）。</p>
-
-<ul>
-<li><strong>ApplicationMaster(AM)</strong></li>
-</ul>
-
+</li>
+<li>
+<p><strong>ApplicationMaster(AM)</strong></p>
 <p>ApplicationMaster是应用程序级别的，每个ApplicationMaster管理运行在YARN上的应用程序。YARN 将 ApplicationMaster看做是第三方组件，ApplicationMaster负责和ResourceManager scheduler协商资源，并且和NodeManager通信来运行相应的task。ResourceManager 为 ApplicationMaster 分配容器，这些容器将会用来运行task。ApplicationMaster 也会追踪应用程序的状态，监控容器的运行进度。当容器运行完成， ApplicationMaster 将会向 ResourceManager 注销这个容器；如果是整个作业运行完成，其也会向 ResourceManager 注销自己，这样这些资源就可以分配给其他的应用程序使用了。</p>
-
-<ul>
-<li><strong>Container容器</strong></li>
+</li>
 </ul>
-
+<ul>
+<li>
+<p><strong>Container容器</strong></p>
 <p>Container是一个逻辑上的概念。与特定节点绑定的，其包含了内存、CPU磁盘等逻辑资源。不过在现在的容器实现中，这些资源只包括了内存和CPU。容器是由 ResourceManager scheduler 服务动态分配的资源构成。容器授予 ApplicationMaster 使用特定主机的特定数量资源的权限。ApplicationMaster 也是在容器中运行的，其在应用程序分配的第一个容器中运行。</p>
-
+</li>
+</ul>
 <h3 id="yarn框架执行流程">YARN框架执行流程</h3>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191205165155373.png" alt="image-20191205165155373" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20191205165155373.png" alt="image-20191205165155373"></p>
 <p>1.Client执行main()函数中runjob()，向yarn提交job，开启作业。</p>
-
 <blockquote>
 <p>这里client jvm是个独立运行的Java进程，跑在Hadoop集群的master节点上。</p>
 </blockquote>
-
 <p>2.Client向RM发送作业请求同时RM将作业id以及jar包存放路径返回给Client。</p>
-
 <p>3.Client会把Jar路径为前缀作业id为后缀作为唯一存放路径，将jar包以及输入分片写入到HDFS集群中。</p>
-
 <blockquote>
 <p>2,3两步都是Hadoop框架来做的，用户只需执行1即可。注意，这里框架只会默认上传MapReduce程序jar包和输入分片文件。如果用户运行MapReduce程序过程中还需其他的jar包、配置文件等，需要在1中自行上传，以及在task运行起来后自行获取。</p>
 </blockquote>
-
 <p>4.Client再次将Job对象（包含2，3存放的路径）提交给RM。</p>
-
 <p>5.RM将其放入调度器，向NM发送命令，NM开启MRAPPMaster进程。</p>
-
 <p>6.MR初始化job。</p>
-
 <p>7.获取3中写入到HDFS中的输入分片。</p>
-
 <blockquote>
 <p>每个输入分片会创建一个map任务对象</p>
 </blockquote>
-
 <p>8.拿到输入分片后向RM的资源调度器请求分配资源来运行map、reduce task。</p>
-
 <p>9.一旦RM的资源调度器为任务分配了container，AM就通过与NM通信来启动container。</p>
-
 <p>10.该任务由主类为YarnChild的Java进程执行。但是它在运行之前会将需要的资源文件本地化。这里就会去HDFS获取程序运行所需的相关文件。</p>
-
 <blockquote>
 <p>在3中补充提到与框架无关的文件需要用户自己去上传和下载。文件是存放在HDFS上，依赖Hadoop的分布式缓存机制进行上传和下载。达到的效果是把用户需要使用的文件分发到各个NM节点。</p>
 </blockquote>
-
 <p>11.运行map任务或者reduce任务。</p>
-
 <h2 id="mapreduce模型">MapReduce模型</h2>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191206171530452.png" alt="image-20191206171530452" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20191206171530452.png" alt="image-20191206171530452"></p>
 <blockquote>
 <p>图片来自 <a href="https://blog.csdn.net/aijiudu/article/details/72353510">https://blog.csdn.net/aijiudu/article/details/72353510</a></p>
 </blockquote>
-
 <p>MapReduce将复杂的并行计算过程高度的抽象到了两个函数：<strong>Map函数和Reduce函数</strong>。</p>
-
 <table>
 <thead>
 <tr>
@@ -289,222 +255,165 @@
 <th>说明</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>Map</td>
-<td>&lt;键1,值1&gt;<br>如&lt;行号,pid&gt;</td>
-<td><k2,v2><br/>如<shard_num,solrInputDocument></td>
-<td>1.将split后的每个input数据集进一步解析成一批<k,v>对，输入到map函数进行处理<br>2.每个输入<k1,v1>都会输出<k2,v2>，这是中间结果，作为map的输出存储到磁盘。等到job完全结束才会删除。</td>
+<td>&lt;键1,值1&gt;<!-- raw HTML omitted -->如&lt;行号,pid&gt;</td>
+<td>&lt;k2,v2&gt;<!-- raw HTML omitted -->如&lt;shard_num,solrInputDocument&gt;</td>
+<td>1.将split后的每个input数据集进一步解析成一批&lt;k,v&gt;对，输入到map函数进行处理<!-- raw HTML omitted -->2.每个输入&lt;k1,v1&gt;都会输出&lt;k2,v2&gt;，这是中间结果，作为map的输出存储到磁盘。等到job完全结束才会删除。</td>
 </tr>
-
 <tr>
 <td>Reduce</td>
-<td><k3,v3><br/>如<shard_num,solrInputDocument></td>
-<td>写hdfs/disk<br/>如solrclient.add()</td>
+<td>&lt;k3,v3&gt;<!-- raw HTML omitted -->如&lt;shard_num,solrInputDocument&gt;</td>
+<td>写hdfs/disk<!-- raw HTML omitted -->如solrclient.add()</td>
 <td>这里的reduce函数无返回对象，直接在函数内部进行最终结果的输出。</td>
 </tr>
 </tbody>
 </table>
-
 <p>MapReduce的核心是“分而治之”策略。数据在其MapReduce的生命周期中过程中需要经过<strong>六大阶段</strong>，<strong>Input、Split、Map、Shuffule、Reduce和Output</strong>。这里讲一下最核心的三个。</p>
-
 <h3 id="map阶段">Map阶段</h3>
-
 <p>1.输入文件进行split成小文件，被每个map任务使用。</p>
-
 <p>2.由程序内的InputFormat(默认实现类TextInputFormat)来读取外部数据，它会调用RecordReader(它的成员变量)的read()方法来读取，返回k,v键值对。k,v键值对传送给map()方法，作为其入参来执行用户定义的map逻辑。</p>
-
 <blockquote>
 <p>MapReduce框架默认实现</p>
 </blockquote>
-
 <p>3.map()方法输出结果也是k,v键值对。对于map输出的每一个键值对，系统都会给定一个partition，partition值默认是通过计算key的hash值后对Reduce task的数量取模获得。如果一个键值对的partition值为1，意味着这个键值对会交给第一个Reducer处理。用户可以自定义partition逻辑。</p>
-
 <p>4.Map的输出结果是由collector处理的，每个Map任务不断地将键值对输出到在内存中构造的一个环形数据结构中。使用环形数据结构是为了更有效地使用内存空间，在内存中放置尽可能多的数据。环形缓冲区其实就是一个数组，后端不断接受数据的同时，前端数据不断被溢出，长度用完后读取的新数据再从前端开始覆盖。这个缓冲区默认大小100M，可以通过MR.SORT.MB(应该是它)配置。</p>
-
 <p>5.Map按照定义的partitioner分区，每个分区的输出value进行sort排序。</p>
-
 <blockquote>
 <p>若有combiner会先执行combiner。combiner作用是预合并，减少输出文件数量和大小。sort也是为了后面merge时效率更高。</p>
 </blockquote>
-
 <p>6.按照定义的partitioner分区spill(溢出)到文件（对于某一个小文件，其key都是来自一个partitioner分区），这些文件仍在map task所处机器上。</p>
-
 <p>7.小文件执行merge(合并)，形成partitioner分区内有序的大文件。这些大文件仍在map task所处机器上。</p>
-
 <blockquote>
 <p>一个map最终会输出一个output文件，里面存储了所以value值的有序集合（会有不同key的value）。这里输出的文件可以选择使用压缩。</p>
 </blockquote>
-
 <h3 id="reduce阶段">Reduce阶段</h3>
-
 <p>1.copy数据。Reduce从AM那边获取本Reduce的数据存放在哪些Map里，到对应的Map机器去拉取文件。数据被reduce提走之后，map机器不会立刻删除数据，这是为了预防reduce任务失败需要重做。因此map输出数据是在整个作业完成之后才被删除掉的。</p>
-
 <p>2.Merge、Sort、spill。这个过程与Map阶段类似，reduce将copy过来的数据文件加载到内存，进行merge和sort，当内存缓冲区的使用达到阈值后开始往磁盘spill。这个过程会循环多次，最终得到一份有序的reduce输入看k,v键值对文件。</p>
-
 <p>3.通过GroupingComparator()分辨同一组的数据，把他们发送给reduce(k,iterator)方法。</p>
-
 <p>4.调用context.write()方法，会让OutPurFormat调用RecodeWriter的write()方法将处理结果写入到数据仓库中。</p>
-
 <blockquote>
 <p>如何输出，输出到哪，都可以在RecodeWriter里自定义。</p>
 </blockquote>
-
 <h3 id="shuffle">Shuffle</h3>
-
 <p>这里讲一下shuffle。这个阶段是MapReduce框架中间过程数据混洗阶段，交叉在map和reduce的过程中，包括数据分区，排序，局部聚合，缓存，拉取，再合并排序等阶段。<strong>从Map阶段的3~7以及Reduce阶段的1~2都是shuffle阶段</strong>。</p>
-
 <h2 id="hdfs">HDFS</h2>
-
 <p>Hadoop Distributed File System(hadoop分布式文件系统)，架构图如下。</p>
-
-<p><img src="https://jasonqian10.github.io/img/post/image-20191208102913273.png" alt="image-20191208102913273" /></p>
-
+<p><img src="https://jasonqian10.github.io/img/post/image-20191208102913273.png" alt="image-20191208102913273"></p>
 <p>有四部分组成</p>
-
 <h3 id="client">Client</h3>
-
 <p>职责：</p>
-
 <ul>
-<li><p>文件切分。文件上传 HDFS 的时候，Client 将文件切分成 一个一个的Block，然后进行存储。</p></li>
-
-<li><p>与 NameNode 交互，获取文件的位置信息。</p></li>
-
-<li><p>与 DataNode 交互，读取或者写入数据。</p></li>
-
-<li><p>Client 提供一些命令来管理 HDFS，比如启动或者关闭HDFS。</p></li>
-
-<li><p>Client 可以通过一些命令来访问 HDFS。</p></li>
+<li>
+<p>文件切分。文件上传 HDFS 的时候，Client 将文件切分成 一个一个的Block，然后进行存储。</p>
+</li>
+<li>
+<p>与 NameNode 交互，获取文件的位置信息。</p>
+</li>
+<li>
+<p>与 DataNode 交互，读取或者写入数据。</p>
+</li>
+<li>
+<p>Client 提供一些命令来管理 HDFS，比如启动或者关闭HDFS。</p>
+</li>
+<li>
+<p>Client 可以通过一些命令来访问 HDFS。</p>
+</li>
 </ul>
-
 <h3 id="namenode">NameNode</h3>
-
 <p>名称节点，是负责管理分布式文件系统的命名空间（Namespace），保存了两个核心的数据结构，即FsImage和EditLog。 你可以把它理解成<strong>大管家</strong>，它不负责存储具体的数据。</p>
-
 <ul>
 <li>FsImage用于维护文件系统树以及文件树中所有的文件和文件夹的元数据</li>
 <li>操作日志文件EditLog中记录了所有针对文件的创建、删除、重命名等操作
 注意，这个两个都是文件，也会加载解析到内存中。</li>
 </ul>
-
 <p>职责：</p>
-
 <ul>
-<li><p>管理 HDFS 的名称空间</p></li>
-
-<li><p>管理数据块（Block）映射信息</p></li>
-
-<li><p>配置副本策略</p></li>
-
-<li><p>处理客户端读写请求。</p></li>
+<li>
+<p>管理 HDFS 的名称空间</p>
+</li>
+<li>
+<p>管理数据块（Block）映射信息</p>
+</li>
+<li>
+<p>配置副本策略</p>
+</li>
+<li>
+<p>处理客户端读写请求。</p>
+</li>
 </ul>
-
 <h3 id="sendarynamenode">SendaryNamenode</h3>
-
 <p>NameNode节点的备份，它会定期的和namenode就行通信来完成整个的备份操作。<strong>并非 NameNode 的热备。当NameNode 挂掉的时候，它并不能马上替换 NameNode 并提供服务。</strong></p>
-
 <p>职责：</p>
-
 <ul>
-<li><p>辅助 NameNode，分担其工作量。</p></li>
-
-<li><p>定期合并 fsimage和fsedits，并推送给NameNode。</p></li>
-
-<li><p>在紧急情况下，可辅助恢复 NameNode。</p></li>
+<li>
+<p>辅助 NameNode，分担其工作量。</p>
+</li>
+<li>
+<p>定期合并 fsimage和fsedits，并推送给NameNode。</p>
+</li>
+<li>
+<p>在紧急情况下，可辅助恢复 NameNode。</p>
+</li>
 </ul>
-
 <h3 id="datanode">DataNode</h3>
-
 <p>数据节点，用来具体的存储文件，维护了blockId 与 datanode本地文件的映射。 需要不断的与namenode节点通信，来告知其自己的信息，方便nameode来管控整个系统。</p>
-
 <p>数据节点存储数据以块为单位，块大小默认是128m，默认会存储多份。</p>
-
 <p>职责：</p>
-
 <ul>
 <li>存储实际的数据块。</li>
 <li>执行数据块的读/写操作。</li>
 </ul>
-
 <h2 id="hadoop集群节点组成">Hadoop集群节点组成</h2>
-
 <h3 id="hadoop集群逻辑节点组成">Hadoop集群逻辑节点组成</h3>
-
 <p>包括HDFS集群和YARN框架集群：</p>
-
 <ul>
-<li><strong>HDFS集群</strong></li>
-</ul>
-
+<li>
+<p><strong>HDFS集群</strong></p>
 <p>NameNode</p>
-
 <p>SecondNameNode</p>
-
 <p>DataNode</p>
-
-<ul>
-<li><strong>YARN框架集群</strong></li>
-</ul>
-
+</li>
+<li>
+<p><strong>YARN框架集群</strong></p>
 <p>ResourceManageNode</p>
-
 <p>NodeManageNode</p>
-
+</li>
+</ul>
 <h3 id="hadoop集群物理节点应该如何分配">Hadoop集群物理节点应该如何分配？</h3>
-
 <p>例如一套5节点的Hadoop集群：</p>
-
 <p>节点1部署NameNode和ResourceManageNode（一般NameNode和ResourceManageNode部署在同一个节点上）这个节点为主节点。client node也在这个节点上；</p>
-
 <p>节点2，3，4，5部署DataNode和NodeManageNode；</p>
-
 <p>节点2部署SecondNameNode。</p>
-
 <h3 id="emr集群介绍">EMR集群介绍</h3>
-
 <p>EMR是AWS提供的Hadoop集群服务。现在使用云服务是主流趋势，这里介绍一下EMR集群节点组成。</p>
-
 <ul>
 <li>Master node</li>
 </ul>
-
 <p>该节点管理集群，它通过运行软件组件来协调在其他节点之间分配数据和任务的过程以便进行处理。主节点跟踪任务的状态并监控集群的健康状况。每个集群具有一个主节点，并且可以创建仅包含主节点的单节点集群。</p>
-
 <ul>
 <li>Core node</li>
 </ul>
-
 <p>该节点具有运行任务并在集群上的 Hadoop 分布式文件系统 (HDFS) 中存储数据的软件组件。多节点集群至少具有一个核心节点。</p>
-
 <ul>
 <li>Task node</li>
 </ul>
-
 <p>该节点具有仅运行任务但不在 HDFS 中存储数据的软件组件。任务节点是可选的。</p>
-
 <h2 id="问题">问题</h2>
-
 <ul>
-<li>Hadoop和MapReduce是什么关系？</li>
-</ul>
-
+<li>
+<p>Hadoop和MapReduce是什么关系？</p>
 <p>我在搜索Hadoop和MapReduce的相关资料时会遇到到底搜“Hadoop”关键字还是“MapReduce”关键字。现在网上的博客很多也没有区分两者关系。</p>
-
 <p><strong>狭义Hadoop</strong>：本文中我们提到的Hadoop都算狭义Hadoop，MapReduce是一种运算框架，Hadoop包含MapReduce。</p>
-
 <p><strong>广义Hadoop</strong>：指Hadoop生态圈，其包括Hadoop、Hadoop Yarn、Hadoop MapReduce、Hadoop HDFS、Hive、Hbase、ZooKeeper、Spark等。</p>
-
+</li>
+</ul>
 <blockquote>
 <p>参考文章</p>
-
 <p><a href="https://blog.csdn.net/aijiudu/article/details/72353510">https://blog.csdn.net/aijiudu/article/details/72353510</a></p>
-
 <p><a href="https://blog.csdn.net/qianbing11/article/details/82357033">https://blog.csdn.net/qianbing11/article/details/82357033</a></p>
-
 <p><a href="https://blog.csdn.net/xiaoshunzi111/article/details/48810239">https://blog.csdn.net/xiaoshunzi111/article/details/48810239</a></p>
-
 <p><a href="https://blog.csdn.net/weixin_38750084/article/details/82963235">https://blog.csdn.net/weixin_38750084/article/details/82963235</a></p>
 </blockquote>
     </div>
@@ -585,7 +494,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://jasonqian10.github.io/post/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -602,7 +511,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://jasonqian10.github.io/tags/">
          
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -640,41 +549,43 @@
 <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
     <div class="post-toc">
         <div class="post-toc-content"><nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#hadoop概念">Hadoop概念</a>
-<ul>
-<li><a href="#官方概念">官方概念</a></li>
-<li><a href="#hadoop-的核心组件">Hadoop 的核心组件</a></li>
-</ul></li>
-<li><a href="#yarn框架">YARN框架</a>
-<ul>
-<li><a href="#yarn框架几个重要组件-概念">YARN框架几个重要组件/概念</a></li>
-<li><a href="#yarn框架执行流程">YARN框架执行流程</a></li>
-</ul></li>
-<li><a href="#mapreduce模型">MapReduce模型</a>
-<ul>
-<li><a href="#map阶段">Map阶段</a></li>
-<li><a href="#reduce阶段">Reduce阶段</a></li>
-<li><a href="#shuffle">Shuffle</a></li>
-</ul></li>
-<li><a href="#hdfs">HDFS</a>
-<ul>
-<li><a href="#client">Client</a></li>
-<li><a href="#namenode">NameNode</a></li>
-<li><a href="#sendarynamenode">SendaryNamenode</a></li>
-<li><a href="#datanode">DataNode</a></li>
-</ul></li>
-<li><a href="#hadoop集群节点组成">Hadoop集群节点组成</a>
-<ul>
-<li><a href="#hadoop集群逻辑节点组成">Hadoop集群逻辑节点组成</a></li>
-<li><a href="#hadoop集群物理节点应该如何分配">Hadoop集群物理节点应该如何分配？</a></li>
-<li><a href="#emr集群介绍">EMR集群介绍</a></li>
-</ul></li>
-<li><a href="#问题">问题</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#hadoop概念">Hadoop概念</a>
+      <ul>
+        <li><a href="#官方概念">官方概念</a></li>
+        <li><a href="#hadoop-的核心组件">Hadoop 的核心组件</a></li>
+      </ul>
+    </li>
+    <li><a href="#yarn框架">YARN框架</a>
+      <ul>
+        <li><a href="#yarn框架几个重要组件概念">YARN框架几个重要组件/概念</a></li>
+        <li><a href="#yarn框架执行流程">YARN框架执行流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#mapreduce模型">MapReduce模型</a>
+      <ul>
+        <li><a href="#map阶段">Map阶段</a></li>
+        <li><a href="#reduce阶段">Reduce阶段</a></li>
+        <li><a href="#shuffle">Shuffle</a></li>
+      </ul>
+    </li>
+    <li><a href="#hdfs">HDFS</a>
+      <ul>
+        <li><a href="#client">Client</a></li>
+        <li><a href="#namenode">NameNode</a></li>
+        <li><a href="#sendarynamenode">SendaryNamenode</a></li>
+        <li><a href="#datanode">DataNode</a></li>
+      </ul>
+    </li>
+    <li><a href="#hadoop集群节点组成">Hadoop集群节点组成</a>
+      <ul>
+        <li><a href="#hadoop集群逻辑节点组成">Hadoop集群逻辑节点组成</a></li>
+        <li><a href="#hadoop集群物理节点应该如何分配">Hadoop集群物理节点应该如何分配？</a></li>
+        <li><a href="#emr集群介绍">EMR集群介绍</a></li>
+      </ul>
+    </li>
+    <li><a href="#问题">问题</a></li>
+  </ul>
 </nav></div>
     </div>
 </section>
@@ -689,12 +600,12 @@
       <div class="footer-inner">
         <div class="copyright" >
   <span itemprop="copyrightYear">  &copy; 
-  2009 - 2020</span>
+  2009 - 2022</span>
   <span class="with-love"><i class="fa fa-heart"></i></span>
   <span class="author" itemprop="copyrightHolder">知不道</span>
 </div>
 <div class="powered-by">
-  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.58.3</a>
+  Powered by - <a class="theme-link" href="http://gohugo.io" target="_blank" title="hugo" >Hugo v0.96.0</a>
 </div>
 <div class="theme-info">
   Theme by - <a class="theme-link" href="https://github.com/xtfly/hugo-theme-next" target="_blank"> NexT

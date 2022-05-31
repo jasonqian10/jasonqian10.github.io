@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>java on 知不道</title>
@@ -6,11 +6,7 @@
     <description>Recent content in java on 知不道</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 01 Jul 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jasonqian10.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 01 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jasonqian10.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【Java并发编程】(一)原理篇</title>
       <link>https://jasonqian10.github.io/post/java/java-concurrency-principle/</link>
@@ -45,9 +41,7 @@
       
       <guid>https://jasonqian10.github.io/post/java/java-collection/</guid>
       <description>&lt;h3 id=&#34;概述&#34;&gt;概述&lt;/h3&gt;
-
 &lt;p&gt;集合框架是Java编码中最常用的知识点，本篇主要梳理一下Java集合框架，总结出各个常用的集合知识点。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;Collection接口下有List、Set、Queue，三者都是接口&lt;/li&gt;
 &lt;li&gt;Map是独立接口（与Collection是平级关系），下有Hashtable，LinkedHashMap，HashMap，TreeMap&lt;/li&gt;
@@ -64,7 +58,6 @@
       
       <guid>https://jasonqian10.github.io/post/java/java8-stream/</guid>
       <description>&lt;h3 id=&#34;概述&#34;&gt;概述&lt;/h3&gt;
-
 &lt;p&gt;Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。使用Stream API 对集合数据进行操作，就类似于使用 SQL 执行的数据库查询。也可以使用 Stream API 来并行执行操作。简而言之，Stream API 提供了一种高效且易于使用的处理数据的方式。&lt;/p&gt;</description>
     </item>
     
@@ -75,25 +68,15 @@
       
       <guid>https://jasonqian10.github.io/post/java/java8-function-interface/</guid>
       <description>&lt;h2 id=&#34;函数式接口&#34;&gt;函数式接口&lt;/h2&gt;
-
 &lt;p&gt;函数式接口(Functional Interface)是只有一个抽象方法的接口。这样一个函数接口其实就是一个函数，将函数式编程转换成对象操作。(函数转换成对象，接口实现类中无需实现，可以交给调用方去赋值，即提供了一个钩子)&lt;/p&gt;
-
 &lt;p&gt;1)函数式接口中的抽象函数就是为了支持 lambda表达式；&lt;/p&gt;
-
 &lt;p&gt;2)函数式接口可以被隐式转换为lambda表达式；&lt;/p&gt;
-
 &lt;p&gt;3)为确保函数式接口符合语法，可以添加@FunctionalInterface注解；&lt;/p&gt;
-
 &lt;p&gt;注意：加不加&lt;code&gt;@FunctionalInterface&lt;/code&gt;对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法。&lt;/p&gt;
-
 &lt;p&gt;例外：&lt;/p&gt;
-
 &lt;p&gt;函数式接口里是可以包含默认方法default method（函数式接口里是可以包含默认方法）；&lt;/p&gt;
-
 &lt;p&gt;函数式接口里是可以包含静态方法（因为静态方法不能是抽象方法，是一个已经实现了的方法，无法被覆写）；&lt;/p&gt;
-
 &lt;p&gt;函数式接口里是可以包含Object里的public方法，如equals()。&lt;/p&gt;
-
 &lt;p&gt;下面介绍几种常用的函数式接口。&lt;/p&gt;</description>
     </item>
     
@@ -104,18 +87,12 @@
       
       <guid>https://jasonqian10.github.io/post/java/java8-lambda/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
-
 &lt;p&gt;Java8引入了lambda表达式。随着java8应用的越来越广，在我们开发过程中已经大量的在使用lambda表达式了，但是使用了并不说明你真正懂了lambda，离开idea的自动联想你能直接写出lambda表达式吗？&lt;/p&gt;
-
 &lt;h2 id=&#34;lambda表达式语法&#34;&gt;lambda表达式语法&lt;/h2&gt;
-
 &lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;
-
 &lt;p&gt;可以把Lambda表达式理解为简洁的表示可传递的匿名函数(函数式接口)的一种方式：它没有名称，但它有参数列表，函数主体，返回类型，可能还有一个可以抛出的异常列表。&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;lambda表达式依附于&lt;strong&gt;函数式接口&lt;/strong&gt;，可以理解为是函数式接口的匿名实现。&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;函数式接口&lt;/strong&gt;后面会详细介绍。&lt;/p&gt;
 &lt;/blockquote&gt;</description>
     </item>
