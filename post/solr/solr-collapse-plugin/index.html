@@ -185,19 +185,19 @@
 <ul>
 <li>
 <p>对字段 group_field进行折叠，组内排序规则是score desc，这也是默认的规则:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>fq={!collapse field=group_field}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">fq=</span>{<span style="color:#960050;background-color:#1e0010">!collapse</span> <span style="color:#960050;background-color:#1e0010">field=group_field</span>}
 </span></span></code></pre></div></li>
 <li>
 <p>对字段 group_field进行折叠，组内排序规则是numeric_field最小:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>fq={!collapse field=group_field min=numeric_field}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">fq=</span>{<span style="color:#960050;background-color:#1e0010">!collapse</span> <span style="color:#960050;background-color:#1e0010">field=group_field</span> <span style="color:#960050;background-color:#1e0010">min=numeric_field</span>}
 </span></span></code></pre></div></li>
 <li>
 <p>对字段 group_field进行折叠，组内排序规则是numeric_field最大:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>fq={!collapse field=group_field max=numeric_field}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">fq=</span>{<span style="color:#960050;background-color:#1e0010">!collapse</span> <span style="color:#960050;background-color:#1e0010">field=group_field</span> <span style="color:#960050;background-color:#1e0010">max=numeric_field</span>}
 </span></span></code></pre></div></li>
 <li>
 <p>对字段 group_field进行折叠，组内排序规则是numeric_field升序，score降序</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>fq={!collapse field=group_field sort=&#39;numeric_field asc, score desc&#39;}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">fq=</span>{<span style="color:#960050;background-color:#1e0010">!collapse</span> <span style="color:#960050;background-color:#1e0010">field=group_field</span> <span style="color:#960050;background-color:#1e0010">sort=&#39;numeric_field</span> <span style="color:#960050;background-color:#1e0010">asc,</span> <span style="color:#960050;background-color:#1e0010">score</span> <span style="color:#960050;background-color:#1e0010">desc&#39;</span>}
 </span></span></code></pre></div></li>
 </ul>
 <h3 id="collapse源码分析">collapse源码分析</h3>
@@ -205,13 +205,13 @@
 <p>collapse的核心类是CollapsingQParserPlugin.java，是一类QParserPlugin，build出来的query是post filter query，在正常query之后执行。执行流程嵌在QueryComponent组件中，collapse会将结果集折叠为每个组的单个文档。所有QueryComponent的下游组件（faceting，highlighting等）都可以与折叠的结果集一起工作。</p>
 <p>collapse执行主要分为<code>parse阶段</code>、<code>collapse阶段</code>、<code>finish阶段</code>。</p>
 <h5 id="parse阶段">parse阶段</h5>
-<!-- raw HTML omitted -->
+<p><img src="https://jasonqian10.github.io/img/post/image-20201224093430685.png" alt="image-20201224093430685"></p>
 <p>parse阶段是在QueryComponent的prepare()方法执行的。</p>
 <p>步骤1,2,3是创建<strong>CollapsingQParser</strong>,这是collapse filter query的QParser；</p>
 <p>步骤4-8是创建fq query。</p>
 <p>parse阶段是完成fq query的准备，在下面阶段是使用fq query。</p>
 <h5 id="collapse阶段和finish阶段">collapse阶段和finish阶段</h5>
-<!-- raw HTML omitted -->
+<p><img src="https://jasonqian10.github.io/img/post/image-20201224133637688.png" alt="image-20201224133637688"></p>
 <p>这两个阶段是在QueryComponent的process()方法执行的。也就是搜索文档的过程。</p>
 <p>步骤1-6是准备collapse的文档收集器；</p>
 <p>步骤7-10是文档收集的固定流程，进入scoreAll打分阶段；</p>
@@ -219,7 +219,7 @@
 <p>步骤13是<strong>finish阶段</strong>，主要逻辑是对collapse阶段收集的docid列表进行遍历，取出docid对应的score（collapse阶段存储好了），再链式调用上一级collect方法（CollectorChain是责任链模式一级一级执行）。</p>
 <h4 id="collapse核心逻辑">collapse核心逻辑</h4>
 <p>collapse是通过collapse自己的Collector类进行文档收集的，每个collector会有自己的collapse strategy。</p>
-<!-- raw HTML omitted -->
+<p><img src="https://jasonqian10.github.io/img/post/image-20201224170010525.png" alt="image-20201224170010525"></p>
 <p>上面的思维导图可以看到：</p>
 <p>CollectorFactory是创建Collector的工厂类，根据不同collapse组内排序类型(score/min/max/sort)和collapse字段类型(String/Numeric)创建不同的Collector对象。Collector会根据不同组内排序类型(min/max/sort)和排序字段类型(Int/Float/Long)创建不同Collapse策略类。核心collapse逻辑则在策略类的collapse()方法实现。</p>
 <ul>

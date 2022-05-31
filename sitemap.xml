@@ -9,8 +9,7 @@
         <tags>
           <tag>solr</tag><tag>lucene</tag><tag>solr cloud</tag>
         </tags>
-        <content type="html"> 前言 前面有篇总结博客 solr搜索原理解析 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 SearchHandler#handleRequestBody() ，所有 /select 的请求都会进入这个入口。
-集群模式 solr cloud环境下请求以cloud模式进入 SearchHandler#handleRequestBody(),方法内部主要核心步骤：
+        <content type="html"> 前言 前面有篇总结博客 solr搜索原理解析 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 SearchHandler#handleRequestBody() ，所有 /select 的请求都会进入这个入口。 集群模式 solr cloud环境下请求以cloud模式进入 SearchHandler#handleRequestBody(),方法内部主要核心步骤：
 step1 注册Component
 通过getComponents()获取注册的 SearchComponent 列表
 List&amp;lt;SearchComponent&amp;gt; components = getComponents(); 如果第一次请求进入，则会先注册列表initComponents(), 注册列表定义优先找solrconfig.xml中 requestHandler 标签下的 component 标签，如果未定义则会getDefaultComponents()取默认列表。

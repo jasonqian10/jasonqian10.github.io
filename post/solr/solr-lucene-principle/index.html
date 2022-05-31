@@ -171,7 +171,7 @@
 <p>Solr 是一个开源的搜索服务器，Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。Solr是在Lucene上封装的完善的搜索引擎。</p>
 <p>solr是门户，lucene是底层基础。通俗地说，如果Solr是汽车，那么Lucene就是发动机，没有发动机，汽车就没法运转，但对于用户来说只可开车，不能开发动机。</p>
 <p>solr搜索流程分solr部分和Lucene部分，整体流程是请求先经过solr部分再进入Lucene部分。
-<!-- raw HTML omitted --></p>
+<img src="https://jasonqian10.github.io/img/post/solr_lucene-1542234.png" alt="solr_lucene-1542234"></p>
 <blockquote>
 <p><strong>说明</strong>
 对应网上已有的素材或者文字符合作者想要的描述，就直接引用了，不重复造轮子</p>
@@ -182,12 +182,12 @@
 </blockquote>
 <h4 id="solr的启动过程">solr的启动过程</h4>
 <p>Solr可以独立运行，运行在Jetty中，Jetty 是一个开源的servlet容器，它为基于Java的web容器，其工作流程（也就是<strong>solr server启动过程</strong>）如下
-<!-- raw HTML omitted --></p>
+<img src="https://jasonqian10.github.io/img/post/image-20191020120045651.png" alt="image-20191020120045651"></p>
 <p>这属于servlet范畴，本文不重点讨论，大家知道大体流程即可。</p>
 <h3 id="solr-query流程">solr query流程</h3>
 <p>solr处理query的入口是SolrDispatchFilter，其实现了javax.servlet的Filter的接口。通过拦截servlet请求的方式进入solr处理。
-<!-- raw HTML omitted -->
-上图可以看出solr中的流程。</p>
+<img src="https://jasonqian10.github.io/img/post/image-20191020120449619.png" alt="image-20191020120449619"></p>
+<p>上图可以看出solr中的流程。</p>
 <p>下面按照处理顺序重点讲一下solr几个处理query的核心类：</p>
 <table>
 <thead>
@@ -222,7 +222,7 @@
 </table>
 <h4 id="searchhandler">SearchHandler</h4>
 <p>真正处理请求的入口函数在SearchHandler.handleRequestBody()。对于不同的Request-Handler(qt)，请求会进入不同的SearchHandler，这由solrconfig.xml中的配置决定。我们这里以 <strong>select</strong> 请求为例，请求会进入SearchHandler。handleRequestBody()中主要做的事情就是依次调用SearchComponent列表的prepare，process，post方法。
-<!-- raw HTML omitted --></p>
+<img src="https://jasonqian10.github.io/img/post/image-20191012152013256.png" alt="image-20191012152013256"></p>
 <ul>
 <li>
 <p>如何定制SearchHandler</p>
@@ -283,7 +283,7 @@
 </ul>
 <h3 id="lucene-query流程">Lucene query流程</h3>
 <p>Lucene处理query的入口是IndexSearcher.search()。其调用流程如下
-<!-- raw HTML omitted --></p>
+<img src="https://jasonqian10.github.io/img/post/image-20191021135319182.png" alt="image-20191021135319182"></p>
 <h4 id="createnormalizedweight">createNormalizedWeight</h4>
 <p>创建归一化weight的流程，包括</p>
 <h5 id="重写query对象">重写Query对象</h5>

@@ -14,8 +14,8 @@
       
       <guid>https://jasonqian10.github.io/post/solr/solr-distribute/</guid>
       <description>&lt;h3 id=&#34;前言&#34;&gt;前言&lt;/h3&gt;
-&lt;p&gt;前面有篇总结博客 &lt;a href=&#34;http://qianjiasong.com/post/solr/solr-lucene-principle/&#34;&gt;solr搜索原理解析&lt;/a&gt; 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 &lt;code&gt;SearchHandler#handleRequestBody()&lt;/code&gt; ，所有 &lt;code&gt;/select&lt;/code&gt; 的请求都会进入这个入口。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;</description>
+&lt;p&gt;前面有篇总结博客 &lt;a href=&#34;http://qianjiasong.com/post/solr/solr-lucene-principle/&#34;&gt;solr搜索原理解析&lt;/a&gt; 介绍了solr请求处理的整体请求，本篇博客会针对其中一个局部流程展开介绍。这个流程是solr cloud分发请求机制，主要入口在 &lt;code&gt;SearchHandler#handleRequestBody()&lt;/code&gt; ，所有 &lt;code&gt;/select&lt;/code&gt; 的请求都会进入这个入口。
+&lt;img src=&#34;https://jasonqian10.github.io/img/post/solrcloud-flow.png&#34; alt=&#34;solrcloud-flow&#34;&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>
